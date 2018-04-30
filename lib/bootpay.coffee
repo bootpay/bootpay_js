@@ -137,7 +137,7 @@ window.BootPay =
     # 결제 효청시 application_id를 입력하면 덮어 씌운다. ( 결제 이후 버그를 줄이기 위한 노력 )
     @applicationId = data.application_id if data.application_id?
     @params =
-      application_id: if data.application_id? then data.application_id else @applicationId
+      application_id: @applicationId
       show_agree_window: if data.show_agree_window? then parseInt(data.show_agree_window) else 0
       device_type: @deviceType
       method: data.method if data.method?

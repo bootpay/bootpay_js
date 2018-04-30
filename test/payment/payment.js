@@ -25,11 +25,11 @@ document.addEventListener('DOMContentLoaded', function () {
 function doPayment() {
     BootPay.request({
         price: '3000',
-        application_id: '',
+        application_id: '59a568d3e13f3336c21bf707',
         name: '테스트 아이템',
         phone: '01000000000',
         order_id: (new Date()).getTime(),
-        pg: 'danal',
+        pg: 'kcp',
         show_agree_window: 0,
         items: [
             {
