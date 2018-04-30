@@ -7,6 +7,9 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.css', '.sass', '.coffee', '.json']
     },
+    devServer: {
+        port: 3001
+    },
     module: {
         rules: [
             {
