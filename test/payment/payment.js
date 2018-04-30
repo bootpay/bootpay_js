@@ -53,7 +53,7 @@ function doPayment() {
         console.log(data);
     }).confirm(function (data) {
         if (confirm('결제를 정말 승인할까요?')) {
-            this.transactionConfirm();
+            this.transactionConfirm(data);
         } else {
             var msg = "결제가 승인거절되었습니다.: " + JSON.stringify(data)
             alert(msg);

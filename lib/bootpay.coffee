@@ -300,7 +300,7 @@ window.BootPay =
     @methods.confirm = method
     @
   ready: (method) ->
-    @methods.ready = mehtod
+    @methods.ready = method
     @
   error: (method) ->
     @methods.error = method
@@ -313,15 +313,18 @@ window.BootPay =
     @
 
   transactionConfirm: (data) ->
+    if data? or data.receipt_id?
+      alert '결제 승인을 하기 위해서는 receipt_id 값이 포함된 data값을 함께 보내야 합니다.'
+      Logger.error 'this.transactionConfirm(data); 이렇게 confirm을 실행해주세요.'
+      return
     html = """
-    <input type="hidden" name="receipt_id" value="#{data.receipt_id}" />
-    <input type="hidden" name="application_id" value="#{@applicationId}" />
-"""
+      <input type="hidden" name="receipt_id" value="#{data.receipt_id}" />
+      <input type="hidden" name="application_id" value="#{@applicationId}" />
+    """
     document.getElementById('bootpay_confirm_form').appendChild html
     document.bootpay_confirm_form.target = 'bootpay_inner_iframe'
     document.bootpay_confirm_form.submit()
     @
-
 
 window.BootPay.initialize()
 
