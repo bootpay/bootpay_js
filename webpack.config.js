@@ -8,7 +8,8 @@ module.exports = {
         extensions: ['.js', '.css', '.sass', '.coffee', '.json']
     },
     devServer: {
-        port: 3001
+        port: 3001,
+        public: 'g-cdn.bootpay.co.kr'
     },
     module: {
         rules: [

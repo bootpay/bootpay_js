@@ -1,0 +1,10 @@
+[Unit]
+Description=<%= ENV['SERVICE_NAME'] %> Webpack
+After=network.target
+[Service]
+Type=simple
+User=<%= `whoami`.to_s.strip %>
+WorkingDirectory=<%= `pwd`.to_s.strip %>
+ExecStart=<%= `pwd`.to_s.strip %>/node_modules/.bin/webpack-dev-server --mode=development
+[Install]
+WantedBy=multi-user.target
