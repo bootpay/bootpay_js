@@ -1,4 +1,5 @@
 request = require('superagent')
+import './event'
 import Logger from './logger'
 import CryptoJS from 'crypto-js'
 import './style'
@@ -10,8 +11,9 @@ window.BootPay =
   restUrl: require('../package.json').urls.restUrl[process.env.NODE_ENV]
   clientUrl: require('../package.json').urls.clientUrl[process.env.NODE_ENV]
   analyticsUrl: require('../package.json').urls.analyticsUrl[process.env.NODE_ENV]
-  paymentWindowId: 'bootpay-payment-window'
+  windowId: 'bootpay-payment-window'
   iframeId: 'bootpay-payment-iframe'
+  ieMinVersion: 9
   deviceType: 1
   methods: {}
   params: {}
@@ -51,13 +53,16 @@ window.BootPay =
 # Date: 2018-04-28
 #----------------------------------------------------------
   getData: (key) -> window.localStorage.getItem key
+# 로그인한 유저 정보를 가져온다.
+  getUserData: -> try JSON.parse(@getData('user'))
+  catch then undefined
 # Javascript로 UUID를 생성한다.
   generateUUID: ->
     'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c) ->
       r = Math.random() * 16 | 0
       v = if c == 'x' then r else r & 0x3 | 0x8
       v.toString 16
-  # 세션 키를 발급하는 로직
+# 세션 키를 발급하는 로직
   setReadySessionKey: ->
     sessionKeyTime = (new Date()).getTime()
     if @getData('last_time')?.length
@@ -77,21 +82,22 @@ window.BootPay =
       @setData 'sk', "#{@getData('uuid')}_#{sessionKeyTime}"
       @setData 'sk_time', sessionKeyTime
       Logger.debug "처음 접속하여 세션 고유 값을 설정하였습니다."
-  # 로그인 정보를 절차에 따라 초기화한다.
+# 로그인 정보를 절차에 따라 초기화한다.
   expireUserData: ->
     data = @getUserData()
     # 데이터가 없거나 접속 한지 하루가 지나면 데이터를 삭제한다.
     if data? and (data.time + @VISIT_TIMEOUT < new Date().getTime())
       Logger.info "시간이 지나 로그인 유저 정보를 초기화 하였습니다."
       @setData 'user', null
+# 통계 시작
   startTrace: (data = undefined) ->
     @setApplicationId() unless @applicationId?.length
     @expireUserData()
     @sendCommonData data
-
+# 통계용 데이터를 부트페이로 전송
   sendCommonData: (data) ->
     url = document.URL
-    return if !url or (url.search(/g-cdn.bootpay.co.kr/) == -1 and url.search(/bootpay.co.kr/) > -1 and  url.search(/app.bootpay.co.kr/) == -1)
+    return if !url or (url.search(/g-cdn.bootpay.co.kr/) == -1 and url.search(/bootpay.co.kr/) > -1 and url.search(/app.bootpay.co.kr/) == -1)
     user = @getUserData()
     items = if data? and data.items?.length then data.items else [
       {
@@ -104,7 +110,6 @@ window.BootPay =
         price: if data? then data.price else undefined
       }
     ]
-
     requestData =
       application_id: @applicationId
       uuid: @getData('uuid')
@@ -117,7 +122,8 @@ window.BootPay =
       items: items
     Logger.debug "활동 정보를 서버로 전송합니다. data: #{JSON.stringify(requestData)}"
     encryptData = CryptoJS.AES.encrypt(JSON.stringify(requestData), requestData.sk)
-    request.post([@analyticsUrl, "call?ver=#{@version}"].join('/'))
+    request
+    .post([@analyticsUrl, "call?ver=#{@version}"].join('/'))
     .send(
       data: encryptData.ciphertext.toString(CryptoJS.enc.Base64)
       session_key: "#{encryptData.key.toString(CryptoJS.enc.Base64)}###{encryptData.iv.toString(CryptoJS.enc.Base64)}"
@@ -125,8 +131,197 @@ window.BootPay =
     .end((err, res) =>
       Logger.error "BOOTPAY MESSAGE: #{json.message} - Application ID가 제대로 되었는지 확인해주세요." if res.status isnt 200 or res.body.status isnt 200
     )
+  request: (data) ->
+    @removePaymentWindow()
+    user = @getUserData()
+    # 결제 효청시 application_id를 입력하면 덮어 씌운다. ( 결제 이후 버그를 줄이기 위한 노력 )
+    @applicationId = data.application_id if data.application_id?
+    @params =
+      application_id: if data.application_id? then data.application_id else @applicationId
+      show_agree_window: if data.show_agree_window? then parseInt(data.show_agree_window) else 0
+      device_type: @deviceType
+      method: data.method if data.method?
+      pg: data.pg if data.pg?
+      name: data.name
+      items: data.items if data.items?.length
+      redirect_url: if data.redirect_url? then data.redirect_url else ''
+      phone: if data.phone?.length then data.phone.replace(/-/g, '') else ''
+      uuid: if data.uuid?.length then data.uuid else @getData('uuid')
+      order_id: if data.order_id? then String(data.order_id) else ''
+      user_info: if data.user_info? then data.user_info else undefined
+      sk: @getData('sk')
+      time: @getData('time')
+      price: data.price
+      format: if data.format? then data.format else 'json'
+      params: if data.params? then data.params else undefined
+      user_id: if user? then user.id else undefined
+      path_url: document.URL
+    # 각 함수 호출 callback을 초기화한다.
+    @methods = {}
+    # 아이템 정보의 Validation
+    @integrityItemData() if @params.items?.length
+    # 결제 정보 데이터의 Validation
+    @integrityParams() if !@params.method? or @params.method is 'auth'
+    # 데이터를 AES로 암호화한다.
+    encryptData = CryptoJS.AES.encrypt(JSON.stringify(@params), @params.sk)
+    html = """
+      <div id="#{@windowId}">
+        <form name="bootpay_form" action="#{[@restUrl, 'start', 'js', '?ver=' + @version].join('/')}" method="POST">
+          <input type="hidden" name="data" value="#{encryptData.ciphertext.toString(CryptoJS.enc.Base64)}" />
+          <input type="hidden" name="session_key" value="#{encryptData.key.toString(CryptoJS.enc.Base64)}###{encryptData.iv.toString(CryptoJS.enc.Base64)}" />
+        </form>
+        <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl, 'confirm'].join('/')}" method="POST">
+        </form>
+        <div class="bootpay-window">#{@iframeHtml('')}</div>
+      </div>
+      """
+    document.body.innerHTML += html
+    @start()
+    @
 
-  getUserData: -> try JSON.parse(@getData('user')) catch then undefined
+  #  결제 요청 정보 Validation
+  integrityParams: ->
+    price = parseFloat @params.price
+    try
+      throw '결제할 금액을 설정해주세요. ( 1,000원 이상, 본인인증의 경우엔 0원을 입력해주세요. ) [ params: price ]' if (isNaN(price) or price < 1000) and @params.method isnt 'bankalarm'
+      throw '판매할 상품명을 입력해주세요. [ parmas: name ]' unless @params.name?.length
+      throw '익스플로러 8이하 버전에서는 결제가 불가능합니다.' if @blockIEVersion()
+      throw '휴대폰 번호의 자리수와 형식이 맞지 않습니다. [ params : phone ]' if @params.phone?.length and !@phoneRegex.test(@params.phone)
+      throw '판매하려는 제품 order_id를 지정해주셔야합니다. 다른 결제 정보와 겹치지 않은 유니크한 값으로 정해서 보내주시기 바랍니다. [ params: order_id ]' unless @params.order_id?.length
+    catch e
+      alert e
+      Logger.error e
+      throw e
+  # 아이템 정보 Validation
+  integrityItemData: ->
+    try
+      throw '아이템 정보가 배열 형태가 아닙니다.' unless Array.isArray(@params.items)
+      @params.items.forEach (item, index) ->
+        throw "통계에 필요한 아이템 이름이 없습니다. [key: item_name, index: #{index}] " unless item.item_name?.length
+        throw "통계에 필요한 상품 판매 개수가 없습니다. [key: qty, index: #{index}]" unless item.qty?
+        throw "상품 판매 개수를 숫자로 입력해주세요. [key: qty, index: #{index}]" if isNaN(parseInt(item.qty))
+        throw "통계를 위한 상품의 고유값을 넣어주세요. [key: unique, index: #{index}]" unless item.unique?.length
+        throw "통계를 위해 상품의 개별 금액을 넣어주세요. [key: price, index: #{index}]" unless item.price?
+        throw "상품금액은 숫자로만 가능합니다. [key: price, index: #{index}]" if isNaN(parseInt(item.price))
+    catch e
+      alert e
+      Logger.error e
+      throw e
+  start: ->
+    @progressMessageShow '결제창을 불러오는 중입니다.'
+    @closeEventBind()
+    document.getElementById(@iframeId).addEventListener('load', @progressMessageHide)
+    document.bootpay_form.target = 'bootpay_inner_iframe'
+    document.bootpay_form.submit()
+    @
+  # 창이 닫혔을 때 이벤트 처리
+  closeEventBind: ->
+    window.off 'message.BootpayGlobalEvent'
+    window.on('message.BootpayGlobalEvent', (e) =>
+      try
+        data = JSON.parse e.data
+      catch
+        throw "#{e.data} json parse error"
+      switch data.action
+        when 'BootpayCancel'
+          @progressMessageShow '결제를 취소중입니다.'
+          @methods.cancel.call @, data if @methods.cancel?
+          @removePaymentWindow()
+        when 'BootpayBankReady'
+          @methods.ready.call @, data if @methods.ready?
+        when 'BootpayConfirm'
+          @progressMessageShow '결제를 승인중입니다.'
+          if !@methods.confirm?
+            @transactionConfirm data
+          else
+            @methods.confirm.call(@, data)
+        when 'BootpayResize'
+          iframeSelector = document.getElementById(@iframeId)
+          if data.reset
+            iframeSelector.removeAttribute 'style'
+            iframeSelector.setAttribute('scrolling', undefined)
+          else
+            iframeSelector.style.setProperty('max-width', data.width)
+            iframeSelector.style.setProperty('width', '100%')
+            iframeSelector.style.setProperty('height', data.height)
+            iframeSelector.style.setProperty('overflow', data.overflow)
+            iframeSelector.style.setProperty('-ms-overflow-style', data.ms_overflow)
+            iframeSelector.setAttribute 'scrolling', data.scrolling if data.scrolling?
+        when 'BootpayError'
+          @methods.error.call @, data if @methods.error?
+          @removePaymentWindow()
+        when 'BootpayDone'
+          @progressMessageHide()
+          @methods.done.call @, data
+          @removePaymentWindow()
+        when 'BootpayClose'
+          @progressMessageHide()
+          @removePaymentWindow()
+    )
+# IE 버전 blocking
+  blockIEVersion: ->
+    sAgent = window.navigator.userAgent
+    idx = sAgent.indexOf("MSIE")
+    return false unless idx > 0
+    version = parseInt(sAgent.substring(idx + 5, sAgent.indexOf(".", idx)))
+    version < @ieMinVersion
+# 결제창을 삭제한다.
+  removePaymentWindow: ->
+    document.body.style.removeProperty('bootpay-modal-open')
+    document.getElementById(@windowId).remove() if document.getElementById(@windowId)?
+    @methods.close @ if @methods.close?
+# 결제할 iFrame 창을 만든다.
+  iframeHtml: (url) ->
+    """
+      <iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}"></iframe>
+      <div class="progress-message-window">
+        <div class="progress-message spinner" id="progress-message">
+          <div class="bounce1 bounce"></div><div class="bounce2 bounce"></div><div class="bounce3 bounce"></div>
+          &nbsp;
+          <span class="text" id="progress-message-text"></span>
+        </div>
+      </div>
+    """
+  progressMessageHide: ->
+    pms = document.getElementById('progress-message')
+    pms.style.setProperty('display', 'none')
+    document.getElementById('progress-message-text').innerText = ''
+    try document.getElementById(@iframeId).removeEventListener('load', @progressMessageHide) catch then return
+
+  progressMessageShow: (msg) ->
+    pms = document.getElementById('progress-message')
+    pms.style.setProperty('display', 'inline-block')
+    document.getElementById('progress-message-text').innerText = msg
+    
+  cancel: (method) ->
+    @methods.cancel = method
+    @
+  confirm: (method) ->
+    @methods.confirm = method
+    @
+  ready: (method) ->
+    @methods.ready = mehtod
+    @
+  error: (method) ->
+    @methods.error = method
+    @
+  done: (method) ->
+    @methods.done = method
+    @
+  close: (method) ->
+    @methods.close = method
+    @
+
+  transactionConfirm: (data) ->
+    html = """
+    <input type="hidden" name="receipt_id" value="#{data.receipt_id}" />
+    <input type="hidden" name="application_id" value="#{@applicationId}" />
+"""
+    document.getElementById('bootpay_confirm_form').appendChild html
+    document.bootpay_confirm_form.target = 'bootpay_inner_iframe'
+    document.bootpay_confirm_form.submit()
+    @
+
 
 window.BootPay.initialize()
 

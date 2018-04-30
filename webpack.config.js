@@ -1,10 +1,9 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const version = require('./package.json').version;
 module.exports = {
     entry: './lib/bootpay.coffee',
     output: {
-        path: __dirname + '/dist',
-        filename: "bootpay-" + version + "-min.js"
+        path: __dirname,
+        filename: "bootpay-latest.js"
     },
     resolve: {
         extensions: ['.js', '.css', '.sass', '.coffee', '.json']
@@ -43,9 +42,7 @@ module.exports = {
             },
             {
                 test: /\.css/,
-                use: [{
-                    loader: "css-loader" // translates CSS into CommonJS
-                }]
+                use: [ 'style-loader', 'css-loader' ]
             },
             {
                 test: /\.sass$/,
