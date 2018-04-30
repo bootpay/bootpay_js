@@ -10,6 +10,7 @@ export default Logger =
         @logLevel = 3
       else
         @logLevel = 4
+
   debug: (msg) -> console.log msg if @logLevel <= 4
   info: (msg) -> console.info msg if @logLevel <= 3
   warn: (msg) -> console.warn msg if @logLevel <= 2

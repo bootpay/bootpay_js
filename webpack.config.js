@@ -1,8 +1,10 @@
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const version = require('./package.json').version;
 module.exports = {
     entry: './lib/bootpay.coffee',
     output: {
-        path: __dirname,
-        filename: 'bootpay-latest.js'
+        path: __dirname + '/dist',
+        filename: "bootpay-" + version + "-min.js"
     },
     resolve: {
         extensions: ['.js', '.css', '.sass', '.coffee', '.json']
@@ -10,6 +12,20 @@ module.exports = {
     devServer: {
         port: 3001,
         public: 'g-cdn.bootpay.co.kr'
+    },
+    optimization: {
+        minimizer: [
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                uglifyOptions: {
+                    compress: true,
+                    ecma: 6,
+                    mangle: true
+                },
+                sourceMap: true
+            })
+        ]
     },
     module: {
         rules: [
