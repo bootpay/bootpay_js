@@ -1,0 +1,133 @@
+@-webkit-keyframes sk-bouncedelay {
+    0%, 80%, 100% {
+        -webkit-transform: scale(0);
+    }
+    40% {
+        -webkit-transform: scale(1.0);
+    }
+}
+
+@keyframes sk-bouncedelay {
+    0%, 80%, 100% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+    40% {
+        -webkit-transform: scale(1.0);
+        transform: scale(1.0);
+    }
+}
+
+.bootpay-modal-open {
+    position: fixed;
+    overflow: hidden;
+}
+
+.bootpay-window, .bootpay-poke-window {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 30000;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+.bootpay-window .progress-message-window {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 30000;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.bootpay-window .progress-message-window .progress-message {
+    display: inline-block;
+    text-align: center;
+    max-width: 600px;
+    border-radius: 3px;
+    width: 100%;
+    background-color: transparent;
+    padding: 1em;
+    vertical-align: middle;
+}
+
+@media (min-width: 500px) {
+    .bootpay-window .progress-message-window .progress-message {
+        display: inline-block;
+        width: 400px;
+        vertical-align: middle;
+    }
+}
+@media (min-width: 800px) {
+    .bootpay-poke-window .progress-message-window .progress-message {
+        display: inline-block;
+        width: 800px;
+        vertical-align: middle;
+    }
+}
+
+.bootpay-window .progress-message-window .progress-message span.text {
+    font-weight: 400;
+    color: #fff;
+}
+
+.bootpay-window .spinner .bounce {
+    width: 10px;
+    height: 10px;
+    margin: 0 3px;
+    background-color: #fff;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.bootpay-window .spinner .bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+}
+
+.bootpay-window .spinner .bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+
+.bootpay-window:before, .bootpay-poke-window:before, .progress-message-window:before {
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+    content: ' ';
+    overflow: hidden;
+}
+
+.bootpay-window iframe,
+.bootpay-poke-window iframe {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    z-index: 30001;
+}
+
+@media (min-width: 500px) {
+    .bootpay-window iframe {
+        position: relative;
+        display: inline-block;
+        width: 400px;
+        height: 100%;
+        max-height: 760px;
+        vertical-align: middle;
+    }
+}
