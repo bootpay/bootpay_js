@@ -24,12 +24,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function doPayment() {
     BootPay.request({
-        price: '3000',
+        price: document.getElementsByName('price')[0].value,
         application_id: '59a568d3e13f3336c21bf707',
         name: '테스트 아이템',
         phone: '01000000000',
         order_id: (new Date()).getTime(),
-        pg: 'kcp',
+        pg: document.getElementsByName('pg')[0].value,
+        method: document.getElementsByName('method')[0].value,
         show_agree_window: 0,
         items: [
             {
@@ -41,8 +42,7 @@ function doPayment() {
         ],
         user_info: {
             email: 'test.bootpay.co.kr@gmail.com'
-        },
-        method: 'card'
+        }
     }).error(function (data) {
         var msg = "결제 에러입니다.: " + JSON.stringify(data)
         alert(msg);
