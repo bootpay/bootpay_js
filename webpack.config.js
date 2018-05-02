@@ -15,14 +15,18 @@ module.exports = {
     optimization: {
         minimizer: [
             new UglifyJsPlugin({
-                cache: true,
-                parallel: true,
                 uglifyOptions: {
                     compress: true,
                     ecma: 6,
-                    mangle: true
-                },
-                sourceMap: true
+                    mangle: true,
+                    output: {
+                        comments: false,
+                        beautify: false
+                    },
+                    cache: true,
+                    parallel: true,
+                    sourceMap: (process.env.MODE_ENV !== 'production')
+                }
             })
         ]
     },
@@ -42,7 +46,7 @@ module.exports = {
             },
             {
                 test: /\.css/,
-                use: [ 'style-loader', 'css-loader' ]
+                use: ['style-loader', 'css-loader']
             },
             {
                 test: /\.sass$/,

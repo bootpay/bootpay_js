@@ -1,7 +1,8 @@
 request = require('superagent')
 import './event'
 import Logger from './logger'
-import CryptoJS from 'crypto-js'
+import AES from 'crypto-js/aes'
+import Base64 from 'crypto-js/enc-base64'
 import './style'
 window.BootPay =
   VISIT_TIMEOUT: 86400000 # 재 방문 시간에 대한 interval
@@ -125,13 +126,13 @@ window.BootPay =
       page_type: if data? then data.type else undefined
       items: items
     Logger.debug "활동 정보를 서버로 전송합니다. data: #{JSON.stringify(requestData)}"
-    encryptData = CryptoJS.AES.encrypt(JSON.stringify(requestData), requestData.sk)
+    encryptData = AES.encrypt(JSON.stringify(requestData), requestData.sk)
     request
     .post([@analyticsUrl, "call?ver=#{@version}"].join('/'))
     .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
     .send(
-      data: encryptData.ciphertext.toString(CryptoJS.enc.Base64)
-      session_key: "#{encryptData.key.toString(CryptoJS.enc.Base64)}###{encryptData.iv.toString(CryptoJS.enc.Base64)}"
+      data: encryptData.ciphertext.toString(Base64)
+      session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
     )
     .end((err, res) =>
       Logger.error "BOOTPAY MESSAGE: #{json.message} - Application ID가 제대로 되었는지 확인해주세요." if res.status isnt 200 or res.body.status isnt 200
@@ -160,13 +161,13 @@ window.BootPay =
     return if !data? or !document.URL?
     Logger.debug "로그인 데이터를 전송합니다. data: #{JSON.stringify(data)}"
     data.area = if data.area?.length then data.area[0] else undefined
-    encryptData = CryptoJS.AES.encrypt(JSON.stringify(data), @getData('sk'))
+    encryptData = AES.encrypt(JSON.stringify(data), @getData('sk'))
     request
     .post([@analyticsUrl, "login?ver=#{@version}"].join('/'))
     .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
     .send(
-      data: encryptData.ciphertext.toString(CryptoJS.enc.Base64)
-      session_key: "#{encryptData.key.toString(CryptoJS.enc.Base64)}###{encryptData.iv.toString(CryptoJS.enc.Base64)}"
+      data: encryptData.ciphertext.toString(Base64)
+      session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
     )
     .end((err, res) =>
       if res.status isnt 200 or res.body.status isnt 200
@@ -213,12 +214,12 @@ window.BootPay =
     # 결제 정보 데이터의 Validation
     @integrityParams() if !@params.method? or @params.method is 'auth'
     # 데이터를 AES로 암호화한다.
-    encryptData = CryptoJS.AES.encrypt(JSON.stringify(@params), @params.sk)
+    encryptData = AES.encrypt(JSON.stringify(@params), @params.sk)
     html = """
       <div id="#{@windowId}">
         <form name="bootpay_form" action="#{[@restUrl, 'start', 'js', '?ver=' + @version].join('/')}" method="POST">
-          <input type="hidden" name="data" value="#{encryptData.ciphertext.toString(CryptoJS.enc.Base64)}" />
-          <input type="hidden" name="session_key" value="#{encryptData.key.toString(CryptoJS.enc.Base64)}###{encryptData.iv.toString(CryptoJS.enc.Base64)}" />
+          <input type="hidden" name="data" value="#{encryptData.ciphertext.toString(Base64)}" />
+          <input type="hidden" name="session_key" value="#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}" />
         </form>
         <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl, 'confirm'].join('/')}" method="POST">
         </form>

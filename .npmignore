@@ -10,3 +10,6 @@ support/
 node_modules/
 test/
 .gitignore
+package-lock.json
+yarn.lock
+Gemfile.lock
