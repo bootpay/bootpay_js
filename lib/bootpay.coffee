@@ -369,7 +369,6 @@ window.BootPay =
     sAgent = window.navigator.userAgent
     idx = sAgent.indexOf("MSIE")
     return false unless idx > 0
-    console.log parseInt(sAgent.substring(idx + 5, sAgent.indexOf(".", idx)))
     version > parseInt(sAgent.substring(idx + 5, sAgent.indexOf(".", idx)))
 # IE 버전 blocking
   blockIEVersion: -> @isLtBrowserVersion @ieMinVersion
