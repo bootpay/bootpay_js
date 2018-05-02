@@ -33,3 +33,33 @@ function doLogin() {
         area: document.getElementsByName('area')[0].value
     });
 }
+
+function doNotify() {
+    BootPay.notify({
+        price: '1000',
+        name: '파는 아이템',
+        items: [
+            {
+                item_name: '나는 아이템',
+                qty: 1,
+                unique: '123',
+                price: 1000
+            }
+        ],
+        user_info: {
+            username: document.getElementsByName('name')[0].value,
+            email: document.getElementsByName('email')[0].value,
+            addr: document.getElementsByName('area')[0].value,
+            phone: document.getElementsByName('phone')[0].value
+        },
+        method: 'card',
+        order_id: (new Date()).getTime()
+    }, function (data) {
+        var receiptId = data.receipt_id;
+        document.getElementsByName('receipt_id')[0].value = receiptId;
+        // 결제 시작 진행
+    }, function (data) {
+        console.log(data);
+        // 서버에서 응답하지 않았으므로 바로 결제 진행
+    }, 3000);
+}

@@ -268,6 +268,54 @@ window.BootPay =
     document.bootpay_form.target = 'bootpay_inner_iframe'
     document.bootpay_form.submit()
     @
+  notify: (data, success = undefined, error = undefined, timeout = 3000) ->
+    @removePaymentWindow()
+    user = @getUserData()
+    @applicationId = if data.application_id? then data.application_id else @applicationId
+    @params = {}
+    @params.device_type = @deviceType
+    @params.method = data.method if data.method?
+    @params.application_id = @applicationId
+    @params.name = data.name
+    @params.item_code = data.item_code if data.item_code?
+    @params.qty = data.qty if data.item_code? and data.qty?
+    @params.user_info = data.user_info
+    @params.redirect_url = if data.redirect_url? then data.redirect_url else ''
+    @params.phone = if data.phone?.length then data.phone.replace(/-/g, '') else ''
+    @params.uuid = if data.uuid?.length then data.uuid else window.localStorage['uuid']
+    @params.order_id = if data.order_id? then String(data.order_id) else undefined
+    @params.sk = window.localStorage.getItem('sk')
+    @params.time = window.localStorage.getItem('time')
+    @params.price = data.price
+    @params.format = @option.format if data.format?
+    @params.params = data.params
+    @params.user_id = if user? then user.id else undefined
+    @params.bank_account = if data.bank_account? then data.bank_account else undefined
+    @params.bank_name = if data.bank_name? then data.bank_name else undefined
+    @integrityItemData() if @params.items?.length
+    @params.items = data.items
+    @integrityParams() if !@params.method? or !@params.method isnt 'auth'
+    encryptData = AES.encrypt(JSON.stringify(@params), @getData('sk'))
+    request
+    .post([@restUrl, "notify?ver=#{@version}"].join('/'))
+    .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+    .timeout(
+      response: timeout
+      deadline: timeout
+    )
+    .send(
+      data: encryptData.ciphertext.toString(Base64)
+      session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
+    )
+    .end((err, res) =>
+      if !err
+        if res.status isnt 200 or res.body.status isnt 200
+          Logger.error "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요."
+        else
+          success.apply @, [res.body.data] if success?
+      else
+        error.apply @, ["서버 오류로 인해 결제가 되지 않았습니다. #{err.message}"] if error?
+    )
 # 창이 닫혔을 때 이벤트 처리
   closeEventBind: ->
     window.off 'message.BootpayGlobalEvent'
