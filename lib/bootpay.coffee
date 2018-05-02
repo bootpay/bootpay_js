@@ -128,16 +128,16 @@ window.BootPay =
     Logger.debug "활동 정보를 서버로 전송합니다. data: #{JSON.stringify(requestData)}"
     encryptData = AES.encrypt(JSON.stringify(requestData), requestData.sk)
     request
-    .post([@analyticsUrl, "call?ver=#{@version}"].join('/'))
-    .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-    .send(
+      .post([@analyticsUrl, "call?ver=#{@version}"].join('/'))
+      .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+      .send(
       data: encryptData.ciphertext.toString(Base64)
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
     )
-    .end((err, res) =>
+      .end((err, res) =>
       Logger.error "BOOTPAY MESSAGE: #{json.message} - Application ID가 제대로 되었는지 확인해주세요." if res.status isnt 200 or res.body.status isnt 200
     )
-  # 로그인 정보를 부트페이 서버로 전송한다.
+# 로그인 정보를 부트페이 서버로 전송한다.
   startLoginSession: (data) ->
     try
       throw '로그인 데이터를 입력해주세요.' unless data?
@@ -156,20 +156,20 @@ window.BootPay =
       gender: data.gender
       area: if data.area? then String(data.area).match(/서울|인천|대구|광주|부산|울산|경기|강원|충청북도|충북|충청남도|충남|전라북도|전북|전라남도|전남|경상북도|경북|경상남도|경남|제주|세종|대전/) else undefined
     )
-  # 부트페이 서버로 데이터를 전송한다.
+# 부트페이 서버로 데이터를 전송한다.
   sendLoginData: (data) ->
     return if !data? or !document.URL?
     Logger.debug "로그인 데이터를 전송합니다. data: #{JSON.stringify(data)}"
     data.area = if data.area?.length then data.area[0] else undefined
     encryptData = AES.encrypt(JSON.stringify(data), @getData('sk'))
     request
-    .post([@analyticsUrl, "login?ver=#{@version}"].join('/'))
-    .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-    .send(
+      .post([@analyticsUrl, "login?ver=#{@version}"].join('/'))
+      .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+      .send(
       data: encryptData.ciphertext.toString(Base64)
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
     )
-    .end((err, res) =>
+      .end((err, res) =>
       if res.status isnt 200 or res.body.status isnt 200
         Logger.error "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요."
       else
@@ -180,7 +180,7 @@ window.BootPay =
         )
     )
 
-  # 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
+# 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
   request: (data) ->
     @removePaymentWindow()
     user = @getUserData()
@@ -259,8 +259,8 @@ window.BootPay =
       alert e
       Logger.error e
       throw e
-  # 결제창을 조립해서 만들고 부트페이로 결제 정보를 보낸다.
-  # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
+# 결제창을 조립해서 만들고 부트페이로 결제 정보를 보낸다.
+# 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
   start: ->
     @progressMessageShow '결제창을 불러오는 중입니다.'
     @closeEventBind()
@@ -297,17 +297,17 @@ window.BootPay =
     @integrityParams() if !@params.method? or !@params.method isnt 'auth'
     encryptData = AES.encrypt(JSON.stringify(@params), @getData('sk'))
     request
-    .post([@restUrl, "notify?ver=#{@version}"].join('/'))
-    .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-    .timeout(
+      .post([@restUrl, "notify?ver=#{@version}"].join('/'))
+      .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+      .timeout(
       response: timeout
       deadline: timeout
     )
-    .send(
+      .send(
       data: encryptData.ciphertext.toString(Base64)
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
     )
-    .end((err, res) =>
+      .end((err, res) =>
       if !err
         if res.status isnt 200 or res.body.status isnt 200
           Logger.error "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요."
@@ -350,9 +350,7 @@ window.BootPay =
             iframeSelector.style.setProperty('width', '100%')
             iframeSelector.style.setProperty('height', data.height)
             # ie 9이하에서는 overflow 속성을 인식하지 못한다.
-            unless @isLtBrowserVersion(10)
-              iframeSelector.style.setProperty('overflow', data.overflow)
-              iframeSelector.style.setProperty('-ms-overflow-style', data.ms_overflow)
+            iframeSelector.style.overflow = data.overflow
             iframeSelector.setAttribute 'scrolling', data.scrolling if data.scrolling?
         when 'BootpayError'
           @methods.error.call @, data if @methods.error?
