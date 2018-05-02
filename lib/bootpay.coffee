@@ -226,7 +226,7 @@ window.BootPay =
         <div class="bootpay-window">#{@iframeHtml('')}</div>
       </div>
       """
-    document.body.innerHTML += html
+    document.body.insertAdjacentHTML 'beforeend', html
     @start()
     @
 
