@@ -1,5 +1,5 @@
 {
-  "name": "bootpay_js",
+  "name": "bootpay-js",
   "version": "2.0.0",
   "description": "Bootpay Javasrcipt Library",
   "main": "lib/bootpay.coffee",
