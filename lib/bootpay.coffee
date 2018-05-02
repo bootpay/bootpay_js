@@ -349,6 +349,7 @@ window.BootPay =
             iframeSelector.style.setProperty('max-width', data.width)
             iframeSelector.style.setProperty('width', '100%')
             iframeSelector.style.setProperty('height', data.height)
+            # ie 9이하에서는 overflow 속성을 인식하지 못한다.
             unless @isLtBrowserVersion(10)
               iframeSelector.style.setProperty('overflow', data.overflow)
               iframeSelector.style.setProperty('-ms-overflow-style', data.ms_overflow)
