@@ -322,9 +322,11 @@ window.BootPay =
     window.off 'message.BootpayGlobalEvent'
     window.on('message.BootpayGlobalEvent', (e) =>
       try
-        data = JSON.parse e.data
-      catch
-        throw "#{e.data} json parse error"
+        data = {}
+        data = JSON.parse e.data if e.data? and typeof e.data is 'string'
+      catch e
+        Logger.error "data: #{e.data}, #{e.message} json parse error"
+        return
       switch data.action
         when 'BootpayCancel'
           @progressMessageShow '결제를 취소중입니다.'
@@ -347,8 +349,9 @@ window.BootPay =
             iframeSelector.style.setProperty('max-width', data.width)
             iframeSelector.style.setProperty('width', '100%')
             iframeSelector.style.setProperty('height', data.height)
-            iframeSelector.style.setProperty('overflow', data.overflow)
-            iframeSelector.style.setProperty('-ms-overflow-style', data.ms_overflow)
+            unless @isLtBrowserVersion(10)
+              iframeSelector.style.setProperty('overflow', data.overflow)
+              iframeSelector.style.setProperty('-ms-overflow-style', data.ms_overflow)
             iframeSelector.setAttribute 'scrolling', data.scrolling if data.scrolling?
         when 'BootpayError'
           @methods.error.call @, data if @methods.error?
@@ -361,13 +364,14 @@ window.BootPay =
           @progressMessageHide()
           @removePaymentWindow()
     )
-# IE 버전 blocking
-  blockIEVersion: ->
+  isLtBrowserVersion: (version) ->
     sAgent = window.navigator.userAgent
     idx = sAgent.indexOf("MSIE")
     return false unless idx > 0
-    version = parseInt(sAgent.substring(idx + 5, sAgent.indexOf(".", idx)))
-    version < @ieMinVersion
+    console.log parseInt(sAgent.substring(idx + 5, sAgent.indexOf(".", idx)))
+    version > parseInt(sAgent.substring(idx + 5, sAgent.indexOf(".", idx)))
+# IE 버전 blocking
+  blockIEVersion: -> @isLtBrowserVersion @ieMinVersion
 # 결제창을 삭제한다.
   removePaymentWindow: ->
     document.body.style.removeProperty('bootpay-modal-open')
