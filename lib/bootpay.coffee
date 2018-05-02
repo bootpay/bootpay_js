@@ -63,6 +63,9 @@ window.BootPay =
       r = Math.random() * 16 | 0
       v = if c == 'x' then r else r & 0x3 | 0x8
       v.toString 16
+# 로그인 했을때 데이터를 저장한다.
+  setUserData: (data) ->
+    @setData 'user', JSON.stringify(data)
 # 세션 키를 발급하는 로직
   setReadySessionKey: ->
     sessionKeyTime = (new Date()).getTime()
@@ -125,6 +128,7 @@ window.BootPay =
     encryptData = CryptoJS.AES.encrypt(JSON.stringify(requestData), requestData.sk)
     request
     .post([@analyticsUrl, "call?ver=#{@version}"].join('/'))
+    .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
     .send(
       data: encryptData.ciphertext.toString(CryptoJS.enc.Base64)
       session_key: "#{encryptData.key.toString(CryptoJS.enc.Base64)}###{encryptData.iv.toString(CryptoJS.enc.Base64)}"
@@ -132,6 +136,50 @@ window.BootPay =
     .end((err, res) =>
       Logger.error "BOOTPAY MESSAGE: #{json.message} - Application ID가 제대로 되었는지 확인해주세요." if res.status isnt 200 or res.body.status isnt 200
     )
+  # 로그인 정보를 부트페이 서버로 전송한다.
+  startLoginSession: (data) ->
+    try
+      throw '로그인 데이터를 입력해주세요.' unless data?
+      throw '로그인 하는 아이디를 입력해주세요.' unless data.id?
+    catch e
+      Logger.error e
+      alert e
+      throw e
+    @sendLoginData(
+      application_id: if data.application_id? then data.application_id else @applicationId
+      id: data.id
+      username: data.username
+      birth: data.birth
+      phone: data.phone
+      email: data.email
+      gender: data.gender
+      area: if data.area? then String(data.area).match(/서울|인천|대구|광주|부산|울산|경기|강원|충청북도|충북|충청남도|충남|전라북도|전북|전라남도|전남|경상북도|경북|경상남도|경남|제주|세종|대전/) else undefined
+    )
+  # 부트페이 서버로 데이터를 전송한다.
+  sendLoginData: (data) ->
+    return if !data? or !document.URL?
+    Logger.debug "로그인 데이터를 전송합니다. data: #{JSON.stringify(data)}"
+    data.area = if data.area?.length then data.area[0] else undefined
+    encryptData = CryptoJS.AES.encrypt(JSON.stringify(data), @getData('sk'))
+    request
+    .post([@analyticsUrl, "login?ver=#{@version}"].join('/'))
+    .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+    .send(
+      data: encryptData.ciphertext.toString(CryptoJS.enc.Base64)
+      session_key: "#{encryptData.key.toString(CryptoJS.enc.Base64)}###{encryptData.iv.toString(CryptoJS.enc.Base64)}"
+    )
+    .end((err, res) =>
+      if res.status isnt 200 or res.body.status isnt 200
+        Logger.error "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요."
+      else
+        json = res.body.data
+        @setUserData(
+          id: json.user_id
+          time: (new Date()).getTime()
+        )
+    )
+
+  # 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
   request: (data) ->
     @removePaymentWindow()
     user = @getUserData()
@@ -210,6 +258,8 @@ window.BootPay =
       alert e
       Logger.error e
       throw e
+  # 결제창을 조립해서 만들고 부트페이로 결제 정보를 보낸다.
+  # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
   start: ->
     @progressMessageShow '결제창을 불러오는 중입니다.'
     @closeEventBind()

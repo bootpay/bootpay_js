@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../../bootpay-latest.js" type="application/javascript"></script>
+    <script src="./analytics.js" type="application/javascript"></script>
+    <meta charset="utf-8"/>
+    <meta name="bootpay-application-id" content="59a568d3e13f3336c21bf707"/>
+    <link rel="stylesheet" media="all" href="../stylesheet/style.css"/>
+</head>
+<body>
+<div class="pg-select-container">
+    <div class="pg-select-box">
+        <h2 class="title">로그인 정보 보내기</h2>
+        <div class="group">
+            <label>아이디</label>
+            <input class="input-block" value="gosomi" name="id"/>
+        </div>
+        <div class="group">
+            <label>이름</label>
+            <input class="input-block" value="윤태섭" name="name"/>
+        </div>
+        <div class="group">
+            <label>생년월일</label>
+            <input class="input-block" value="1996-09-08" name="birth"/>
+        </div>
+        <div class="group">
+            <label>이메일</label>
+            <input class="input-block" value="sexyking@forelf.com" name="email"/>
+        </div>
+        <div class="group">
+            <label>성별</label>
+            <select class="bootpay-select" name="gender">
+                <option value="0">여자</option>
+                <option value="1">남자</option>
+            </select>
+        </div>
+        <div class="group">
+            <label>사는지역</label>
+            <input class="input-block" value="서울특별시 구로구" name="area"/>
+        </div>
+        <div class="group">
+            <label>전화번호 / 휴대폰번호</label>
+            <input class="input-block" value="01000000000" name="phone"/>
+        </div>
+        <div class="group">
+            <label>영수증 ID</label>
+            <input class="input-block" value="" name="receipt_id"/>
+        </div>
+        <div class="button-box text-center">
+            <button class="button" onclick="doLogin()">로그인하기</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
