@@ -371,7 +371,7 @@ window.BootPay =
 # 결제창을 삭제한다.
   removePaymentWindow: ->
     document.body.style.removeProperty('bootpay-modal-open')
-    document.getElementById(@windowId).remove() if document.getElementById(@windowId)?
+    document.getElementById(@windowId).outerHTML = '' if document.getElementById(@windowId)?
     @methods.close @ if @methods.close?
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->
