@@ -311,6 +311,7 @@ window.BootPay =
       if !err
         if res.status isnt 200 or res.body.status isnt 200
           Logger.error "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요."
+          error.apply @, ["BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요.", res.body] if error?
         else
           success.apply @, [res.body.data] if success?
       else
