@@ -19,6 +19,7 @@ window.BootPay =
   params: {}
   option: {}
   phoneRegex: /^\d{2,3}\d{3,4}\d{4}$/
+  dateFormat: /(\d{4})-(\d{2})-(\d{2})/
   initialize: (logLevel = 1) ->
     @setLogLevel logLevel
     @setReadyUUID()
@@ -156,6 +157,7 @@ window.BootPay =
       params: if data.params? then data.params else undefined
       user_id: if user? then user.id else undefined
       path_url: document.URL
+      account_expire_at: if data.account_expire_at? then data.account_expire_at else undefined
     # 각 함수 호출 callback을 초기화한다.
     @methods = {}
     # 아이템 정보의 Validation
@@ -179,7 +181,7 @@ window.BootPay =
     @start()
     @
 
-  #  결제 요청 정보 Validation
+#  결제 요청 정보 Validation
   integrityParams: ->
     price = parseFloat @params.price
     try
@@ -188,11 +190,12 @@ window.BootPay =
       throw '익스플로러 8이하 버전에서는 결제가 불가능합니다.' if @blockIEVersion()
       throw '휴대폰 번호의 자리수와 형식이 맞지 않습니다. [ params : phone ]' if @params.phone?.length and !@phoneRegex.test(@params.phone)
       throw '판매하려는 제품 order_id를 지정해주셔야합니다. 다른 결제 정보와 겹치지 않은 유니크한 값으로 정해서 보내주시기 바랍니다. [ params: order_id ]' unless @params.order_id?.length
+      throw '가상계좌 입금 만료일 포멧이 잘못되었습니다. yyyy-mm-dd로 입력해주세요. [ params: account_expire_at ]' if @params.account_expire_at?.length and !@dateFormat.test(@params.account_expire_at) and @params.method is 'vbank'
     catch e
       alert e
       Logger.error e
       throw e
-  # 아이템 정보 Validation
+# 아이템 정보 Validation
   integrityItemData: ->
     try
       throw '아이템 정보가 배열 형태가 아닙니다.' unless Array.isArray(@params.items)
@@ -214,7 +217,7 @@ window.BootPay =
     document.bootpay_form.target = 'bootpay_inner_iframe'
     document.bootpay_form.submit()
     @
-  # 창이 닫혔을 때 이벤트 처리
+# 창이 닫혔을 때 이벤트 처리
   closeEventBind: ->
     window.off 'message.BootpayGlobalEvent'
     window.on('message.BootpayGlobalEvent', (e) =>
@@ -286,13 +289,14 @@ window.BootPay =
     pms = document.getElementById('progress-message')
     pms.style.setProperty('display', 'none')
     document.getElementById('progress-message-text').innerText = ''
-    try document.getElementById(@iframeId).removeEventListener('load', @progressMessageHide) catch then return
+    try document.getElementById(@iframeId).removeEventListener('load', @progressMessageHide)
+    catch then return
 
   progressMessageShow: (msg) ->
     pms = document.getElementById('progress-message')
     pms.style.setProperty('display', 'inline-block')
     document.getElementById('progress-message-text').innerText = msg
-    
+
   cancel: (method) ->
     @methods.cancel = method
     @
@@ -313,15 +317,16 @@ window.BootPay =
     @
 
   transactionConfirm: (data) ->
-    if data? or data.receipt_id?
+    if !data? or !data.receipt_id?
       alert '결제 승인을 하기 위해서는 receipt_id 값이 포함된 data값을 함께 보내야 합니다.'
       Logger.error 'this.transactionConfirm(data); 이렇게 confirm을 실행해주세요.'
       return
+
     html = """
       <input type="hidden" name="receipt_id" value="#{data.receipt_id}" />
       <input type="hidden" name="application_id" value="#{@applicationId}" />
     """
-    document.getElementById('bootpay_confirm_form').appendChild html
+    document.getElementById('bootpay_confirm_form').innerHTML = html
     document.bootpay_confirm_form.target = 'bootpay_inner_iframe'
     document.bootpay_confirm_form.submit()
     @
