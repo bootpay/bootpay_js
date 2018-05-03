@@ -378,7 +378,7 @@ window.BootPay =
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->
     """
-      <iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}"></iframe>
+      <iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}" allowtransparency="true"></iframe>
       <div class="progress-message-window">
         <div class="progress-message spinner" id="progress-message">
           <div class="bounce1 bounce"></div><div class="bounce2 bounce"></div><div class="bounce3 bounce"></div>

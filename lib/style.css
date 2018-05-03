@@ -23,7 +23,7 @@
     overflow: hidden;
 }
 
-.bootpay-window, .bootpay-poke-window {
+.bootpay-window {
     display: block;
     position: fixed;
     left: 0;
@@ -101,16 +101,16 @@
     animation-delay: -0.16s;
 }
 
-.bootpay-window:before, .bootpay-poke-window:before, .progress-message-window:before {
+.bootpay-window:before, .progress-message-window:before {
     display: inline-block;
     vertical-align: middle;
     height: 100%;
     content: ' ';
     overflow: hidden;
+    background: transparent;
 }
 
-.bootpay-window iframe,
-.bootpay-poke-window iframe {
+.bootpay-window iframe {
     position: relative;
     display: inline-block;
     width: 100%;

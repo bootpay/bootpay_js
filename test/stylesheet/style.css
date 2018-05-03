@@ -31,6 +31,10 @@ select.bootpay-select {
     font-weight: 600;
 }
 
+select.bootpay-select::-ms-expand {
+    display: none;
+}
+
 select.bootpay-select:disabled {
     background-color: #FAFCFF;
     color: #B9C3C9;
