@@ -4,6 +4,53 @@
 코드 한줄로 구현하는 Bootpay JS 모듈입니다. 개발 언어는 coffeescript로 되어 있으며, jQuery 의존성이 있는 1.x.x버전은 Private Git 저장소로 관리중이며, jQuery의존성이 없는 2.x.x는 GitHub에 오픈소스로 개발되었습니다.
 2.x.x는 Webpack으로 컴파일 되며, webpack-dev-server를 통해 테스트 서버로 결제를 테스트 할 수도 있습니다.
 
+## NPM URL
+NPM으로 다운 받을 수 있는 경로는 다음과 같습니다.
+https://www.npmjs.com/package/bootpay-js
+
+## 연동 방법
+### 1. CDN으로 Javascript 호출하기
+```html
+<script src="https://cdn.bootpay.co.kr/js/bootpay-2.0.0.min.js" type="application/javascript"></script>
+```
+
+### 2. npm으로 설치하기
+```shell
+npm install bootpay-js
+```
+설치 한 후에
+``` javascript
+var BootPay = require('bootpay-js');
+```
+형태로 사용이 가능합니다.
+
+### 3. Webpack Package 사용
+```json
+{
+  "dependencies": {
+    //...
+    "bootpay-js": "^2.0.0"
+    //...
+  }
+}
+```
+
+```coffeescript
+import BootPay from 'bootpay-js'
+```
+
+### 4. Require JS 사용
+```html
+<script type="text/javascript">
+    //jQuery 수정 버전을 로드한다.
+    require(["https://cdn.bootpay.co.kr/js/bootpay-2.0.0.min.js"], function(BootPay) {
+        BootPay.request({
+            // anyThing Data
+        });
+    });
+</script>
+```
+
 ## 부트페이로 결제 연동하기 전에
 * Bootpay Admin (https://admin.bootpay.co.kr) 로 간 후 먼저 회원가입을 해주세요.
 * Bootpay Docs (https://docs.bootpay.co.kr) 로 가셔서 연동전 필요한 준비를 해주세요.
