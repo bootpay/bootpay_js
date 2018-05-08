@@ -17,7 +17,7 @@ module.exports = {
             new UglifyJsPlugin({
                 uglifyOptions: {
                     compress: true,
-                    ecma: 6,
+                    ecma: 5,
                     mangle: true,
                     output: {
                         comments: false,
