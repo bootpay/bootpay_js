@@ -11,7 +11,7 @@ https://www.npmjs.com/package/bootpay-js
 ## 연동 방법
 ### 1. CDN으로 Javascript 호출하기
 ```html
-<script src="https://cdn.bootpay.co.kr/js/bootpay-2.0.2.min.js" type="application/javascript"></script>
+<script src="https://cdn.bootpay.co.kr/js/bootpay-2.0.3.min.js" type="application/javascript"></script>
 ```
 
 ### 2. npm으로 설치하기
@@ -29,7 +29,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^2.0.2"
+    "bootpay-js": "^2.0.3"
     //...
   }
 }
@@ -43,7 +43,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-2.0.2.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-2.0.3.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });

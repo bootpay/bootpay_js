@@ -16,6 +16,10 @@ window.BootPay =
   iframeId: 'bootpay-payment-iframe'
   ieMinVersion: 9
   deviceType: 1
+  ableDeviceTypes:
+    JS: 1
+    ANDROID: 2
+    IOS: 3
   methods: {}
   params: {}
   option: {}
@@ -55,6 +59,19 @@ window.BootPay =
 # Date: 2018-04-28
 #----------------------------------------------------------
   getData: (key) -> window.localStorage.getItem key
+# device Type을 설정한다. 없을 경우 false를 리턴, 있는 경우 true를 리턴
+  setDevice: (deviceType) ->
+    @deviceType = @ableDeviceTypes[deviceType] if @ableDeviceTypes[deviceType]?
+    @ableDeviceTypes[deviceType]?
+
+# 기본적인 통계 데이터를 설정한다.
+# Android, iPhone에서 기본적으로 사용하는 코드
+  setAnalyticsData: (data) ->
+    @setData 'uuid', data.uuid if data.uuid?
+    @setData 'sk', data.sk if data.sk?
+    @setData 'sk_time', data.sk_time if data.sk_time?
+    @setData 'time', data.time if data.time?
+
 # 로그인한 유저 정보를 가져온다.
   getUserData: -> try JSON.parse(@getData('user'))
   catch then undefined
