@@ -152,7 +152,7 @@ window.BootPay =
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
     )
     .end((err, res) =>
-      Logger.error "BOOTPAY MESSAGE: #{json.message} - Application ID가 제대로 되었는지 확인해주세요." if res.status isnt 200 or res.body.status isnt 200
+      Logger.error "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요." if res.status isnt 200 or res.body.status isnt 200
     )
   # 로그인 정보를 부트페이 서버로 전송한다.
   startLoginSession: (data) ->

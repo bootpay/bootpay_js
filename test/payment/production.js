@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function doPayment() {
     BootPay.request({
         price: document.getElementsByName('price')[0].value,
-        application_id: '59a568d3e13f3336c21bf707',
+        application_id: '59a7a368396fa64fc5d4a7db',
         name: '테스트 아이템',
         phone: '01000000000',
         order_id: (new Date()).getTime(),
@@ -69,7 +69,7 @@ function doPayment() {
 function doAllPayment() {
     BootPay.request({
         price: document.getElementsByName('price')[0].value,
-        application_id: '59a568d3e13f3336c21bf707',
+        application_id: '59a7a368396fa64fc5d4a7db',
         name: '테스트 아이템',
         phone: '01000000000',
         order_id: (new Date()).getTime(),
