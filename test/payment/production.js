@@ -98,7 +98,7 @@ function doAllPayment() {
             console.log("do confirm data: " + JSON.stringify(data));
             this.transactionConfirm(data);
         } else {
-            var msg = "결제가 승인거절되었습니다.: " + JSON.stringify(data)
+            var msg = "결제가 승인거절되었습니다.: " + JSON.stringify(data);
             alert(msg);
             console.log(data);
         }
@@ -106,4 +106,14 @@ function doAllPayment() {
         alert("결제가 완료되었습니다.");
         console.log(data);
     });
+}
+
+function changeMethod(e) {
+    switch(e.value) {
+        case 'card_rebill':
+            document.getElementsByName('price')[0].value = 0;
+            break;
+        default:
+            document.getElementsByName('price')[0].value = 3000;
+    }
 }

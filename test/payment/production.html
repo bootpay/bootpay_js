@@ -24,7 +24,7 @@
         </div>
         <div class="group">
             <label>결제수단선택</label>
-            <select class="bootpay-select" name="method">
+            <select class="bootpay-select" name="method" onchange="changeMethod(this);">
                 <option value="card">카드결제</option>
                 <option value="phone">휴대폰소액결제</option>
                 <option value="vbank">가상계좌</option>
