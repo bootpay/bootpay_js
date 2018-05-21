@@ -42,6 +42,9 @@ function doPayment() {
         ],
         user_info: {
             email: 'test.bootpay.co.kr@gmail.com'
+        },
+        extra: {
+            expire_month: '36'
         }
     }).error(function (data) {
         var msg = "결제 에러입니다.: " + JSON.stringify(data)
@@ -109,7 +112,7 @@ function doAllPayment() {
 }
 
 function changeMethod(e) {
-    switch(e.value) {
+    switch (e.value) {
         case 'card_rebill':
             document.getElementsByName('price')[0].value = 0;
             break;

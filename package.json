@@ -1,6 +1,6 @@
 {
   "name": "bootpay-js",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Bootpay Javasrcipt Library",
   "main": "lib/bootpay.coffee",
   "devDependencies": {
