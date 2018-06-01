@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         ]
     });
+    document.getElementsByName('pg')[0].value = 'danal';
+    document.getElementsByName('method')[0].value = 'bank';
 });
 
 function doPayment() {
@@ -37,7 +39,7 @@ function doPayment() {
                 item_name: '테스트 아이템',
                 qty: 1,
                 unique: '123',
-                price: 3000
+                price: 1000
             }
         ],
         user_info: {
@@ -82,7 +84,7 @@ function doAllPayment() {
                 item_name: '테스트 아이템',
                 qty: 1,
                 unique: '123',
-                price: 3000
+                price: 1000
             }
         ],
         user_info: {
