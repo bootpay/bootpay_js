@@ -25,6 +25,7 @@ window.BootPay =
   option: {}
   phoneRegex: /^\d{2,3}\d{3,4}\d{4}$/
   dateFormat: /(\d{4})-(\d{2})-(\d{2})/
+  zeroPaymentMethod: ['bankalarm', 'auth', 'card_rebill']
   initialize: (logLevel = 1) ->
     @setLogLevel logLevel
     @setReadyUUID()
@@ -252,7 +253,7 @@ window.BootPay =
   integrityParams: ->
     price = parseFloat @params.price
     try
-      throw '결제할 금액을 설정해주세요. ( 1,000원 이상, 본인인증의 경우엔 0원을 입력해주세요. ) [ params: price ]' if (isNaN(price) or price < 1000) and @params.method isnt 'bankalarm'
+      throw '결제할 금액을 설정해주세요. ( 1,000원 이상, 본인인증/정기 결제요청의 경우엔 0원을 입력해주세요. ) [ params: price ]' if (isNaN(price) or price < 1000) and @zeroPaymentMethod.indexOf(@params.method) is -1
       throw '판매할 상품명을 입력해주세요. [ parmas: name ]' unless @params.name?.length
       throw '익스플로러 8이하 버전에서는 결제가 불가능합니다.' if @blockIEVersion()
       throw '휴대폰 번호의 자리수와 형식이 맞지 않습니다. [ params : phone ]' if @params.phone?.length and !@phoneRegex.test(@params.phone)

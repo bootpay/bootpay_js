@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         ]
     });
-    document.getElementsByName('pg')[0].value = 'danal';
-    document.getElementsByName('method')[0].value = 'bank';
+    document.getElementsByName('pg')[0].value = 'inicis';
+    document.getElementsByName('method')[0].value = 'card';
 });
 
 function doPayment() {
