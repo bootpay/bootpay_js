@@ -52,7 +52,7 @@ function doNotify() {
             addr: document.getElementsByName('area')[0].value,
             phone: document.getElementsByName('phone')[0].value
         },
-        method: 'card',
+        method: 'toss',
         order_id: (new Date()).getTime()
     }, function (data) {
         var receiptId = data.receipt_id;
