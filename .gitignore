@@ -2,3 +2,4 @@ Gemfile.lock
 *.iml
 *.idea
 /public
+package-lock.json
