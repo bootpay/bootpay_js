@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         ]
     });
-    document.getElementsByName('pg')[0].value = 'inicis';
-    document.getElementsByName('method')[0].value = 'card';
+    document.getElementsByName('pg')[0].value = 'danal';
+    document.getElementsByName('method')[0].value = 'vbank';
 });
 
 function doPayment() {
@@ -46,7 +46,8 @@ function doPayment() {
             email: 'test.bootpay.co.kr@gmail.com'
         },
         extra: {
-            expire_month: '36'
+            expire_month: '36',
+	        vbank_result: 0
         }
     }).error(function (data) {
         var msg = "결제 에러입니다.: " + JSON.stringify(data)
@@ -68,6 +69,8 @@ function doPayment() {
     }).done(function (data) {
         alert("결제가 완료되었습니다.");
         console.log(data);
+    }).ready(function(data) {
+        console.log(data);
     });
 }
 
@@ -78,7 +81,7 @@ function doAllPayment() {
         name: '테스트 아이템',
         phone: '01000000000',
         order_id: (new Date()).getTime(),
-        show_agree_window: 0,
+        show_agree_window: 1,
         items: [
             {
                 item_name: '테스트 아이템',
@@ -89,7 +92,10 @@ function doAllPayment() {
         ],
         user_info: {
             email: 'test.bootpay.co.kr@gmail.com'
-        }
+        },
+	    extra: {
+		    expire_month: '36'
+	    }
     }).error(function (data) {
         var msg = "결제 에러입니다.: " + JSON.stringify(data)
         alert(msg);
@@ -110,6 +116,8 @@ function doAllPayment() {
     }).done(function (data) {
         alert("결제가 완료되었습니다.");
         console.log(data);
+    }).ready(function(data) {
+	    console.log(data);
     });
 }
 

@@ -42,7 +42,13 @@ function doPayment() {
         ],
         user_info: {
             email: 'test.bootpay.co.kr@gmail.com'
-        }
+        },
+	    extra: {
+		    expire_month: '36',
+		    vbank_result: 0
+	    }
+    }).ready(function (data) {
+	    alert('가상계좌 발급완료!');
     }).error(function (data) {
         var msg = "결제 에러입니다.: " + JSON.stringify(data)
         alert(msg);
@@ -73,7 +79,7 @@ function doAllPayment() {
         name: '테스트 아이템',
         phone: '01000000000',
         order_id: (new Date()).getTime(),
-        show_agree_window: 0,
+        show_agree_window: 1,
         items: [
             {
                 item_name: '테스트 아이템',
@@ -85,6 +91,8 @@ function doAllPayment() {
         user_info: {
             email: 'test.bootpay.co.kr@gmail.com'
         }
+    }).ready(function (data) {
+	    alert('가상계좌 발급완료!');
     }).error(function (data) {
         var msg = "결제 에러입니다.: " + JSON.stringify(data)
         alert(msg);
