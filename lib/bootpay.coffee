@@ -9,9 +9,7 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   applicationId: undefined
   version: require('../package.json').version
-  restUrl: require('../package.json').urls.restUrl[process.env.NODE_ENV]
-  clientUrl: require('../package.json').urls.clientUrl[process.env.NODE_ENV]
-  analyticsUrl: require('../package.json').urls.analyticsUrl[process.env.NODE_ENV]
+  mode: 'production'  
   windowId: 'bootpay-payment-window'
   iframeId: 'bootpay-payment-iframe'
   ieMinVersion: 9
@@ -26,6 +24,14 @@ window.BootPay =
   phoneRegex: /^\d{2,3}\d{3,4}\d{4}$/
   dateFormat: /(\d{4})-(\d{2})-(\d{2})/
   zeroPaymentMethod: ['bankalarm', 'auth', 'card_rebill']
+  urls: require('../package.json').urls
+  restUrl: ->
+    @urls.restUrl[@mode]
+  clientUrl: ->
+    @urls.clientUrl[@mode]
+  analyticsUrl: ->
+    @urls.analyticsUrl[@mode]
+
   initialize: (logLevel = 1) ->
     @setLogLevel logLevel
     @setReadyUUID()
@@ -42,6 +48,7 @@ window.BootPay =
         return alert '<meta name="bootpay-application-id" content="[Application ID를 입력]" /> 다음과 같이 <head>안에 넣어주세요'
 #  로그 레벨을 설정한다.
   setLogLevel: (logLevel = 1) -> Logger.setLogLevel logLevel
+  setMode: (mode) -> @mode = mode
 #----------------------------------------------------------
 # UUID가 없을 경우 바로 LocalStorage에 저장한다.
 # Comment by Gosomi
@@ -146,7 +153,7 @@ window.BootPay =
     Logger.debug "활동 정보를 서버로 전송합니다. data: #{JSON.stringify(requestData)}"
     encryptData = AES.encrypt(JSON.stringify(requestData), requestData.sk)
     request
-    .post([@analyticsUrl, "call?ver=#{@version}"].join('/'))
+    .post([@analyticsUrl(), "call?ver=#{@version}"].join('/'))
     .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
     .send(
       data: encryptData.ciphertext.toString(Base64)
@@ -181,7 +188,7 @@ window.BootPay =
     data.area = if data.area?.length then data.area[0] else undefined
     encryptData = AES.encrypt(JSON.stringify(data), @getData('sk'))
     request
-    .post([@analyticsUrl, "login?ver=#{@version}"].join('/'))
+    .post([@analyticsUrl(), "login?ver=#{@version}"].join('/'))
     .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
     .send(
       data: encryptData.ciphertext.toString(Base64)
@@ -200,7 +207,7 @@ window.BootPay =
 
   # 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
   request: (data) ->
-    @removePaymentWindow()
+    @removePaymentWindow(false)
     user = @getUserData()
     # 결제 효청시 application_id를 입력하면 덮어 씌운다. ( 결제 이후 버그를 줄이기 위한 노력 )
     @applicationId = data.application_id if data.application_id?
@@ -236,11 +243,11 @@ window.BootPay =
     encryptData = AES.encrypt(JSON.stringify(@params), @params.sk)
     html = """
       <div id="#{@windowId}">
-        <form name="bootpay_form" action="#{[@restUrl, 'start', 'js', '?ver=' + @version].join('/')}" method="POST">
+        <form name="bootpay_form" action="#{[@restUrl(), 'start', 'js', '?ver=' + @version].join('/')}" method="POST">
           <input type="hidden" name="data" value="#{encryptData.ciphertext.toString(Base64)}" />
           <input type="hidden" name="session_key" value="#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}" />
         </form>
-        <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl, 'confirm'].join('/')}" method="POST">
+        <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl(), 'confirm'].join('/')}" method="POST">
         </form>
         <div class="bootpay-window">#{@iframeHtml('')}</div>
       </div>
@@ -288,7 +295,7 @@ window.BootPay =
     document.bootpay_form.submit()
     @
   notify: (data, success = undefined, error = undefined, timeout = 3000) ->
-    @removePaymentWindow()
+    @removePaymentWindow(false)
     user = @getUserData()
     @applicationId = if data.application_id? then data.application_id else @applicationId
     @params = {}
@@ -316,7 +323,7 @@ window.BootPay =
     @integrityParams() if !@params.method? or !@params.method isnt 'auth'
     encryptData = AES.encrypt(JSON.stringify(@params), @getData('sk'))
     request
-    .post([@restUrl, "notify?ver=#{@version}"].join('/'))
+    .post([@restUrl(), "notify?ver=#{@version}"].join('/'))
     .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
     .timeout(
       response: timeout
@@ -390,10 +397,10 @@ window.BootPay =
 # IE 버전 blocking
   blockIEVersion: -> @isLtBrowserVersion @ieMinVersion
 # 결제창을 삭제한다.
-  removePaymentWindow: ->
+  removePaymentWindow: (callClose = true) ->
     document.body.style.removeProperty('bootpay-modal-open')
     document.getElementById(@windowId).outerHTML = '' if document.getElementById(@windowId)?
-    @methods.close @ if @methods.close?
+    @methods.close @ if @methods.close? and callClose
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->
     """

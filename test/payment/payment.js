@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     BootPay.setLogLevel(4);
+    BootPay.setMode('development');
     BootPay.startTrace({
         items: [
             {
@@ -71,6 +72,8 @@ function doPayment() {
         console.log(data);
     }).ready(function(data) {
         console.log(data);
+    }).close(function() {
+        alert('닫힘!!');
     });
 }
 
