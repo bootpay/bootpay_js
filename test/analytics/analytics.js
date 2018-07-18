@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     BootPay.setLogLevel(4);
+	BootPay.setMode('development');
     BootPay.startTrace({
         items: [
             {

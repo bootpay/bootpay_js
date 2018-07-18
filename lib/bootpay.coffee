@@ -159,8 +159,11 @@ window.BootPay =
       data: encryptData.ciphertext.toString(Base64)
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
     )
-    .end((err, res) =>
+    .then((res) =>
       Logger.warn "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요." if res.status isnt 200 or res.body.status isnt 200
+    )
+    .catch((err) =>
+      Logger.warn "BOOTPAY MESSAGE: #{err.body.message} - Application ID가 제대로 되었는지 확인해주세요."
     )
   # 로그인 정보를 부트페이 서버로 전송한다.
   startLoginSession: (data) ->
@@ -194,7 +197,7 @@ window.BootPay =
       data: encryptData.ciphertext.toString(Base64)
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
     )
-    .end((err, res) =>
+    .then((res) =>
       if res.status isnt 200 or res.body.status isnt 200
         Logger.warn "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요."
       else
@@ -203,6 +206,9 @@ window.BootPay =
           id: json.user_id
           time: (new Date()).getTime()
         )
+    )
+    .catch((err) =>
+      Logger.warn "BOOTPAY MESSAGE: #{err.message} - Application ID가 제대로 되었는지 확인해주세요."
     )
 
   # 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
@@ -333,15 +339,15 @@ window.BootPay =
       data: encryptData.ciphertext.toString(Base64)
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
     )
-    .end((err, res) =>
-      if !err
-        if res.status isnt 200 or res.body.status isnt 200
-          Logger.error "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요."
-          error.apply @, ["BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요.", res.body] if error?
-        else
-          success.apply @, [res.body.data] if success?
+    .then((res) =>
+      if res.status isnt 200 or res.body.status isnt 200
+        Logger.error "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요."
+        error.apply @, ["BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요.", res.body] if error?
       else
-        error.apply @, ["서버 오류로 인해 결제가 되지 않았습니다. #{err.message}"] if error?
+        success.apply @, [res.body.data] if success?
+    )
+    .catch((err) =>
+      error.apply @, ["서버 오류로 인해 결제가 되지 않았습니다. #{err.message}"] if error?
     )
 # 창이 닫혔을 때 이벤트 처리
   closeEventBind: ->

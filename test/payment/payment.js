@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         ]
     });
-    document.getElementsByName('pg')[0].value = 'danal';
-    document.getElementsByName('method')[0].value = 'vbank';
+    document.getElementsByName('pg')[0].value = 'payapp';
+    document.getElementsByName('method')[0].value = 'card';
 });
 
 function doPayment() {
