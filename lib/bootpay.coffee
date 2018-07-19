@@ -324,12 +324,13 @@ window.BootPay =
     @params.user_id = if user? then user.id else undefined
     @params.bank_account = if data.bank_account? then data.bank_account else undefined
     @params.bank_name = if data.bank_name? then data.bank_name else undefined
+    @params.order_unique = if data.order_unique? then data.order_unique else 0
     @integrityItemData() if @params.items?.length
     @params.items = data.items
     @integrityParams() if !@params.method? or !@params.method isnt 'auth'
     encryptData = AES.encrypt(JSON.stringify(@params), @getData('sk'))
     request
-    .post([@restUrl(), "notify?ver=#{@version}"].join('/'))
+    .post([@restUrl(), "notify?ver=#{@version}&format=json"].join('/'))
     .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
     .timeout(
       response: timeout

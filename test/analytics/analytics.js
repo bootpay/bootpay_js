@@ -39,6 +39,7 @@ function doNotify() {
     BootPay.notify({
         price: '1000',
         name: '파는 아이템',
+        order_unique: 1,
         items: [
             {
                 item_name: '나는 아이템',
@@ -54,7 +55,8 @@ function doNotify() {
             phone: document.getElementsByName('phone')[0].value
         },
         method: 'toss',
-        order_id: (new Date()).getTime()
+        // order_id: (new Date()).getTime()
+        order_id: 1
     }, function (data) {
         var receiptId = data.receipt_id;
         document.getElementsByName('receipt_id')[0].value = receiptId;
