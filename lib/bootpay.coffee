@@ -9,7 +9,7 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   applicationId: undefined
   version: require('../package.json').version
-  mode: 'production'  
+  mode: 'production'
   windowId: 'bootpay-payment-window'
   iframeId: 'bootpay-payment-iframe'
   ieMinVersion: 9
@@ -382,6 +382,7 @@ window.BootPay =
             iframeSelector.style.setProperty('max-width', data.width)
             iframeSelector.style.setProperty('width', '100%')
             iframeSelector.style.setProperty('height', data.height)
+            iframeSelector.style.setProperty('background-color', data.backgroundColor) if data.backgroundColor?
             # ie 9이하에서는 overflow 속성을 인식하지 못한다.
             iframeSelector.style.overflow = data.overflow
             iframeSelector.setAttribute 'scrolling', data.scrolling if data.scrolling?
