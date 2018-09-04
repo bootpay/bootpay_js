@@ -45,7 +45,8 @@ function doPayment() {
         },
 	    extra: {
 		    expire_month: '36',
-		    vbank_result: 0
+		    vbank_result: 1,
+            quota: '0,2,3'
 	    }
     }).ready(function (data) {
 	    alert('가상계좌 발급완료!');

@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         ]
     });
-    document.getElementsByName('pg')[0].value = 'payapp';
-    document.getElementsByName('method')[0].value = 'card';
+    document.getElementsByName('pg')[0].value = 'danal';
+    document.getElementsByName('method')[0].value = 'phone';
 });
 
 function doPayment() {
@@ -48,7 +48,11 @@ function doPayment() {
         },
         extra: {
             expire_month: '36',
-	        vbank_result: 0
+	        vbank_result: 0,
+            quota: '0,2,3,4,5,6,7,8,9,10,11',
+            phone_number: '01000000000',
+            phone_fixed: 0,
+            phone_carrier: 'SKT'
         }
     }).error(function (data) {
         var msg = "결제 에러입니다.: " + JSON.stringify(data)
