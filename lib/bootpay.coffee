@@ -8,7 +8,7 @@ window.BootPay =
   VISIT_TIMEOUT: 86400000 # 재 방문 시간에 대한 interval
   SK_TIMEOUT: 1800000 # 30분
   applicationId: undefined
-  version: '2.0.10'
+  version: '2.0.11'
   mode: 'production'
   windowId: 'bootpay-payment-window'
   iframeId: 'bootpay-payment-iframe'
@@ -233,6 +233,7 @@ window.BootPay =
       sk: @getData('sk')
       time: @getData('time')
       price: data.price
+      tax_free: if data.tax_free? then data.tax_free else 0
       format: if data.format? then data.format else 'json'
       params: if data.params? then data.params else undefined
       user_id: if user? then user.id else undefined

@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function doPayment() {
     BootPay.request({
         price: document.getElementsByName('price')[0].value,
+	    tax_free: document.getElementsByName('tax_free')[0].value,
         application_id: '59a568d3e13f3336c21bf707',
         name: '테스트 아이템',
         phone: '01000000000',
@@ -84,6 +85,7 @@ function doPayment() {
 function doAllPayment() {
     BootPay.request({
         price: document.getElementsByName('price')[0].value,
+	    tax_free: document.getElementsByName('tax_free')[0].value,
         application_id: '59a568d3e13f3336c21bf707',
         name: '테스트 아이템',
         phone: '01000000000',
