@@ -10,6 +10,7 @@ window.BootPay =
   applicationId: undefined
   version: '2.0.12'
   mode: 'production'
+  backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
   iframeId: 'bootpay-payment-iframe'
   ieMinVersion: 9
@@ -256,7 +257,7 @@ window.BootPay =
         </form>
         <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl(), 'confirm'].join('/')}" method="POST">
         </form>
-        <div class="bootpay-window">#{@iframeHtml('')}</div>
+        <div class="bootpay-window" id="bootpay-background-window">#{@iframeHtml('')}</div>
       </div>
       """
     document.body.insertAdjacentHTML 'beforeend', html
@@ -376,6 +377,7 @@ window.BootPay =
             @methods.confirm.call(@, data)
         when 'BootpayResize'
           iframeSelector = document.getElementById(@iframeId)
+          backgroundSelector = document.getElementById(@backgroundId)
           if data.reset
             iframeSelector.removeAttribute 'style'
             iframeSelector.setAttribute('scrolling', undefined)
@@ -383,7 +385,9 @@ window.BootPay =
             iframeSelector.style.setProperty('max-width', data.width)
             iframeSelector.style.setProperty('width', '100%')
             iframeSelector.style.setProperty('height', data.height)
+            iframeSelector.style.setProperty('max-height', data.maxHeight)
             iframeSelector.style.setProperty('background-color', data.backgroundColor) if data.backgroundColor?
+            backgroundSelector.style.setProperty('background-color', 'transparent') if data.transparentMode is 'true'
             # ie 9이하에서는 overflow 속성을 인식하지 못한다.
             iframeSelector.style.overflow = data.overflow
             iframeSelector.setAttribute 'scrolling', data.scrolling if data.scrolling?

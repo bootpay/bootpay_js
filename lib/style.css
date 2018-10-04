@@ -37,6 +37,10 @@
     -webkit-overflow-scrolling: touch;
 }
 
+.bootpay-window.transparent-mode {
+    background-color: transparent;
+}
+
 .bootpay-window .progress-message-window {
     display: block;
     position: absolute;
@@ -67,6 +71,7 @@
         vertical-align: middle;
     }
 }
+
 @media (min-width: 800px) {
     .bootpay-poke-window .progress-message-window .progress-message {
         display: inline-block;
@@ -127,7 +132,7 @@
         display: inline-block;
         width: 400px;
         height: 100%;
-        max-height: 900px;
+        max-height: 760px;
         vertical-align: middle;
         background-color: transparent;
     }
