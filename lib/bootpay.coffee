@@ -380,6 +380,7 @@ window.BootPay =
           backgroundSelector = document.getElementById(@backgroundId)
           if data.reset
             iframeSelector.removeAttribute 'style'
+            backgroundSelector.removeAttribute 'style'
             iframeSelector.setAttribute('scrolling', undefined)
           else
             iframeSelector.style.setProperty('max-width', data.width)
