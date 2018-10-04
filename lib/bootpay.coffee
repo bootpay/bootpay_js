@@ -8,7 +8,7 @@ window.BootPay =
   VISIT_TIMEOUT: 86400000 # 재 방문 시간에 대한 interval
   SK_TIMEOUT: 1800000 # 30분
   applicationId: undefined
-  version: '2.0.11'
+  version: '2.0.12'
   mode: 'production'
   windowId: 'bootpay-payment-window'
   iframeId: 'bootpay-payment-iframe'

@@ -53,7 +53,9 @@ function doPayment() {
             quota: '0,2,3,4,5,6,7,8,9,10,11',
             phone_number: '01000000000',
             phone_fixed: 0,
-            phone_carrier: 'SKT'
+            phone_carrier: 'SKT',
+	        // app_scheme: 'https://g-cdn.bootpay.co.kr/test/payment/close.html'
+            app_scheme: 'com-apple-mobilesafari-tab://'
         }
     }).error(function (data) {
         var msg = "결제 에러입니다.: " + JSON.stringify(data)
