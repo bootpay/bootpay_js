@@ -48,9 +48,10 @@
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 30000;
+    z-index: 30001;
     text-align: center;
     white-space: nowrap;
+    padding: 1em;
 }
 
 .bootpay-window .progress-message-window .progress-message {
@@ -60,8 +61,42 @@
     border-radius: 3px;
     width: 100%;
     background-color: transparent;
-    padding: 1em;
     vertical-align: middle;
+}
+
+.bootpay-window .progress-message-window .close-message-box {
+    display: none;
+    text-align: center;
+    max-width: 600px;
+    border-radius: 3px;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.bootpay-window .progress-message-window .close-message-box .close-popup {
+    padding: 2rem 1rem;
+    background-color: #fff;
+    color: #333;
+    border-radius: 3px;
+}
+
+.bootpay-window .progress-message-window .close-message-box .close-popup h4.sub-title {
+    font-size: 18px;
+    padding: 0;
+    margin: 0;
+}
+
+.bootpay-window .progress-message-window .close-message-box .close-popup button.close-payment-window {
+    margin-top: 2rem;
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e2e2;
+    border-radius: 2px;
+    background-color: #fff;
+    box-shadow: none;
+    font-size: 14px;
+    outline: none;
 }
 
 @media (min-width: 500px) {
@@ -111,7 +146,6 @@
     vertical-align: middle;
     height: 100%;
     content: ' ';
-    overflow: hidden;
     background: transparent;
 }
 

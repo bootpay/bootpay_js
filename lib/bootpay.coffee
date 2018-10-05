@@ -13,6 +13,7 @@ window.BootPay =
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
   iframeId: 'bootpay-payment-iframe'
+  closeId: 'close-button-window'
   ieMinVersion: 9
   deviceType: 1
   ableDeviceTypes:
@@ -378,9 +379,11 @@ window.BootPay =
         when 'BootpayResize'
           iframeSelector = document.getElementById(@iframeId)
           backgroundSelector = document.getElementById(@backgroundId)
+          closeSelector = document.getElementById(@closeId)
           if data.reset
             iframeSelector.removeAttribute 'style'
             backgroundSelector.removeAttribute 'style'
+            closeSelector.removeAttribute 'style'
             iframeSelector.setAttribute('scrolling', undefined)
           else
             iframeSelector.style.setProperty('max-width', data.width)
@@ -389,6 +392,7 @@ window.BootPay =
             iframeSelector.style.setProperty('max-height', data.maxHeight)
             iframeSelector.style.setProperty('background-color', data.backgroundColor) if data.backgroundColor?
             backgroundSelector.style.setProperty('background-color', 'transparent') if data.transparentMode is 'true'
+            closeSelector.style.setProperty('display', 'inline-block') if data.showCloseWindow is 'true'
             # ie 9이하에서는 overflow 속성을 인식하지 못한다.
             iframeSelector.style.overflow = data.overflow
             iframeSelector.setAttribute 'scrolling', data.scrolling if data.scrolling?
@@ -403,6 +407,14 @@ window.BootPay =
           @progressMessageHide()
           @removePaymentWindow()
     )
+
+  forceClose: ->
+    @methods.cancel.call @, {
+      action: 'BootpayCancel',
+      message: '사용자에 의한 취소'
+    } if @methods.cancel?
+    @removePaymentWindow()
+
   isLtBrowserVersion: (version) ->
     sAgent = window.navigator.userAgent
     idx = sAgent.indexOf("MSIE")
@@ -418,14 +430,19 @@ window.BootPay =
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->
     """
-      <iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}" allowtransparency="true"></iframe>
-      <div class="progress-message-window">
-        <div class="progress-message spinner" id="progress-message">
-          <div class="bounce1 bounce"></div><div class="bounce2 bounce"></div><div class="bounce3 bounce"></div>
-          &nbsp;
-          <span class="text" id="progress-message-text"></span>
-        </div>
-      </div>
+<iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}" allowtransparency="true"></iframe>
+<div class="progress-message-window">
+  <div class="close-message-box" id="close-button-window">
+    <div class="close-popup">
+      <h4 class="sub-title">결제를 중단할까요?</h4>
+      <button class="close-payment-window" onclick="window.BootPay.forceClose();" type="button" id="__bootpay-close-button">닫기</button>
+    </div>
+  </div>
+  <div class="progress-message spinner" id="progress-message">
+    <div class="bounce1 bounce"></div><div class="bounce2 bounce"></div><div class="bounce3 bounce"></div>         &nbsp;
+    <span class="text" id="progress-message-text"></span>
+  </div>
+</div>
     """
   progressMessageHide: ->
     pms = document.getElementById('progress-message')

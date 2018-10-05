@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         ]
     });
-    document.getElementsByName('pg')[0].value = 'danal';
-    document.getElementsByName('method')[0].value = 'phone';
+    document.getElementsByName('pg')[0].value = 'npay';
+    document.getElementsByName('method')[0].value = 'easy';
 });
 
 function doPayment() {
