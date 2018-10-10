@@ -55,7 +55,7 @@
 }
 
 .bootpay-window .progress-message-window.over {
-    z-index: 30001;
+    z-index: 30002;
 }
 
 .bootpay-window .progress-message-window .progress-message {
@@ -161,7 +161,7 @@
     border: none;
     outline: none;
     background-color: transparent;
-    z-index: 30002;
+    z-index: 30001;
 }
 
 @media (min-width: 500px) {
