@@ -42,13 +42,13 @@
 }
 
 .bootpay-window .progress-message-window {
-    display: block;
+    display: none;
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 30001;
+    z-index: 30000;
     text-align: center;
     white-space: nowrap;
     padding: 1em;
@@ -157,7 +157,7 @@
     border: none;
     outline: none;
     background-color: transparent;
-    z-index: 30001;
+    z-index: 30002;
 }
 
 @media (min-width: 500px) {
