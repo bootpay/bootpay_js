@@ -392,7 +392,7 @@ window.BootPay =
             iframeSelector.style.setProperty('max-height', data.maxHeight)
             iframeSelector.style.setProperty('background-color', data.backgroundColor) if data.backgroundColor?
             backgroundSelector.style.setProperty('background-color', 'transparent') if data.transparentMode is 'true'
-            closeSelector.style.setProperty('display', 'inline-block') if data.showCloseWindow is 'true'
+            closeSelector.style.setProperty('display', 'block') if data.showCloseWindow is 'true'
             # ie 9이하에서는 overflow 속성을 인식하지 못한다.
             iframeSelector.style.overflow = data.overflow
             iframeSelector.setAttribute 'scrolling', data.scrolling if data.scrolling?
@@ -431,16 +431,18 @@ window.BootPay =
   iframeHtml: (url) ->
     """
 <iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}" allowtransparency="true"></iframe>
-<div class="progress-message-window">
-  <div class="close-message-box" id="close-button-window">
+<div class="progress-message-window" id="progress-message">
+  <div class="progress-message spinner">
+    <div class="bounce1 bounce"></div><div class="bounce2 bounce"></div><div class="bounce3 bounce"></div>         &nbsp;
+    <span class="text" id="progress-message-text"></span>
+  </div>
+</div>
+<div class="progress-message-window over" id="close-button-window">
+  <div class="close-message-box">
     <div class="close-popup">
       <h4 class="sub-title">결제를 중단할까요?</h4>
       <button class="close-payment-window" onclick="window.BootPay.forceClose();" type="button" id="__bootpay-close-button">닫기</button>
     </div>
-  </div>
-  <div class="progress-message spinner" id="progress-message">
-    <div class="bounce1 bounce"></div><div class="bounce2 bounce"></div><div class="bounce3 bounce"></div>         &nbsp;
-    <span class="text" id="progress-message-text"></span>
   </div>
 </div>
     """
@@ -453,7 +455,7 @@ window.BootPay =
 
   progressMessageShow: (msg) ->
     pms = document.getElementById('progress-message')
-    pms.style.setProperty('display', 'inline-block')
+    pms.style.setProperty('display', 'block')
     document.getElementById('progress-message-text').innerText = msg
 
   cancel: (method) ->
