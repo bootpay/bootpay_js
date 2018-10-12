@@ -483,7 +483,7 @@ window.BootPay =
     encryptData = AES.encrypt(JSON.stringify(data), @getData('sk'))
     console.log @tk
     request
-    .post([@restUrl(), "event"].join('/'))
+    .post([@analyticsUrl(), "event"].join('/'))
     .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
     .send(
       data: encryptData.ciphertext.toString(Base64)
