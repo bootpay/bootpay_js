@@ -1,4 +1,5 @@
 request = require('superagent')
+import 'es6-promise/auto'
 import './event'
 import Logger from './logger'
 import AES from 'crypto-js/aes'

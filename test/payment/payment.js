@@ -67,6 +67,7 @@ function doPayment() {
         console.log(data);
     }).confirm(function (data) {
         if (confirm('결제를 정말 승인할까요?')) {
+            ㄴ어라너아런.call();
             console.log("do confirm data: " + JSON.stringify(data));
             this.transactionConfirm(data);
         } else {
