@@ -397,7 +397,19 @@ window.BootPay =
           )
           @removePaymentWindow()
         when 'BootpayBankReady'
-          @methods.ready.call @, data if @methods.ready?
+          try
+            @methods.ready.call @, data if @methods.ready?
+          catch e
+            @sendPaymentStepData(
+              step: 'ready'
+              status: -1
+              e: e
+            )
+            throw e
+          @sendPaymentStepData(
+            step: 'ready'
+            status: 1
+          )
         when 'BootpayConfirm'
           @progressMessageShow '결제를 승인중입니다.'
           try
@@ -511,10 +523,22 @@ window.BootPay =
   blockIEVersion: -> @isLtBrowserVersion @ieMinVersion
 # 결제창을 삭제한다.
   removePaymentWindow: (callClose = true) ->
-    @tk = undefined
     document.body.style.removeProperty('bootpay-modal-open')
     document.getElementById(@windowId).outerHTML = '' if document.getElementById(@windowId)?
-    @methods.close @ if @methods.close? and callClose
+    try
+      @methods.close @ if @methods.close? and callClose
+    catch e
+      @sendPaymentStepData(
+        step: 'close'
+        status: -1
+        e: e
+      )
+      throw e
+    @sendPaymentStepData(
+      step: 'close'
+      status: 1
+    )
+    @tk = undefined
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->
     """

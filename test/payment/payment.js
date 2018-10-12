@@ -62,12 +62,11 @@ function doPayment() {
         alert(msg);
         console.log(data);
     }).cancel(function (data) {
-        var msg = "결제 취소입니다.: " + JSON.stringify(data)
+	    var msg = "결제 취소입니다.: " + JSON.stringify(data)
         alert(msg);
         console.log(data);
     }).confirm(function (data) {
         if (confirm('결제를 정말 승인할까요?')) {
-            ㄴ어라너아런.call();
             console.log("do confirm data: " + JSON.stringify(data));
             this.transactionConfirm(data);
         } else {
