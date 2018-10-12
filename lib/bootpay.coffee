@@ -217,55 +217,67 @@ window.BootPay =
   # 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
   request: (data) ->
     @removePaymentWindow(false)
-    user = @getUserData()
-    # 결제 효청시 application_id를 입력하면 덮어 씌운다. ( 결제 이후 버그를 줄이기 위한 노력 )
-    @applicationId = data.application_id if data.application_id?
-    @tk = "#{@generateUUID()}-#{(new Date).getTime()}"
-    @params =
-      application_id: @applicationId
-      show_agree_window: if data.show_agree_window? then parseInt(data.show_agree_window) else 0
-      device_type: @deviceType
-      method: data.method if data.method?
-      pg: data.pg if data.pg?
-      name: data.name
-      items: data.items if data.items?.length
-      redirect_url: if data.redirect_url? then data.redirect_url else ''
-      phone: if data.phone?.length then data.phone.replace(/-/g, '') else ''
-      uuid: if data.uuid?.length then data.uuid else @getData('uuid')
-      order_id: if data.order_id? then String(data.order_id) else ''
-      user_info: if data.user_info? then data.user_info else undefined
-      sk: @getData('sk')
-      time: @getData('time')
-      price: data.price
-      tax_free: if data.tax_free? then data.tax_free else 0
-      format: if data.format? then data.format else 'json'
-      params: if data.params? then data.params else undefined
-      user_id: if user? then user.id else undefined
-      path_url: document.URL
-      extra: if data.extra? then data.extra else undefined
-      account_expire_at: if data.account_expire_at? then data.account_expire_at else undefined
-      tk: @tk
-    # 각 함수 호출 callback을 초기화한다.
-    @methods = {}
-    # 아이템 정보의 Validation
-    @integrityItemData() if @params.items?.length
-    # 결제 정보 데이터의 Validation
-    @integrityParams() if !@params.method? or @params.method is 'auth'
-    # 데이터를 AES로 암호화한다.
-    encryptData = AES.encrypt(JSON.stringify(@params), @params.sk)
-    html = """
-      <div id="#{@windowId}">
-        <form name="bootpay_form" action="#{[@restUrl(), 'start', 'js', '?ver=' + @version].join('/')}" method="POST">
-          <input type="hidden" name="data" value="#{encryptData.ciphertext.toString(Base64)}" />
-          <input type="hidden" name="session_key" value="#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}" />
-        </form>
-        <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl(), 'confirm'].join('/')}" method="POST">
-        </form>
-        <div class="bootpay-window" id="bootpay-background-window">#{@iframeHtml('')}</div>
-      </div>
-      """
-    document.body.insertAdjacentHTML 'beforeend', html
-    @start()
+    try
+      user = @getUserData()
+      # 결제 효청시 application_id를 입력하면 덮어 씌운다. ( 결제 이후 버그를 줄이기 위한 노력 )
+      @applicationId = data.application_id if data.application_id?
+      @tk = "#{@generateUUID()}-#{(new Date).getTime()}"
+      @params =
+        application_id: @applicationId
+        show_agree_window: if data.show_agree_window? then parseInt(data.show_agree_window) else 0
+        device_type: @deviceType
+        method: data.method if data.method?
+        pg: data.pg if data.pg?
+        name: data.name
+        items: data.items if data.items?.length
+        redirect_url: if data.redirect_url? then data.redirect_url else ''
+        phone: if data.phone?.length then data.phone.replace(/-/g, '') else ''
+        uuid: if data.uuid?.length then data.uuid else @getData('uuid')
+        order_id: if data.order_id? then String(data.order_id) else ''
+        user_info: if data.user_info? then data.user_info else undefined
+        sk: @getData('sk')
+        time: @getData('time')
+        price: data.price
+        tax_free: if data.tax_free? then data.tax_free else 0
+        format: if data.format? then data.format else 'json'
+        params: if data.params? then data.params else undefined
+        user_id: if user? then user.id else undefined
+        path_url: document.URL
+        extra: if data.extra? then data.extra else undefined
+        account_expire_at: if data.account_expire_at? then data.account_expire_at else undefined
+        tk: @tk
+      # 각 함수 호출 callback을 초기화한다.
+      @methods = {}
+      # 아이템 정보의 Validation
+      @integrityItemData() if @params.items?.length
+      # 결제 정보 데이터의 Validation
+      @integrityParams() if !@params.method? or @params.method is 'auth'
+      # 데이터를 AES로 암호화한다.
+      encryptData = AES.encrypt(JSON.stringify(@params), @params.sk)
+      html = """
+        <div id="#{@windowId}">
+          <form name="bootpay_form" action="#{[@restUrl(), 'start', 'js', '?ver=' + @version].join('/')}" method="POST">
+            <input type="hidden" name="data" value="#{encryptData.ciphertext.toString(Base64)}" />
+            <input type="hidden" name="session_key" value="#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}" />
+          </form>
+          <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl(), 'confirm'].join('/')}" method="POST">
+          </form>
+          <div class="bootpay-window" id="bootpay-background-window">#{@iframeHtml('')}</div>
+        </div>
+        """
+      document.body.insertAdjacentHTML 'beforeend', html
+      @start()
+    catch e
+      @sendPaymentStepData(
+        step: 'start'
+        status: -1
+        e: e
+      )
+      throw e
+    @sendPaymentStepData(
+      step: 'start'
+      status: 1
+    )
     @
 
 #  결제 요청 정보 Validation
