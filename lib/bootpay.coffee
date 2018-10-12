@@ -27,6 +27,7 @@ window.BootPay =
   dateFormat: /(\d{4})-(\d{2})-(\d{2})/
   zeroPaymentMethod: ['bankalarm', 'auth', 'card_rebill']
   urls: require('../package.json').urls
+  tk: undefined
   restUrl: ->
     @urls.restUrl[@mode]
   clientUrl: ->
@@ -103,7 +104,7 @@ window.BootPay =
         lastTime = parseInt(@getData('last_time')) # 마지막으로 접근한 시간을 기록한다.
         @setData 'last_time', sessionKeyTime
         if isNaN(lastTime) or lastTime + @SK_TIMEOUT < sessionKeyTime # 마지막 접속한 시간에 30분이 지나버린 경우 세션을 초기화한다.
-          @setData 'sk', "#{@getData('uuid')}_#{sessionKeyTime}"
+          @setData 'sk', "#{@getData('uuid')}-#{sessionKeyTime}"
           @setData 'sk_time', sessionKeyTime
           @setData 'time', (sessionKeyTime - lastTime)
           Logger.debug "시간이 지나 세션 고유 값 정보를 새로 갱신하였습니다. sk: #{@getData('sk')}, time: #{@getData('sk_time')}"
@@ -111,7 +112,7 @@ window.BootPay =
           Logger.debug "이전 세션을 그대로 이용합니다. sk: #{@getData('sk')}, time: #{@getData('sk_time')}"
     else
       @setData 'last_time', sessionKeyTime
-      @setData 'sk', "#{@getData('uuid')}_#{sessionKeyTime}"
+      @setData 'sk', "#{@getData('uuid')}-#{sessionKeyTime}"
       @setData 'sk_time', sessionKeyTime
       Logger.debug "처음 접속하여 세션 고유 값을 설정하였습니다."
 # 로그인 정보를 절차에 따라 초기화한다.
@@ -219,6 +220,7 @@ window.BootPay =
     user = @getUserData()
     # 결제 효청시 application_id를 입력하면 덮어 씌운다. ( 결제 이후 버그를 줄이기 위한 노력 )
     @applicationId = data.application_id if data.application_id?
+    @tk = "#{@generateUUID()}-#{(new Date).getTime()}"
     @params =
       application_id: @applicationId
       show_agree_window: if data.show_agree_window? then parseInt(data.show_agree_window) else 0
@@ -242,6 +244,7 @@ window.BootPay =
       path_url: document.URL
       extra: if data.extra? then data.extra else undefined
       account_expire_at: if data.account_expire_at? then data.account_expire_at else undefined
+      tk: @tk
     # 각 함수 호출 callback을 초기화한다.
     @methods = {}
     # 아이템 정보의 Validation
@@ -366,16 +369,40 @@ window.BootPay =
       switch data.action
         when 'BootpayCancel'
           @progressMessageShow '결제를 취소중입니다.'
-          @methods.cancel.call @, data if @methods.cancel?
+          try
+            @methods.cancel.call @, data if @methods.cancel?
+          catch e
+            @sendPaymentStepData(
+              step: 'cancel'
+              status: -1
+              e: e
+            )
+            throw e
+          @sendPaymentStepData(
+            step: 'cancel'
+            status: 1
+          )
           @removePaymentWindow()
         when 'BootpayBankReady'
           @methods.ready.call @, data if @methods.ready?
         when 'BootpayConfirm'
           @progressMessageShow '결제를 승인중입니다.'
-          if !@methods.confirm?
-            @transactionConfirm data
-          else
-            @methods.confirm.call(@, data)
+          try
+            if !@methods.confirm?
+              @transactionConfirm data
+            else
+              @methods.confirm.call(@, data)
+          catch e
+            @sendPaymentStepData(
+              step: 'confirm'
+              status: -1
+              e: e
+            )
+            throw e
+          @sendPaymentStepData(
+            step: 'confirm'
+            status: 1
+          )
         when 'BootpayResize'
           iframeSelector = document.getElementById(@iframeId)
           backgroundSelector = document.getElementById(@backgroundId)
@@ -397,15 +424,62 @@ window.BootPay =
             iframeSelector.style.overflow = data.overflow
             iframeSelector.setAttribute 'scrolling', data.scrolling if data.scrolling?
         when 'BootpayError'
-          @methods.error.call @, data if @methods.error?
+          try
+            @methods.error.call @, data if @methods.error?
+          catch e
+            @sendPaymentStepData(
+              step: 'error'
+              status: -1
+              msg: e
+            )
+            throw e
+          @sendPaymentStepData(
+            step: 'error'
+            status: 1
+          )
           @removePaymentWindow()
         when 'BootpayDone'
           @progressMessageHide()
-          @methods.done.call @, data
+          try
+            @methods.done.call @, data
+          catch e
+            @sendPaymentStepData(
+              step: 'done'
+              status: -1
+              e: e
+            )
+            throw e
+          @sendPaymentStepData(
+            step: 'done'
+            status: 1
+          )
           @removePaymentWindow()
         when 'BootpayClose'
           @progressMessageHide()
           @removePaymentWindow()
+    )
+
+# 결제 실행 단계를 로그로 보낸다.
+  sendPaymentStepData: (data) ->
+    return if !@tk? or !@applicationId? # Transaction key가 없다면 실행할 필요가 없다.
+    data.version = @version
+    data.tk = @tk
+    data.application_id = @applicationId
+    if data.e?
+      data.msg = try data.e.message catch then data.e
+      data.trace = try data.e.stack catch then undefined
+    encryptData = AES.encrypt(JSON.stringify(data), @getData('sk'))
+    console.log @tk
+    request
+    .post([@restUrl(), "event"].join('/'))
+    .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+    .send(
+      data: encryptData.ciphertext.toString(Base64)
+      session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
+    ).then((res) =>
+      Logger.debug "BOOTPAY MESSAGE: 결제 이벤트 데이터 정보 전송"
+    ).catch((err) =>
+      Logger.error "BOOTPAY MESSAGE: 결제 이벤트 데이터 정보 전송실패 #{JSON.stringify(err)}"
     )
 
   forceClose: ->
@@ -424,6 +498,7 @@ window.BootPay =
   blockIEVersion: -> @isLtBrowserVersion @ieMinVersion
 # 결제창을 삭제한다.
   removePaymentWindow: (callClose = true) ->
+    @tk = undefined
     document.body.style.removeProperty('bootpay-modal-open')
     document.getElementById(@windowId).outerHTML = '' if document.getElementById(@windowId)?
     @methods.close @ if @methods.close? and callClose
