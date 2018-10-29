@@ -29,7 +29,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^2.0.12"
+    "bootpay-js": "^2.0.13"
     //...
   }
 }
