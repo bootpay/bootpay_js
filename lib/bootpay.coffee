@@ -494,7 +494,6 @@ window.BootPay =
       data.msg = try data.e.message catch then data.e
       data.trace = try data.e.stack catch then undefined
     encryptData = AES.encrypt(JSON.stringify(data), @getData('sk'))
-    console.log @tk
     request
     .post([@analyticsUrl(), "event"].join('/'))
     .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
