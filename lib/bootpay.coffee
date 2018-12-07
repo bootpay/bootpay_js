@@ -5,11 +5,12 @@ import Logger from './logger'
 import AES from 'crypto-js/aes'
 import Base64 from 'crypto-js/enc-base64'
 import './style'
+window = {} unless window?
 window.BootPay =
   VISIT_TIMEOUT: 86400000 # 재 방문 시간에 대한 interval
   SK_TIMEOUT: 1800000 # 30분
   applicationId: undefined
-  version: '2.0.13'
+  version: '2.0.17'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
