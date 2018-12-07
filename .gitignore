@@ -5,4 +5,4 @@ Gemfile.lock
 package-lock.json
 /node_modules
 yarn.lock
-lib/bootpay.js
+lib/*.js
