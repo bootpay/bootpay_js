@@ -13,3 +13,4 @@ test/
 package-lock.json
 yarn.lock
 Gemfile.lock
+lib/*.coffee
