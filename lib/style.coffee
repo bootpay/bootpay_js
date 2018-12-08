@@ -1,3 +1,5 @@
+style = document.createElement('style');
+style.innerHTML = """
 @-webkit-keyframes sk-bouncedelay {
     0%, 80%, 100% {
         -webkit-transform: scale(0);
@@ -175,3 +177,5 @@
         background-color: transparent;
     }
 }
+"""
+document.head.appendChild(style)
