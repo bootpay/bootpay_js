@@ -25,7 +25,7 @@
     "superagent": "^3.8.3"
   },
   "scripts": {
-    "prepublish": "coffee -o lib -c lib/*.coffee"
+    "prepublish": "coffee --transpile -o lib -c lib/*.coffee"
   },
   "repository": {
     "type": "git",
