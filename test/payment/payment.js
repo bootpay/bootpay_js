@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'kcp';
+	document.getElementsByName('pg')[0].value = 'nicepay';
 	document.getElementsByName('method')[0].value = 'bank';
 });
 
@@ -30,13 +30,13 @@ function doPayment() {
 		price: document.getElementsByName('price')[0].value,
 		tax_free: document.getElementsByName('tax_free')[0].value,
 		application_id: '59a568d3e13f3336c21bf707',
-		name: '테스트\"s 아이템',
+		name: '테스트s 아이템',
 		phone: '01000000000',
 		order_id: (new Date()).getTime(),
 		pg: document.getElementsByName('pg')[0].value,
 		method: document.getElementsByName('method')[0].value,
 		show_agree_window: 0,
-		account_expire_at: '2018-11-21 01:01:01',
+		account_expire_at: '2018-12-20 01:01:01',
 		items: [
 			{
 				item_name: '테스트 아이템',
@@ -54,7 +54,9 @@ function doPayment() {
 			quota: '0,2,3,4,5,6,7,8,9,10,11',
 			phone_number: '01000000000',
 			phone_fixed: 0,
-			phone_carrier: 'SKT'
+			phone_carrier: 'SKT',
+			start_at: "2015-01-01",
+			end_at: "2099-12-31"
 		}
 	}).error(function (data) {
 		var msg = "결제 에러입니다.: " + JSON.stringify(data)
