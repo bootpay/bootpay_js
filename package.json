@@ -1,6 +1,6 @@
 {
   "name": "bootpay-js",
-  "version": "2.0.19-beta1",
+  "version": "2.0.19",
   "description": "Bootpay Javasrcipt Library",
   "main": "lib/bootpay.js",
   "files": [
@@ -17,6 +17,7 @@
     "style-loader": "^0.21.0"
   },
   "dependencies": {
+    "babel-core": "^6.26.3",
     "es6-promise": "^4.2.5",
     "babel-preset-es2015": "^6.24.1",
     "babel-cli": "^6.26.0",
@@ -25,7 +26,7 @@
     "superagent": "^3.8.3"
   },
   "scripts": {
-    "prepublish": "coffee --transpile -o lib -c lib/*.coffee"
+    "prepublish": "./prepublish.sh"
   },
   "repository": {
     "type": "git",
