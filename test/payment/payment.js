@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'nicepay';
-	document.getElementsByName('method')[0].value = 'bank';
+	document.getElementsByName('pg')[0].value = 'payletter';
+	document.getElementsByName('method')[0].value = 'phone';
 });
 
 function doPayment() {
@@ -46,7 +46,8 @@ function doPayment() {
 			}
 		],
 		user_info: {
-			email: 'test.bootpay.co.kr@gmail.com'
+			email: 'test.bootpay.co.kr@gmail.com',
+			addr: '인천광역시 남동구'
 		},
 		extra: {
 			expire_month: '36',

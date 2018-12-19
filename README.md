@@ -76,10 +76,9 @@ BootPay.request({
         ],
         user_info: { // 구매한 고객정보 ( 통계 혹은 PG사에서 요구하는 고객 정보 )
             email: '(이메일)',
-            phone: '(고객의 휴대폰 정보)',
-            gender: '(고객의 성별)',
-            birth: '(고객의 생년월일)',
-            area: '(고객의 거주지역)'
+            phone: '(고객의 휴대폰 정보)',                        
+            username: '구매자성함',
+            addr: '(고객의 거주지역)'
         }
     }).error(function (data) { 
         // 결제가 실패했을 때 호출되는 함수입니다.
