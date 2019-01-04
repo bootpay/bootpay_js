@@ -1,5 +1,10 @@
 # Bootpay JS
 
+## Change Log
+
+### 2.0.20
+- 결제를 팝업으로 띄워서 요청할 때 팝업과 팝업 Opener의 도메인이 서로 다른 경우 결제 UUID와 접속 UUID를 동기화하는 함수 추가 ( IE에서는 Cross Site postMessage 정책 때문에 해당 기능이 작동하지 않습니다. )
+
 ## 부트페이 결제 요청 JS SDK
 코드 한줄로 구현하는 Bootpay JS 모듈입니다. 개발 언어는 coffeescript로 되어 있으며, jQuery 의존성이 있는 1.x.x버전은 Private Git 저장소로 관리중이며, jQuery의존성이 없는 2.x.x는 GitHub에 오픈소스로 개발되었습니다.
 2.x.x는 Webpack으로 컴파일 되며, webpack-dev-server를 통해 테스트 서버로 결제를 테스트 할 수도 있습니다.
