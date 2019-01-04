@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'payletter';
-	document.getElementsByName('method')[0].value = 'phone';
+	document.getElementsByName('pg')[0].value = 'lgup';
+	document.getElementsByName('method')[0].value = 'card';
 });
 
 function doPayment() {
@@ -46,6 +46,7 @@ function doPayment() {
 			}
 		],
 		user_info: {
+			username: '홍길동',
 			email: 'test.bootpay.co.kr@gmail.com',
 			addr: '인천광역시 남동구'
 		},
@@ -53,8 +54,6 @@ function doPayment() {
 			expire_month: '36',
 			vbank_result: 1,
 			quota: '0,2,3,4,5,6,7,8,9,10,11',
-			phone_number: '01000000000',
-			phone_fixed: 0,
 			phone_carrier: 'SKT',
 			start_at: "2015-01-01",
 			end_at: "2099-12-31"

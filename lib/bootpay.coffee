@@ -10,7 +10,7 @@ window.BootPay =
   VISIT_TIMEOUT: 86400000 # 재 방문 시간에 대한 interval
   SK_TIMEOUT: 1800000 # 30분
   applicationId: undefined
-  version: '2.0.19'
+  version: '2.0.20'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
@@ -41,6 +41,7 @@ window.BootPay =
     @setLogLevel logLevel
     @setReadyUUID()
     @setReadySessionKey()
+    @bindBootpayCommonEvent()
 # meta tag에서 application id를 찾는다.
   setApplicationId: (applicationId = undefined) ->
     if applicationId?
@@ -76,6 +77,10 @@ window.BootPay =
   setDevice: (deviceType) ->
     @deviceType = @ableDeviceTypes[deviceType] if @ableDeviceTypes[deviceType]?
     @ableDeviceTypes[deviceType]?
+
+  # Parent 혹은 Opener에서 데이터를 가져와 통계 데이터를 동기화한다.
+  setAnalyticsDataByParent: (parent) ->
+    parent.postMessage(JSON.stringify(action: 'BootpayAnalyticsData'), '*')
 
 # 기본적인 통계 데이터를 설정한다.
 # Android, iPhone에서 기본적으로 사용하는 코드
@@ -218,6 +223,7 @@ window.BootPay =
 
   # 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
   request: (data) ->
+    @bindBootpayPaymentEvent()
     @removePaymentWindow(false)
     try
       user = @getUserData()
@@ -315,7 +321,6 @@ window.BootPay =
   # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
   start: ->
     @progressMessageShow '결제창을 불러오는 중입니다.'
-    @closeEventBind()
     document.getElementById(@iframeId).addEventListener('load', @progressMessageHide)
     document.bootpay_form.target = 'bootpay_inner_iframe'
     document.bootpay_form.submit()
@@ -371,7 +376,7 @@ window.BootPay =
       error.apply @, ["서버 오류로 인해 결제가 되지 않았습니다. #{err.message}"] if error?
     )
 # 창이 닫혔을 때 이벤트 처리
-  closeEventBind: ->
+  bindBootpayPaymentEvent: ->
     window.off 'message.BootpayGlobalEvent'
     window.on('message.BootpayGlobalEvent', (e) =>
       try
@@ -483,6 +488,29 @@ window.BootPay =
         when 'BootpayClose'
           @progressMessageHide()
           @removePaymentWindow()
+    )
+  bindBootpayCommonEvent: ->
+    window.off 'message.BootpayCommonEvent'
+    window.on('message.BootpayCommonEvent', (e) =>
+      try
+        data = {}
+        data = JSON.parse e.data if e.data? and typeof e.data is 'string'
+      catch e
+        Logger.debug "data: #{e.data}, #{e.message} json parse error"
+        return
+      switch data.action
+        when 'BootpayAnalyticsData'
+          e.source.postMessage(JSON.stringify(
+            action: 'BootpayAnalyticsReceived'
+            uuid: @getData('uuid')
+            sk: @getData('sk')
+            sk_time: @getData('sk_time')
+            time: @getData('time')
+            user: @getData('user')
+          ), '*')
+        when 'BootpayAnalyticsReceived'
+          Logger.debug "receive analytics data: #{JSON.stringify(data)}"
+          @setAnalyticsData(data)
     )
 
 # 결제 실행 단계를 로그로 보낸다.
