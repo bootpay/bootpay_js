@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'lgup';
+	document.getElementsByName('pg')[0].value = 'kcp';
 	document.getElementsByName('method')[0].value = 'card';
 });
 
@@ -70,6 +70,7 @@ function doPayment() {
 		if (confirm('결제를 정말 승인할까요?')) {
 			console.log("do confirm data: " + JSON.stringify(data));
 			this.transactionConfirm(data);
+			this.transactionConfirm(data);
 		} else {
 			var msg = "결제가 승인거절되었습니다.: " + JSON.stringify(data)
 			alert(msg);
@@ -90,6 +91,7 @@ function doAllPayment() {
 		price: document.getElementsByName('price')[0].value,
 		tax_free: document.getElementsByName('tax_free')[0].value,
 		application_id: '59a568d3e13f3336c21bf707',
+		// methods: ['card', 'bank'],
 		name: "테스트's 아이템",
 		phone: '01000000000',
 		order_id: (new Date()).getTime(),

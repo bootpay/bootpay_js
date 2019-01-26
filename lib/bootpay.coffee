@@ -10,7 +10,7 @@ window.BootPay =
   VISIT_TIMEOUT: 86400000 # 재 방문 시간에 대한 interval
   SK_TIMEOUT: 1800000 # 30분
   applicationId: undefined
-  version: '2.0.20'
+  version: '2.1.0'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
@@ -235,6 +235,7 @@ window.BootPay =
         show_agree_window: if data.show_agree_window? then parseInt(data.show_agree_window) else 0
         device_type: @deviceType
         method: data.method if data.method?
+        methods: data.methods if data.methods?
         pg: data.pg if data.pg?
         name: data.name
         items: data.items if data.items?.length
@@ -298,6 +299,7 @@ window.BootPay =
       throw '휴대폰 번호의 자리수와 형식이 맞지 않습니다. [ params : phone ]' if @params.phone?.length and !@phoneRegex.test(@params.phone)
       throw '판매하려는 제품 order_id를 지정해주셔야합니다. 다른 결제 정보와 겹치지 않은 유니크한 값으로 정해서 보내주시기 바랍니다. [ params: order_id ]' unless @params.order_id?.length
       throw '가상계좌 입금 만료일 포멧이 잘못되었습니다. yyyy-mm-dd로 입력해주세요. [ params: account_expire_at ]' if @params.account_expire_at?.length and !@dateFormat.test(@params.account_expire_at) and @params.method is 'vbank'
+      throw '선택 제한 결제 수단 설정은 배열 형태로 보내주셔야 합니다. [ params: methods, ex) ["card", "phone"] ]' if @params.methods? and !Array.isArray(@params.methods)
     catch e
       alert e
       Logger.error e
