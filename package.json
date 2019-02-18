@@ -1,6 +1,6 @@
 {
   "name": "bootpay-js",
-  "version": "2.0.20",
+  "version": "2.1.0-beta1",
   "description": "Bootpay Javasrcipt Library",
   "main": "lib/bootpay.js",
   "files": [
