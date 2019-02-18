@@ -236,10 +236,12 @@ window.BootPay =
         device_type: @deviceType
         method: data.method if data.method?
         methods: data.methods if data.methods?
+        rocket_key: data.rocket_key if data.rocket_key?
         pg: data.pg if data.pg?
         name: data.name
         items: data.items if data.items?.length
         redirect_url: if data.redirect_url? then data.redirect_url else ''
+        return_url: if data.return_url? then data.return_url else ''
         phone: if data.phone?.length then data.phone.replace(/-/g, '') else ''
         uuid: if data.uuid?.length then data.uuid else @getData('uuid')
         order_id: if data.order_id? then String(data.order_id) else ''
@@ -340,6 +342,7 @@ window.BootPay =
     @params.qty = data.qty if data.item_code? and data.qty?
     @params.user_info = data.user_info
     @params.redirect_url = if data.redirect_url? then data.redirect_url else ''
+    @params.return_url = if data.return_url? then data.return_url else ''
     @params.phone = if data.phone?.length then data.phone.replace(/-/g, '') else ''
     @params.uuid = if data.uuid?.length then data.uuid else window.localStorage['uuid']
     @params.order_id = if data.order_id? then String(data.order_id) else undefined
@@ -388,6 +391,16 @@ window.BootPay =
         Logger.error "data: #{e.data}, #{e.message} json parse error"
         return
       switch data.action
+        when 'BootpayFormSubmit'
+          for k, v of data.params
+            input = document.createElement('INPUT')
+            input.setAttribute('type', 'hidden')
+            input.setAttribute('name', k)
+            input.value = v
+            document.__BOOTPAY_TOP_FORM__.appendChild(input)
+          document.__BOOTPAY_TOP_FORM__.action = data.url
+          document.__BOOTPAY_TOP_FORM__.acceptCharset = data.charset
+          document.__BOOTPAY_TOP_FORM__.submit()
         when 'BootpayCancel'
           @progressMessageShow '결제를 취소중입니다.'
           try
@@ -573,6 +586,8 @@ window.BootPay =
   iframeHtml: (url) ->
     """
 <iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}" allowtransparency="true"></iframe>
+<form name="__BOOTPAY_TOP_FORM__" action="https://api.bootpay.co.kr/continue" method="post">
+</form>
 <div class="progress-message-window" id="progress-message">
   <div class="progress-message spinner">
     <div class="bounce1 bounce"></div><div class="bounce2 bounce"></div><div class="bounce3 bounce"></div>         &nbsp;
