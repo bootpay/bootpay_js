@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'inicis';
-	document.getElementsByName('method')[0].value = 'card';
+	document.getElementsByName('pg')[0].value = 'kcp';
+	document.getElementsByName('method')[0].value = 'bank';
 });
 
 function doPayment() {
@@ -37,7 +37,7 @@ function doPayment() {
 		method: document.getElementsByName('method')[0].value,
 		show_agree_window: 0,
 		return_url: 'https://dev-app.bootpay.co.kr/test',
-		rocket_key: 'aqure84',
+		boot_key: 'aqure84',
 		items: [
 			{
 				item_name: '테스트 아이템',
@@ -55,7 +55,8 @@ function doPayment() {
 			expire_month: '36',
 			vbank_result: 1,
 			quota: '0,2,3,4,5,6,7,8,9,10,11',
-			phone_carrier: 'SKT'
+			phone_carrier: 'SKT',
+			escrow: 1
 		}
 	}).error(function (data) {
 		var msg = "결제 에러입니다.: " + JSON.stringify(data)

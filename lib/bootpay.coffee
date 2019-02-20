@@ -9,6 +9,7 @@ import './style'
 window.BootPay =
   VISIT_TIMEOUT: 86400000 # 재 방문 시간에 대한 interval
   SK_TIMEOUT: 1800000 # 30분
+  CONFIRM_LOCK: false
   applicationId: undefined
   version: '2.1.0'
   mode: 'production'
@@ -225,6 +226,7 @@ window.BootPay =
   request: (data) ->
     @bindBootpayPaymentEvent()
     @removePaymentWindow(false)
+    @setConfirmLock(false)
     try
       user = @getUserData()
       # 결제 효청시 application_id를 입력하면 덮어 씌운다. ( 결제 이후 버그를 줄이기 위한 노력 )
@@ -236,7 +238,7 @@ window.BootPay =
         device_type: @deviceType
         method: data.method if data.method?
         methods: data.methods if data.methods?
-        rocket_key: data.rocket_key if data.rocket_key?
+        boot_key: data.boot_key if data.boot_key?
         pg: data.pg if data.pg?
         name: data.name
         items: data.items if data.items?.length
@@ -634,19 +636,29 @@ window.BootPay =
     @methods.close = method
     @
 
-  transactionConfirm: (data) ->
-    if !data? or !data.receipt_id?
-      alert '결제 승인을 하기 위해서는 receipt_id 값이 포함된 data값을 함께 보내야 합니다.'
-      Logger.error 'this.transactionConfirm(data); 이렇게 confirm을 실행해주세요.'
-      return
+  setConfirmLock: (lock) ->
+    @CONFIRM_LOCK = lock
 
-    html = """
-      <input type="hidden" name="receipt_id" value="#{data.receipt_id}" />
-      <input type="hidden" name="application_id" value="#{@applicationId}" />
-    """
-    document.getElementById('bootpay_confirm_form').innerHTML = html
-    document.bootpay_confirm_form.target = 'bootpay_inner_iframe'
-    document.bootpay_confirm_form.submit()
+  isConfirmLock: ->
+    @CONFIRM_LOCK
+
+  transactionConfirm: (data) ->
+    if @isConfirmLock()
+      console.log 'Transaction Lock'
+    else
+      @setConfirmLock(true)
+      if !data? or !data.receipt_id?
+        alert '결제 승인을 하기 위해서는 receipt_id 값이 포함된 data값을 함께 보내야 합니다.'
+        Logger.error 'this.transactionConfirm(data); 이렇게 confirm을 실행해주세요.'
+        return
+
+      html = """
+        <input type="hidden" name="receipt_id" value="#{data.receipt_id}" />
+        <input type="hidden" name="application_id" value="#{@applicationId}" />
+      """
+      document.getElementById('bootpay_confirm_form').innerHTML = html
+      document.bootpay_confirm_form.target = 'bootpay_inner_iframe'
+      document.bootpay_confirm_form.submit()
     @
 
 window.BootPay.initialize()
