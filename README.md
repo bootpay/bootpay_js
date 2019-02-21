@@ -2,6 +2,12 @@
 
 ## Change Log
 
+### 2.1.0
+- IE에서 transactionConfirm 함수가 두번 호출되는 문제가 있습니다. ConfirmLock을 통해 한번만 호출되도록 수정하였습니다. ( Bug Fixed )
+- escrow 결제 여부를 선택하는 부분이 extra에서 보낼 수 있도록 업데이트 되었습니다. ( 기능추가 )
+- 일부 모바일 카드 결제에서 iFrame에서 앱카드 및 ISP가 호출안되는 문제가 있어서 Form 방식 결제를 할 수 있도록 변경이 되었습니다. 요청시 결제 리턴 결과를 받을 return_url params를 보내서 승인 전 데이터를 받을 URL을 설정할 수 있습니다. ( 기능추가 )
+- 통계 데이터를 결제 특정 이벤트에 보내지 않는 버그를 수정하였습니다. ( Bug Fixed )
+
 ### 2.0.20
 - 결제를 팝업으로 띄워서 요청할 때 팝업과 팝업 Opener의 도메인이 서로 다른 경우 결제 UUID와 접속 UUID를 동기화하는 함수 추가 ( IE에서는 Cross Site postMessage 정책 때문에 해당 기능이 작동하지 않습니다. )
 
@@ -16,7 +22,7 @@ https://www.npmjs.com/package/bootpay-js
 ## 연동 방법
 ### 1. CDN으로 Javascript 호출하기
 ```html
-<script src="https://cdn.bootpay.co.kr/js/bootpay-2.0.20.min.js" type="application/javascript"></script>
+<script src="https://cdn.bootpay.co.kr/js/bootpay-2.1.0.min.js" type="application/javascript"></script>
 ```
 
 ### 2. npm으로 설치하기
@@ -34,7 +40,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^2.0.20"
+    "bootpay-js": "^2.1.0"
     //...
   }
 }
@@ -48,7 +54,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-2.0.20.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-2.1.0.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });
