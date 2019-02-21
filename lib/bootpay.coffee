@@ -11,7 +11,7 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '2.1.0'
+  version: '2.1.1'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
@@ -247,6 +247,7 @@ window.BootPay =
         phone: if data.phone?.length then data.phone.replace(/-/g, '') else ''
         uuid: if data.uuid?.length then data.uuid else @getData('uuid')
         order_id: if data.order_id? then String(data.order_id) else ''
+        use_order_id: if data.use_order_id? then data.use_order_id else 0
         user_info: if data.user_info? then data.user_info else undefined
         sk: @getData('sk')
         time: @getData('time')

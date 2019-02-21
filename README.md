@@ -2,6 +2,9 @@
 
 ## Change Log
 
+### 2.1.1
+- 가맹점에서 order_id를 PK로 PG사로 전송기능 ( KCP만 가능 - 차후 다른 가맹점도 업데이트 예정 - use_order_id: 1로 설정하면 사용 가능 )
+
 ### 2.1.0
 - IE에서 transactionConfirm 함수가 두번 호출되는 문제가 있습니다. ConfirmLock을 통해 한번만 호출되도록 수정하였습니다. ( Bug Fixed )
 - escrow 결제 여부를 선택하는 부분이 extra에서 보낼 수 있도록 업데이트 되었습니다. ( 기능추가 )
@@ -22,7 +25,7 @@ https://www.npmjs.com/package/bootpay-js
 ## 연동 방법
 ### 1. CDN으로 Javascript 호출하기
 ```html
-<script src="https://cdn.bootpay.co.kr/js/bootpay-2.1.0.min.js" type="application/javascript"></script>
+<script src="https://cdn.bootpay.co.kr/js/bootpay-2.1.1.min.js" type="application/javascript"></script>
 ```
 
 ### 2. npm으로 설치하기
@@ -40,7 +43,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^2.1.0"
+    "bootpay-js": "^2.1.1"
     //...
   }
 }
@@ -54,7 +57,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-2.1.0.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-2.1.1.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });

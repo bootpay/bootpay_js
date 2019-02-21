@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'kcp';
-	document.getElementsByName('method')[0].value = 'bank';
+	document.getElementsByName('pg')[0].value = 'nicepay';
+	document.getElementsByName('method')[0].value = 'card';
 });
 
 function doPayment() {
@@ -36,6 +36,7 @@ function doPayment() {
 		pg: document.getElementsByName('pg')[0].value,
 		method: document.getElementsByName('method')[0].value,
 		show_agree_window: 0,
+		use_order_id: 1,
 		return_url: 'https://dev-app.bootpay.co.kr/test',
 		boot_key: 'aqure84',
 		items: [
@@ -56,7 +57,7 @@ function doPayment() {
 			vbank_result: 1,
 			quota: '0,2,3,4,5,6,7,8,9,10,11',
 			phone_carrier: 'SKT',
-			escrow: 1
+			escrow: 0
 		}
 	}).error(function (data) {
 		var msg = "결제 에러입니다.: " + JSON.stringify(data)
