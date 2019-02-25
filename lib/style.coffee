@@ -76,11 +76,12 @@ style.innerHTML = """
     max-width: 600px;
     border-radius: 3px;
     width: 100%;
+    white-space: pre-line;
     vertical-align: middle;
 }
 
 .bootpay-window .progress-message-window .close-message-box .close-popup {
-    padding: 2rem 1rem;
+    padding: 1rem;
     background-color: #fff;
     color: #333;
     border-radius: 3px;
@@ -90,19 +91,22 @@ style.innerHTML = """
     font-size: 18px;
     padding: 0;
     margin: 0;
+    font-weight: 400;
 }
 
 .bootpay-window .progress-message-window .close-message-box .close-popup button.close-payment-window {
     margin-top: 2rem;
     display: block;
     width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid #e2e2e2;
+    padding: 1rem;
+    border: 1px solid #5e72e4;
     border-radius: 2px;
-    background-color: #fff;
+    background-color: #5e72e4;
+    border-radius: 5px;
     box-shadow: none;
-    font-size: 14px;
+    font-size: 16px;
     outline: none;
+    color: #fff;
 }
 
 @media (min-width: 500px) {

@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'inicis';
+	document.getElementsByName('pg')[0].value = 'kcp';
 	document.getElementsByName('method')[0].value = 'card';
 });
 
@@ -32,6 +32,7 @@ function doPayment() {
 		phone: '01000000000',
 		return_url: 'https://dev-app.bootpay.co.kr/test?env=production',
 		order_id: (new Date()).getTime(),
+		use_order_id: 1,
 		pg: document.getElementsByName('pg')[0].value,
 		method: document.getElementsByName('method')[0].value,
 		show_agree_window: 0,

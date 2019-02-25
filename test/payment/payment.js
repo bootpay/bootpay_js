@@ -22,69 +22,71 @@ document.addEventListener('DOMContentLoaded', function () {
 		]
 	});
 	document.getElementsByName('pg')[0].value = 'nicepay';
-	document.getElementsByName('method')[0].value = 'card';
+	document.getElementsByName('method')[0].value = 'bank';
 });
 
 function doPayment() {
-	BootPay.request({
-		price: document.getElementsByName('price')[0].value,
-		tax_free: document.getElementsByName('tax_free')[0].value,
-		application_id: '59a568d3e13f3336c21bf707',
-		name: '테스트s 아이템',
-		phone: '01000000000',
-		order_id: (new Date()).getTime(),
-		pg: document.getElementsByName('pg')[0].value,
-		method: document.getElementsByName('method')[0].value,
-		show_agree_window: 0,
-		use_order_id: 1,
-		return_url: 'https://dev-app.bootpay.co.kr/test',
-		boot_key: 'aqure84',
-		items: [
-			{
-				item_name: '테스트 아이템',
-				qty: 1,
-				unique: '123',
-				price: 1000
+	setTimeout(function() {
+		BootPay.request({
+			price: document.getElementsByName('price')[0].value,
+			tax_free: document.getElementsByName('tax_free')[0].value,
+			application_id: '59a568d3e13f3336c21bf707',
+			name: '테스트s 아이템',
+			phone: '01000000000',
+			order_id: (new Date()).getTime(),
+			pg: document.getElementsByName('pg')[0].value,
+			method: document.getElementsByName('method')[0].value,
+			show_agree_window: 0,
+			use_order_id: 1,
+			return_url: 'https://dev-app.bootpay.co.kr/test',
+			boot_key: 'aqure84',
+			items: [
+				{
+					item_name: '테스트 아이템',
+					qty: 1,
+					unique: '123',
+					price: 1000
+				}
+			],
+			user_info: {
+				username: '홍길동',
+				email: 'test.bootpay.co.kr@gmail.com',
+				addr: '인천광역시 남동구'
+			},
+			extra: {
+				expire_month: '36',
+				vbank_result: 1,
+				quota: '0,2,3,4,5,6,7,8,9,10,11',
+				phone_carrier: 'SKT',
+				escrow: 0
 			}
-		],
-		user_info: {
-			username: '홍길동',
-			email: 'test.bootpay.co.kr@gmail.com',
-			addr: '인천광역시 남동구'
-		},
-		extra: {
-			expire_month: '36',
-			vbank_result: 1,
-			quota: '0,2,3,4,5,6,7,8,9,10,11',
-			phone_carrier: 'SKT',
-			escrow: 0
-		}
-	}).error(function (data) {
-		var msg = "결제 에러입니다.: " + JSON.stringify(data)
-		alert(msg);
-		console.log(data);
-	}).cancel(function (data) {
-		var msg = "결제 취소입니다.: " + JSON.stringify(data)
-		alert(msg);
-		console.log(data);
-	}).confirm(function (data) {
-		if (confirm('결제를 정말 승인할까요?')) {
-			console.log("do confirm data: " + JSON.stringify(data));
-			this.transactionConfirm(data);
-			this.transactionConfirm(data);
-		} else {
-			var msg = "결제가 승인거절되었습니다.: " + JSON.stringify(data)
+		}).error(function (data) {
+			var msg = "결제 에러입니다.: " + JSON.stringify(data)
 			alert(msg);
 			console.log(data);
-		}
-	}).done(function (data) {
-		alert("결제가 완료되었습니다.");
-		console.log(data);
-	}).ready(function (data) {
-		console.log(data);
-	}).close(function () {
-		alert('닫힘!!');
-	});
+		}).cancel(function (data) {
+			var msg = "결제 취소입니다.: " + JSON.stringify(data)
+			alert(msg);
+			console.log(data);
+		}).confirm(function (data) {
+			if (confirm('결제를 정말 승인할까요?')) {
+				console.log("do confirm data: " + JSON.stringify(data));
+				this.transactionConfirm(data);
+				this.transactionConfirm(data);
+			} else {
+				var msg = "결제가 승인거절되었습니다.: " + JSON.stringify(data)
+				alert(msg);
+				console.log(data);
+			}
+		}).done(function (data) {
+			alert("결제가 완료되었습니다.");
+			console.log(data);
+		}).ready(function (data) {
+			console.log(data);
+		}).close(function () {
+			alert('닫힘!!');
+		});
+	}, 100);
 }
 
 function doAllPayment() {

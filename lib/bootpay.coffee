@@ -11,12 +11,15 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '2.1.1'
+  version: '2.1.2'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
   iframeId: 'bootpay-payment-iframe'
-  closeId: 'close-button-window'
+  closeId: 'bootpay-progress-button-window'
+  popupWatchInstance: undefined
+  popupInstance: undefined
+  popupData: undefined
   ieMinVersion: 9
   deviceType: 1
   ableDeviceTypes:
@@ -37,6 +40,10 @@ window.BootPay =
     @urls.clientUrl[@mode]
   analyticsUrl: ->
     @urls.analyticsUrl[@mode]
+
+  isMobileSafari: ->
+    agent = window.navigator.userAgent
+    agent.match(/iPad/i) || agent.match(/iPhone/i)
 
   initialize: (logLevel = 1) ->
     @setLogLevel logLevel
@@ -274,6 +281,8 @@ window.BootPay =
             <input type="hidden" name="data" value="#{encryptData.ciphertext.toString(Base64)}" />
             <input type="hidden" name="session_key" value="#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}" />
           </form>
+          <form id="__BOOTPAY_TOP_FORM__" name="__BOOTPAY_TOP_FORM__" action="#{[@restUrl(), 'continue'].join('/')}" method="post">
+          </form>
           <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl(), 'confirm'].join('/')}" method="POST">
           </form>
           <div class="bootpay-window" id="bootpay-background-window">#{@iframeHtml('')}</div>
@@ -331,7 +340,7 @@ window.BootPay =
     document.getElementById(@iframeId).addEventListener('load', @progressMessageHide)
     document.bootpay_form.target = 'bootpay_inner_iframe'
     document.bootpay_form.submit()
-    @
+
   notify: (data, success = undefined, error = undefined, timeout = 3000) ->
     @removePaymentWindow(false)
     user = @getUserData()
@@ -390,10 +399,20 @@ window.BootPay =
       try
         data = {}
         data = JSON.parse e.data if e.data? and typeof e.data is 'string'
+        console.log data
       catch e
         Logger.error "data: #{e.data}, #{e.message} json parse error"
         return
       switch data.action
+        when 'BootpayPopup'
+          # iFrame창을 삭제한다.
+          @popupData = data
+          @progressMessageHide()
+          # 아이폰은 사파리 정책상 팝업을 띄우려면 사용자의 직접적인 액션이 있어야 한다.
+          if @isMobileSafari()
+            @showProgressButton()
+          else
+            @startPopupPaymentWindow(data)
         when 'BootpayFormSubmit'
           for k, v of data.params
             input = document.createElement('INPUT')
@@ -407,6 +426,7 @@ window.BootPay =
         when 'BootpayCancel'
           @progressMessageShow '결제를 취소중입니다.'
           try
+            @clearEnvironment()
             @methods.cancel.call @, data if @methods.cancel?
           catch e
             @sendPaymentStepData(
@@ -422,6 +442,7 @@ window.BootPay =
           @removePaymentWindow()
         when 'BootpayBankReady'
           try
+            @clearEnvironment()
             @methods.ready.call @, data if @methods.ready?
           catch e
             @sendPaymentStepData(
@@ -437,6 +458,7 @@ window.BootPay =
         when 'BootpayConfirm'
           @progressMessageShow '결제를 승인중입니다.'
           try
+            @clearEnvironment()
             if !@methods.confirm?
               @transactionConfirm data
             else
@@ -474,6 +496,7 @@ window.BootPay =
             iframeSelector.setAttribute 'scrolling', data.scrolling if data.scrolling?
         when 'BootpayError'
           try
+            @clearEnvironment()
             @methods.error.call @, data if @methods.error?
           catch e
             @sendPaymentStepData(
@@ -490,6 +513,7 @@ window.BootPay =
         when 'BootpayDone'
           @progressMessageHide()
           try
+            @clearEnvironment()
             @methods.done.call @, data
           catch e
             @sendPaymentStepData(
@@ -589,34 +613,43 @@ window.BootPay =
   iframeHtml: (url) ->
     """
 <iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}" allowtransparency="true"></iframe>
-<form name="__BOOTPAY_TOP_FORM__" action="https://api.bootpay.co.kr/continue" method="post">
-</form>
-<div class="progress-message-window" id="progress-message">
+<div class="progress-message-window" id="bootpay-progress-message">
   <div class="progress-message spinner">
     <div class="bounce1 bounce"></div><div class="bounce2 bounce"></div><div class="bounce3 bounce"></div>         &nbsp;
     <span class="text" id="progress-message-text"></span>
   </div>
 </div>
-<div class="progress-message-window over" id="close-button-window">
+<div class="progress-message-window over" id="bootpay-progress-button-window">
   <div class="close-message-box">
     <div class="close-popup">
-      <h4 class="sub-title">결제를 중단할까요?</h4>
-      <button class="close-payment-window" onclick="window.BootPay.forceClose();" type="button" id="__bootpay-close-button">닫기</button>
+      <h4 class="sub-title">선택하신 결제는 팝업으로 결제가 시작됩니다. 결제를 시작할까요?</h4>
+      <button class="close-payment-window" onclick="window.BootPay.startPopup();" type="button" id="__bootpay-close-button">결제 시작하기</button>
     </div>
   </div>
 </div>
     """
+  startPopup: ->
+    @startPopupPaymentWindow(@popupData)
+
   progressMessageHide: ->
-    pms = document.getElementById('progress-message')
+    pms = document.getElementById('bootpay-progress-message')
     pms.style.setProperty('display', 'none')
     document.getElementById('progress-message-text').innerText = ''
     try document.getElementById(@iframeId).removeEventListener('load', @progressMessageHide)
     catch then return
 
   progressMessageShow: (msg) ->
-    pms = document.getElementById('progress-message')
+    pms = document.getElementById('bootpay-progress-message')
     pms.style.setProperty('display', 'block')
     document.getElementById('progress-message-text').innerText = msg
+
+  showProgressButton: ->
+    clb = document.getElementById(@closeId)
+    clb.style.setProperty('display', 'block')
+
+  hideProgressButton: ->
+    clb = document.getElementById(@closeId)
+    clb.style.setProperty('display', 'none')
 
   cancel: (method) ->
     @methods.cancel = method
@@ -643,6 +676,38 @@ window.BootPay =
   isConfirmLock: ->
     @CONFIRM_LOCK
 
+  clearEnvironment: ->
+    clearInterval(@popupWatchInstance) if @popupWatchInstance
+    if @popupInstance?
+      @popupInstance.close()
+      @popupInstance = undefined
+
+  startPopupPaymentWindow: (data) ->
+    document.getElementById(@iframeId).src = ''
+    @clearEnvironment()
+    @hideProgressButton()
+    @progressMessageShow('결제 팝업창을 닫으면 결제가 종료됩니다.')
+    @popupInstance = window.open("about:blank", 'bootpay_inner_popup')
+    for k, v of data.params
+      input = document.createElement('INPUT')
+      input.setAttribute('type', 'hidden')
+      input.setAttribute('name', k)
+      input.value = v
+      document.__BOOTPAY_TOP_FORM__.appendChild(input)
+#    document.__BOOTPAY_TOP_FORM__.action = data.submit_url
+    document.__BOOTPAY_TOP_FORM__.target = 'bootpay_inner_popup'
+    document.__BOOTPAY_TOP_FORM__.submit()
+    @popupWatchInstance = setInterval(=>
+      if @popupInstance.closed # 창을 닫은 경우
+        clearInterval(@popupWatchInstance) if @popupWatchInstance?
+        window.postMessage(
+          JSON.stringify(
+            action: 'BootpayCancel'
+            message :'팝업창을 닫았습니다.'
+          )
+        , '*')
+    , 3000)
+
   transactionConfirm: (data) ->
     if @isConfirmLock()
       console.log 'Transaction Lock'
@@ -658,6 +723,7 @@ window.BootPay =
         <input type="hidden" name="application_id" value="#{@applicationId}" />
       """
       document.getElementById('bootpay_confirm_form').innerHTML = html
+      document.bootpay_confirm_form.action = [@restUrl(), 'confirm'].join('/')
       document.bootpay_confirm_form.target = 'bootpay_inner_iframe'
       document.bootpay_confirm_form.submit()
     @
