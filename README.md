@@ -2,11 +2,11 @@
 
 ## Change Log
 
-### 2.1.2 ( Beta1 )
+### 2.1.2 ( Beta1 Nightly )
 - 팝업 결제 일 경우 iOS Safari는 사용자의 개입이 필요한 Direct Interactive 버튼 추가 ( 버튼이 없으면 팝업 차단 되어 있는 경우 팝업이 뜨지 않음 )
 - 결제창 CSS 수정 ( 버튼 색상을 부트페이 메인 컬러로 통일 )
 
-### 2.1.1
+### 2.1.1 ( Stable )
 - 가맹점에서 order_id를 PK로 PG사로 전송기능 ( KCP만 가능 - 차후 다른 가맹점도 업데이트 예정 - use_order_id: 1로 설정하면 사용 가능 )
 
 ### 2.1.0
