@@ -20,13 +20,14 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'kcp';
+	document.getElementsByName('pg')[0].value = 'danal';
 	document.getElementsByName('method')[0].value = 'card';
 });
 
 function doPayment() {
 	BootPay.request({
 		price: document.getElementsByName('price')[0].value,
+		tax_free: document.getElementsByName('tax_free')[0].value,
 		application_id: '59a7a368396fa64fc5d4a7db',
 		name: '테스트 아이템',
 		phone: '01000000000',

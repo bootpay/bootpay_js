@@ -399,7 +399,7 @@ window.BootPay =
       try
         data = {}
         data = JSON.parse e.data if e.data? and typeof e.data is 'string'
-        console.log data
+#        console.log data
       catch e
         Logger.error "data: #{e.data}, #{e.message} json parse error"
         return
