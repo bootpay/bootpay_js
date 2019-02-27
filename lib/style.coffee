@@ -6,6 +6,8 @@ style.innerHTML = """
   right: 0;
   bottom: 0;
   top: 0;
+  height: 100vh !important;
+  overflow: hidden !important;
 }
 
 @media (min-width: 500px) {
