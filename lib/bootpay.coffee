@@ -289,6 +289,7 @@ window.BootPay =
         </div>
         """
       document.body.insertAdjacentHTML 'beforeend', html
+      try document.body.classList.add('bootpay-open') catch then ''
       @start()
     catch e
       @sendPaymentStepData(
@@ -594,6 +595,7 @@ window.BootPay =
 # 결제창을 삭제한다.
   removePaymentWindow: (callClose = true) ->
     document.body.style.removeProperty('bootpay-modal-open')
+    try document.body.classList.remove('bootpay-open') catch then ''
     document.getElementById(@windowId).outerHTML = '' if document.getElementById(@windowId)?
     try
       @methods.close @ if @methods.close? and callClose
@@ -612,7 +614,7 @@ window.BootPay =
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->
     """
-<iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}" allowtransparency="true"></iframe>
+<iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}" allowtransparency="true" scrolling="no"></iframe>
 <div class="progress-message-window" id="bootpay-progress-message">
   <div class="progress-message spinner">
     <div class="bounce1 bounce"></div><div class="bounce2 bounce"></div><div class="bounce3 bounce"></div>         &nbsp;

@@ -1,5 +1,19 @@
 style = document.createElement('style');
 style.innerHTML = """
+.bootpay-open {
+  position: fixed !important;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}
+
+@media (min-width: 500px) {
+  .bootpay-open {
+    position: relative;
+  }
+}
+
 @-webkit-keyframes sk-bouncedelay {
     0%, 80%, 100% {
         -webkit-transform: scale(0);
@@ -27,7 +41,7 @@ style.innerHTML = """
 
 .bootpay-window {
     display: block;
-    position: fixed;
+    position: absolute;
     left: 0;
     right: 0;
     top: 0;
@@ -37,6 +51,24 @@ style.innerHTML = """
     text-align: center;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
+    -webkit-transform: translate3d(0, 0, 0);
+}
+
+@media (min-width: 500px) {
+  .bootpay-window {
+      display: block;
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 30000;
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      -webkit-transform: translate3d(0, 0, 0);
+  }
 }
 
 .bootpay-window.transparent-mode {
