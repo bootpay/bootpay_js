@@ -400,6 +400,7 @@ window.BootPay =
       try
         data = {}
         data = JSON.parse e.data if e.data? and typeof e.data is 'string'
+        data.action = data.action.replace(/Child/g, '') if data.action?
 #        console.log data
       catch e
         Logger.error "data: #{e.data}, #{e.message} json parse error"

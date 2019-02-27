@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'nicepay';
-	document.getElementsByName('method')[0].value = 'bootpay';
+	document.getElementsByName('pg')[0].value = 'easypay';
+	document.getElementsByName('method')[0].value = 'card';
 });
 
 function doPayment() {
