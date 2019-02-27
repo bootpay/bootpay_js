@@ -337,7 +337,7 @@ window.BootPay =
   # 결제창을 조립해서 만들고 부트페이로 결제 정보를 보낸다.
   # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
   start: ->
-    @progressMessageShow '결제창을 불러오는 중입니다.'
+    @progressMessageShow ''
     document.getElementById(@iframeId).addEventListener('load', @progressMessageHide)
     document.bootpay_form.target = 'bootpay_inner_iframe'
     document.bootpay_form.submit()
@@ -425,7 +425,7 @@ window.BootPay =
           document.__BOOTPAY_TOP_FORM__.acceptCharset = data.charset
           document.__BOOTPAY_TOP_FORM__.submit()
         when 'BootpayCancel'
-          @progressMessageShow '결제를 취소중입니다.'
+          @progressMessageShow '취소중입니다.'
           try
             @clearEnvironment()
             @methods.cancel.call @, data if @methods.cancel?
@@ -457,7 +457,7 @@ window.BootPay =
             status: 1
           )
         when 'BootpayConfirm'
-          @progressMessageShow '결제를 승인중입니다.'
+          @progressMessageShow '승인중입니다.'
           try
             @clearEnvironment()
             if !@methods.confirm?
@@ -688,7 +688,7 @@ window.BootPay =
     document.getElementById(@iframeId).src = ''
     @clearEnvironment()
     @hideProgressButton()
-    @progressMessageShow('결제 팝업창을 닫으면 결제가 종료됩니다.')
+    @progressMessageShow('팝업창을 닫으면 종료됩니다.')
     @popupInstance = window.open("about:blank", 'bootpay_inner_popup')
     for k, v of data.params
       input = document.createElement('INPUT')
