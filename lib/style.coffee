@@ -102,6 +102,7 @@ style.innerHTML = """
     width: 100%;
     background-color: transparent;
     vertical-align: middle;
+    margin-top: -35%;
 }
 
 .bootpay-window .progress-message-window .close-message-box {
@@ -148,14 +149,7 @@ style.innerHTML = """
         display: inline-block;
         width: 400px;
         vertical-align: middle;
-    }
-}
-
-@media (min-width: 800px) {
-    .bootpay-poke-window .progress-message-window .progress-message {
-        display: inline-block;
-        width: 800px;
-        vertical-align: middle;
+        margin-top: 0;
     }
 }
 

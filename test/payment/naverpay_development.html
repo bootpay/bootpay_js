@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="https://pay.naver.com/customer/js/naverPayButton.js" charset="UTF-8"></script>
+    <script src="../../bootpay-latest.js" type="application/javascript"></script>
+    <script src="./naverpay.js" type="application/javascript"></script>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="none"/>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport">
+    <meta name="bootpay-application-id" content="59a568d3e13f3336c21bf707"/>
+    <link rel="stylesheet" media="all" href="../stylesheet/style.css"/>
+    <style>
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="pg-select-container">
+    <div class="pg-select-box">
+        <h2 class="title">결제 요청 하기</h2>
+        <div class="group">
+            <label>PG 회사 선택</label>
+            <button href="" id="button-id">
+                <img src="/test/payment/assets/naverpay.svg" />
+            </button>
+            <script type="text/javascript">
+	        naver.NaverPayButton.apply({
+		        BUTTON_KEY: "99F9F137-828C-4D9E-9CEE-46E4AC3B1784", // 페이에서 제공받은 버튼 인증 키 입력 TYPE: "E", // 버튼 모음 종류 설정
+		        TYPE: 'C',
+		        EMBED_ID: 'button-id',
+		        COLOR: 1, // 버튼 모음의 색 설정
+		        COUNT: 2,
+		        ENABLE: 'Y',// 버튼 개수 설정. 구매하기 버튼만 있으면 1, 찜하기 버튼도 있으면 2를 입력. ENABLE: "Y", // 품절 등의 이유로 버튼 모음을 비활성화할 때에는 "N" 입력,
+		        "":""
+	        });
+            </script>
+        </div>
+    </div>
+</div>
+</body>
+</html>

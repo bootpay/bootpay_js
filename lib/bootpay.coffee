@@ -699,6 +699,7 @@ window.BootPay =
       document.__BOOTPAY_TOP_FORM__.appendChild(input)
 #    document.__BOOTPAY_TOP_FORM__.action = data.submit_url
     document.__BOOTPAY_TOP_FORM__.target = 'bootpay_inner_popup'
+    document.__BOOTPAY_TOP_FORM__.method = 'GET'
     document.__BOOTPAY_TOP_FORM__.submit()
     @popupWatchInstance = setInterval(=>
       if @popupInstance.closed # 창을 닫은 경우

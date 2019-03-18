@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'easypay';
+	document.getElementsByName('pg')[0].value = 'payapp';
 	document.getElementsByName('method')[0].value = 'card';
 });
 
