@@ -538,7 +538,7 @@ window.BootPay =
     window.on('message.BootpayCommonEvent', (e) =>
       try
         data = {}
-        data = JSON.parse e.data if e.data? and typeof e.data is 'string'
+        data = JSON.parse e.data if e.data? and typeof e.data is 'string' and /Bootpay/.test(e.data)
       catch e
         Logger.debug "data: #{e.data}, #{e.message} json parse error"
         return
