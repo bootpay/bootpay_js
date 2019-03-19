@@ -399,7 +399,7 @@ window.BootPay =
     window.on('message.BootpayGlobalEvent', (e) =>
       try
         data = {}
-        data = JSON.parse e.data if e.data? and typeof e.data is 'string'
+        data = JSON.parse e.data if e.data? and typeof e.data is 'string' and /Bootpay/.test(e.data)
         data.action = data.action.replace(/Child/g, '') if data.action?
 #        console.log data
       catch e
