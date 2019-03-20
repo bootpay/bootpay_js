@@ -9,6 +9,7 @@
 - Progress Position 모바일 일 경우 약간 위로 수정
 - Popup 결제 시작 Trigger 요청시 POST -> GET 방식으로 변경 ( 아이폰 인앱 대응 )
 - 타 Framework에서 postMessage 사용시 json parsing 에러 안나도록 Filter 추가
+- iFrame iOS에서 Scroll 버그 수정 ( 일부 PG에서 스크롤이 자연스럽게 내려가지 않는 문제 해결 )
 
 ### 2.1.1 ( Stable )
 - 가맹점에서 order_id를 PK로 PG사로 전송기능 ( KCP만 가능 - 차후 다른 가맹점도 업데이트 예정 - use_order_id: 1로 설정하면 사용 가능 )

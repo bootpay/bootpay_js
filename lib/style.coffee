@@ -8,6 +8,7 @@ style.innerHTML = """
   top: 0;
   height: 100vh !important;
   overflow: hidden !important;
+  -webkit-overflow-scrolling: auto !important;
 }
 
 @media (min-width: 500px) {
@@ -43,7 +44,7 @@ style.innerHTML = """
 
 .bootpay-window {
     display: block;
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
     top: 0;
