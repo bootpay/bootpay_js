@@ -94,7 +94,6 @@ function doAllPayment() {
 		price: document.getElementsByName('price')[0].value,
 		tax_free: document.getElementsByName('tax_free')[0].value,
 		application_id: '59a568d3e13f3336c21bf707',
-		// methods: ['card', 'bank'],
 		name: "테스트's 아이템",
 		phone: '01000000000',
 		order_id: (new Date()).getTime(),

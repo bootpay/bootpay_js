@@ -11,7 +11,7 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '2.1.2'
+  version: '3.0.0'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'

@@ -2,7 +2,12 @@
 
 ## Change Log
 
-### 2.1.2 ( Beta Nightly )
+### 3.0.0 ( Stable )
+#### 새로운 기능
+- 앞으로 새로 제공될 결제 방식(기존 PG 결제 이외의)에 대한 업데이트 이루어졌습니다.
+- REST API로 결제 승인이 가능합니다. 좀 더 정밀한 결제 검증이 가능해졌습니다. ( Docs에서 사용법을 업데이트 중 )
+- 일부 PG에서 iFrame이 안되는 문제가 있어서 Mobile Safari를 대응하기 위해 POPUP 결제창 로직이 추가 되었습니다. 일부 PG사의 결제 수단은 POPUP으로 동일한 로직으로 결제가 진행됩니다.
+#### 버그 수정내역
 - 팝업 결제 일 경우 iOS Safari는 사용자의 개입이 필요한 Direct Interactive 버튼 추가 ( 버튼이 없으면 팝업 차단 되어 있는 경우 팝업이 뜨지 않음 )
 - 결제창 CSS 수정 ( 버튼 색상을 부트페이 메인 컬러로 통일 )
 - iOS 인앱에서 iFrame으로 결제창을 띄울 경우 탭 위치가 올바르지 않는 문제 수정 ( Bug Fixed )
@@ -11,7 +16,7 @@
 - 타 Framework에서 postMessage 사용시 json parsing 에러 안나도록 Filter 추가
 - iFrame iOS에서 Scroll 버그 수정 ( 일부 PG에서 스크롤이 자연스럽게 내려가지 않는 문제 해결 )
 
-### 2.1.1 ( Stable )
+### 2.1.1
 - 가맹점에서 order_id를 PK로 PG사로 전송기능 ( KCP만 가능 - 차후 다른 가맹점도 업데이트 예정 - use_order_id: 1로 설정하면 사용 가능 )
 
 ### 2.1.0

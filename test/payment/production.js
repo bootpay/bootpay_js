@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'danal';
-	document.getElementsByName('method')[0].value = 'card';
+	document.getElementsByName('pg')[0].value = 'nicepay';
+	document.getElementsByName('method')[0].value = 'bootpay';
 });
 
 function doPayment() {
@@ -37,6 +37,7 @@ function doPayment() {
 		pg: document.getElementsByName('pg')[0].value,
 		method: document.getElementsByName('method')[0].value,
 		show_agree_window: 0,
+		boot_key: 'aqure84',
 		items: [
 			{
 				item_name: '테스트 아이템',
