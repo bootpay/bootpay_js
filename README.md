@@ -2,6 +2,11 @@
 
 ## Change Log
 
+### 3.0.1 ( Nightly )
+#### 복합기능
+- use_order_id: 1 과 같은 1, 0의 값을 직관적으로 true, false도 함께 허용
+
+
 ### 3.0.0 ( Stable )
 #### 새로운 기능
 - 앞으로 새로 제공될 결제 방식(기존 PG 결제 이외의)에 대한 업데이트 이루어졌습니다.
@@ -39,7 +44,7 @@ https://www.npmjs.com/package/bootpay-js
 ## 연동 방법
 ### 1. CDN으로 Javascript 호출하기
 ```html
-<script src="https://cdn.bootpay.co.kr/js/bootpay-2.1.1.min.js" type="application/javascript"></script>
+<script src="https://cdn.bootpay.co.kr/js/bootpay-3.0.0.min.js" type="application/javascript"></script>
 ```
 
 ### 2. npm으로 설치하기
@@ -57,7 +62,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^2.1.1"
+    "bootpay-js": "^3.0.0"
     //...
   }
 }
@@ -71,7 +76,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-2.1.1.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-3.0.0.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });

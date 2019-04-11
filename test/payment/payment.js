@@ -23,10 +23,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 	document.getElementsByName('pg')[0].value = 'nicepay';
 	document.getElementsByName('method')[0].value = 'bootpay';
+	document.getElementsByName('boot_key')[0].value = 'bootpay'
 });
 
 function doPayment() {
-	setTimeout(function() {
+	setTimeout(function () {
 		BootPay.request({
 			price: document.getElementsByName('price')[0].value,
 			tax_free: document.getElementsByName('tax_free')[0].value,
@@ -36,18 +37,19 @@ function doPayment() {
 			order_id: (new Date()).getTime(),
 			pg: document.getElementsByName('pg')[0].value,
 			method: document.getElementsByName('method')[0].value,
-			show_agree_window: 0,
-			use_order_id: 1,
+			show_agree_window: false,
+			use_order_id: true,
+			escrow: true,
 			return_url: 'https://dev-app.bootpay.co.kr/test',
-			boot_key: 'aqure84',
-			items: [
-				{
-					item_name: '테스트 아이템',
-					qty: 1,
-					unique: '123',
-					price: 1000
-				}
-			],
+			boot_key: document.getElementsByName('boot_key')[0].value,
+			// items: [
+			// 	{
+			// 		item_name: '테스트 아이템',
+			// 		qty: 1,
+			// 		unique: '123',
+			// 		price: 1000
+			// 	}
+			// ],
 			user_info: {
 				username: '홍길동',
 				email: 'test.bootpay.co.kr@gmail.com',
@@ -55,10 +57,11 @@ function doPayment() {
 			},
 			extra: {
 				expire_month: '36',
-				vbank_result: 1,
+				vbank_result: false,
 				quota: '0,2,3,4,5,6,7,8,9,10,11',
 				phone_carrier: 'SKT',
-				escrow: 0
+				escrow: 0,
+				ux: 'registration'
 			}
 		}).error(function (data) {
 			var msg = "결제 에러입니다.: " + JSON.stringify(data)

@@ -11,7 +11,7 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '3.0.0'
+  version: '3.0.1'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
@@ -241,7 +241,7 @@ window.BootPay =
       @tk = "#{@generateUUID()}-#{(new Date).getTime()}"
       @params =
         application_id: @applicationId
-        show_agree_window: if data.show_agree_window? then parseInt(data.show_agree_window) else 0
+        show_agree_window: if data.show_agree_window? then data.show_agree_window else 0
         device_type: @deviceType
         method: data.method if data.method?
         methods: data.methods if data.methods?
@@ -273,6 +273,8 @@ window.BootPay =
       @integrityItemData() if @params.items?.length
       # 결제 정보 데이터의 Validation
       @integrityParams() if !@params.method? or @params.method is 'auth'
+      # True, False의 데이터를 1, 0으로 변경하는 작업을 한다
+      @generateTrueFalseParams()
       # 데이터를 AES로 암호화한다.
       encryptData = AES.encrypt(JSON.stringify(@params), @params.sk)
       html = """
@@ -334,6 +336,20 @@ window.BootPay =
       alert e
       Logger.error e
       throw e
+  # True, False -> 1, 0 으로 Generate 한다
+  generateTrueFalseParams: ->
+    for index of @params
+      @params[index] = 1 if @params[index] is true
+      if @params[index] is false
+        @params[index] = 0
+        console.log "#{index} false"
+
+    if @params.extra?
+      for index of @params.extra
+        @params.extra[index] = 1 if @params.extra[index] is true
+        @params.extra[index] = 0 if @params.extra[index] is false
+
+    console.log @params
   # 결제창을 조립해서 만들고 부트페이로 결제 정보를 보낸다.
   # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
   start: ->
