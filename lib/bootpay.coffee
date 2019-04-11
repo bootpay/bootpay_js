@@ -340,8 +340,7 @@ window.BootPay =
   generateTrueFalseParams: ->
     for index of @params
       @params[index] = 1 if @params[index] is true
-      if @params[index] is false
-        @params[index] = 0
+      @params[index] = 0 if @params[index] is false
 
     if @params.extra?
       for index of @params.extra
