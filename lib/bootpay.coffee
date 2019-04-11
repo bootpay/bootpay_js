@@ -342,14 +342,12 @@ window.BootPay =
       @params[index] = 1 if @params[index] is true
       if @params[index] is false
         @params[index] = 0
-        console.log "#{index} false"
 
     if @params.extra?
       for index of @params.extra
         @params.extra[index] = 1 if @params.extra[index] is true
         @params.extra[index] = 0 if @params.extra[index] is false
 
-    console.log @params
   # 결제창을 조립해서 만들고 부트페이로 결제 정보를 보낸다.
   # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
   start: ->
