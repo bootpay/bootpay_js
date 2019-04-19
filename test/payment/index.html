@@ -50,6 +50,7 @@
                         <option value="bank">계좌이체</option>
                         <option value="card_rebill">카드정기결제</option>
                         <option value="easy">간편결제</option>
+                        <option value="easy_rebill">간편정기결제</option>
                         <option value="order">주문결제</option>
                         <option value="bootpay">부트페이 간편결제</option>
                     </select>
@@ -61,6 +62,18 @@
                 <div class="group">
                     <label>면세금액</label>
                     <input class="input-block" value="0" name="tax_free" />
+                </div>
+                <div class="group">
+                    <label>간편결제 테마색 ( extra: { theme_color: '' } } )</label>
+                    <input class="input-block" value="#5e72e4" name="theme_color" />
+                </div>
+                <div class="group">
+                    <label>간편결제 테마안 글자색 ( extra: { color: '' } } )</label>
+                    <input class="input-block" value="#ffffff" name="color" />
+                </div>
+                <div class="group">
+                    <label>UX ( extra: { ux: '' } } )</label>
+                    <input class="input-block" value="once" name="ux" />
                 </div>
                 <div class="group">
                     <label>결제키 (BOOT_KEY)</label>

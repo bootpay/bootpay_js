@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 	document.getElementsByName('pg')[0].value = 'nicepay';
 	document.getElementsByName('method')[0].value = 'bootpay';
-	document.getElementsByName('boot_key')[0].value = 'bootpay'
+	document.getElementsByName('boot_key')[0].value = 'aqure84'
 });
 
 function doPayment() {
@@ -61,7 +61,9 @@ function doPayment() {
 				quota: '0,2,3,4,5,6,7,8,9,10,11',
 				phone_carrier: 'SKT',
 				escrow: 0,
-				ux: 'registration'
+				theme_color: document.getElementsByName('theme_color')[0].value,
+				color: document.getElementsByName('color')[0].value,
+				ux: document.getElementsByName('ux')[0].value // registration, easy, once
 			}
 		}).error(function (data) {
 			var msg = "결제 에러입니다.: " + JSON.stringify(data)
