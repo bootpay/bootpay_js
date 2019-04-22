@@ -760,6 +760,7 @@ window.BootPay =
   addNaverPayZzim: (data, test = false) ->
     return alert('shop_id를 입력해주세요.') unless data.shop_id?.length
     return alert('item_id를 입력해주세요.') unless data.item_id?.length
+    @removePaymentWindow(false)
     requestUrlHash = if test then @naverpayZzimUrl.test else @naverpayZzimUrl.live
     requestUrl = if @isMobile() then requestUrlHash.mobile else requestUrlHash.pc
     document.body.insertAdjacentHTML 'beforeend', """
