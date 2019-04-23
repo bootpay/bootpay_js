@@ -775,7 +775,7 @@ window.BootPay =
     @popupInstance = window.open("about:blank", 'bootpay_inner_popup', 'width=500,height=300,toolbar=no,location=no,status=no,scrollbar=no,menubar=no')
     document.__BOOTPAY_TOP_FORM__.action = requestUrl
     document.__BOOTPAY_TOP_FORM__.target = 'bootpay_inner_popup'
-    document.__BOOTPAY_TOP_FORM__.method = 'POST'
+    document.__BOOTPAY_TOP_FORM__.method = 'GET'
     document.__BOOTPAY_TOP_FORM__.submit()
 
 window.BootPay.initialize()

@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'nicepay';
-	document.getElementsByName('method')[0].value = 'bootpay';
+	document.getElementsByName('pg')[0].value = 'inicis';
+	document.getElementsByName('method')[0].value = 'bank';
 	document.getElementsByName('boot_key')[0].value = 'aqure84'
 });
 
@@ -71,7 +71,9 @@ function doPayment() {
 			console.log(data);
 		}).cancel(function (data) {
 			var msg = "결제 취소입니다.: " + JSON.stringify(data)
-			alert(msg);
+			setTimeout(function () {
+				alert(msg);
+			}, 200);
 			console.log(data);
 		}).confirm(function (data) {
 			if (confirm('결제를 정말 승인할까요?')) {
@@ -84,7 +86,9 @@ function doPayment() {
 				console.log(data);
 			}
 		}).done(function (data) {
-			alert("결제가 완료되었습니다.");
+			setTimeout(function () {
+				alert("결제가 완료되었습니다.");
+			}, 200);
 			console.log(data);
 		}).ready(function (data) {
 			console.log(data);
