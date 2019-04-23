@@ -32,15 +32,10 @@ window.BootPay =
   phoneRegex: /^\d{2,3}\d{3,4}\d{4}$/
   dateFormat: /(\d{4})-(\d{2})-(\d{2})/
   zeroPaymentMethod: ['bankalarm', 'auth', 'card_rebill']
-  naverpayZzimUrl:
-    test:
-      pc: 'https://test-pay.naver.com/customer/wishlistPopup.nhn'
-      mobile: 'https://test-m.pay.naver.com/mobile/customer/wishList.nhn'
-    live:
-      pc: 'https://pay.naver.com/customer/wishlistPopup.nhn'
-      mobile: 'https://m.pay.naver.com/mobile/customer/wishList.nhn'
   urls: require('../package.json').urls
   tk: undefined
+  naverpayZzimUrl: (mode = 'production', platform = 'pc') ->
+    @urls.naverpayZzimUrl[mode][platform]
   restUrl: ->
     @urls.restUrl[@mode]
   clientUrl: ->
@@ -49,8 +44,8 @@ window.BootPay =
     @urls.analyticsUrl[@mode]
 
   isMobile: ->
-    a = (navigator.userAgent||navigator.vendor||window.opera)
-    (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))
+    a = (navigator.userAgent || navigator.vendor || window.opera)
+    (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4)))
 
   isMobileSafari: ->
     agent = window.navigator.userAgent
@@ -97,7 +92,7 @@ window.BootPay =
     @deviceType = @ableDeviceTypes[deviceType] if @ableDeviceTypes[deviceType]?
     @ableDeviceTypes[deviceType]?
 
-  # Parent 혹은 Opener에서 데이터를 가져와 통계 데이터를 동기화한다.
+# Parent 혹은 Opener에서 데이터를 가져와 통계 데이터를 동기화한다.
   setAnalyticsDataByParent: (parent) ->
     parent.postMessage(JSON.stringify(action: 'BootpayAnalyticsData'), '*')
 
@@ -181,20 +176,17 @@ window.BootPay =
       items: items
     Logger.debug "활동 정보를 서버로 전송합니다. data: #{JSON.stringify(requestData)}"
     encryptData = AES.encrypt(JSON.stringify(requestData), requestData.sk)
-    request
-    .post([@analyticsUrl(), "call?ver=#{@version}"].join('/'))
-    .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-    .send(
+    request.post([@analyticsUrl(), "call?ver=#{@version}"].join('/')).set(
+      'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'
+    ).send(
       data: encryptData.ciphertext.toString(Base64)
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
-    )
-    .then((res) =>
+    ).then((res) =>
       Logger.warn "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요." if res.status isnt 200 or res.body.status isnt 200
-    )
-    .catch((err) =>
+    ).catch((err) =>
       Logger.warn "BOOTPAY MESSAGE: #{err.body.message} - Application ID가 제대로 되었는지 확인해주세요."
     )
-  # 로그인 정보를 부트페이 서버로 전송한다.
+# 로그인 정보를 부트페이 서버로 전송한다.
   startLoginSession: (data) ->
     try
       throw '로그인 데이터를 입력해주세요.' unless data?
@@ -213,20 +205,18 @@ window.BootPay =
       gender: data.gender
       area: if data.area? then String(data.area).match(/서울|인천|대구|광주|부산|울산|경기|강원|충청북도|충북|충청남도|충남|전라북도|전북|전라남도|전남|경상북도|경북|경상남도|경남|제주|세종|대전/) else undefined
     )
-  # 부트페이 서버로 데이터를 전송한다.
+# 부트페이 서버로 데이터를 전송한다.
   sendLoginData: (data) ->
     return if !data? or !document.URL?
     Logger.debug "로그인 데이터를 전송합니다. data: #{JSON.stringify(data)}"
     data.area = if data.area?.length then data.area[0] else undefined
     encryptData = AES.encrypt(JSON.stringify(data), @getData('sk'))
-    request
-    .post([@analyticsUrl(), "login?ver=#{@version}"].join('/'))
-    .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-    .send(
+    request.post([@analyticsUrl(), "login?ver=#{@version}"].join('/')).set(
+      'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'
+    ).send(
       data: encryptData.ciphertext.toString(Base64)
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
-    )
-    .then((res) =>
+    ).then((res) =>
       if res.status isnt 200 or res.body.status isnt 200
         Logger.warn "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요."
       else
@@ -235,12 +225,11 @@ window.BootPay =
           id: json.user_id
           time: (new Date()).getTime()
         )
-    )
-    .catch((err) =>
+    ).catch((err) =>
       Logger.warn "BOOTPAY MESSAGE: #{err.message} - Application ID가 제대로 되었는지 확인해주세요."
     )
 
-  # 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
+# 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
   request: (data) ->
     @bindBootpayPaymentEvent()
     @removePaymentWindow(false)
@@ -303,7 +292,8 @@ window.BootPay =
         </div>
         """
       document.body.insertAdjacentHTML 'beforeend', html
-      try document.body.classList.add('bootpay-open') catch then ''
+      try document.body.classList.add('bootpay-open')
+      catch then ''
       @start()
     catch e
       @sendPaymentStepData(
@@ -348,7 +338,7 @@ window.BootPay =
       alert e
       Logger.error e
       throw e
-  # True, False -> 1, 0 으로 Generate 한다
+# True, False -> 1, 0 으로 Generate 한다
   generateTrueFalseParams: ->
     for index of @params
       @params[index] = 1 if @params[index] is true
@@ -359,8 +349,8 @@ window.BootPay =
         @params.extra[index] = 1 if @params.extra[index] is true
         @params.extra[index] = 0 if @params.extra[index] is false
 
-  # 결제창을 조립해서 만들고 부트페이로 결제 정보를 보낸다.
-  # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
+# 결제창을 조립해서 만들고 부트페이로 결제 정보를 보낸다.
+# 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
   start: ->
     @progressMessageShow ''
     document.getElementById(@iframeId).addEventListener('load', @progressMessageHide)
@@ -396,25 +386,21 @@ window.BootPay =
     @params.items = data.items
     @integrityParams() if !@params.method? or !@params.method isnt 'auth'
     encryptData = AES.encrypt(JSON.stringify(@params), @getData('sk'))
-    request
-    .post([@restUrl(), "notify?ver=#{@version}&format=json"].join('/'))
-    .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-    .timeout(
+    request.post([@restUrl(), "notify?ver=#{@version}&format=json"].join('/')).set(
+      'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'
+    ).timeout(
       response: timeout
       deadline: timeout
-    )
-    .send(
+    ).send(
       data: encryptData.ciphertext.toString(Base64)
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
-    )
-    .then((res) =>
+    ).then((res) =>
       if res.status isnt 200 or res.body.status isnt 200
         Logger.error "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요."
         error.apply @, ["BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요.", res.body] if error?
       else
         success.apply @, [res.body.data] if success?
-    )
-    .catch((err) =>
+    ).catch((err) =>
       error.apply @, ["서버 오류로 인해 결제가 되지 않았습니다. #{err.message}"] if error?
     )
 # 창이 닫혔을 때 이벤트 처리
@@ -425,13 +411,13 @@ window.BootPay =
         data = {}
         data = JSON.parse e.data if e.data? and typeof e.data is 'string' and /Bootpay/.test(e.data)
         data.action = data.action.replace(/Child/g, '') if data.action?
-#        console.log data
+      #        console.log data
       catch e
         Logger.error "data: #{e.data}, #{e.message} json parse error"
         return
       switch data.action
         when 'BootpayPopup'
-          # iFrame창을 삭제한다.
+        # iFrame창을 삭제한다.
           @popupData = data
           @progressMessageHide()
           # 아이폰은 사파리 정책상 팝업을 띄우려면 사용자의 직접적인 액션이 있어야 한다.
@@ -588,13 +574,14 @@ window.BootPay =
     data.tk = @tk
     data.application_id = @applicationId
     if data.e?
-      data.msg = try data.e.message catch then data.e
-      data.trace = try data.e.stack catch then undefined
+      data.msg = try data.e.message
+      catch then data.e
+      data.trace = try data.e.stack
+      catch then undefined
     encryptData = AES.encrypt(JSON.stringify(data), @getData('sk'))
-    request
-    .post([@analyticsUrl(), "event"].join('/'))
-    .set('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-    .send(
+    request.post([@analyticsUrl(), "event"].join('/')).set(
+      'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'
+    ).send(
       data: encryptData.ciphertext.toString(Base64)
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
     ).then((res) =>
@@ -620,7 +607,8 @@ window.BootPay =
 # 결제창을 삭제한다.
   removePaymentWindow: (callClose = true) ->
     document.body.style.removeProperty('bootpay-modal-open')
-    try document.body.classList.remove('bootpay-open') catch then ''
+    try document.body.classList.remove('bootpay-open')
+    catch then ''
     document.getElementById(@windowId).outerHTML = '' if document.getElementById(@windowId)?
     try
       @methods.close @ if @methods.close? and callClose
@@ -721,7 +709,7 @@ window.BootPay =
       input.setAttribute('name', k)
       input.value = v
       document.__BOOTPAY_TOP_FORM__.appendChild(input)
-#    document.__BOOTPAY_TOP_FORM__.action = data.submit_url
+    #    document.__BOOTPAY_TOP_FORM__.action = data.submit_url
     document.__BOOTPAY_TOP_FORM__.target = 'bootpay_inner_popup'
     document.__BOOTPAY_TOP_FORM__.method = 'GET'
     document.__BOOTPAY_TOP_FORM__.submit()
@@ -731,7 +719,7 @@ window.BootPay =
         window.postMessage(
           JSON.stringify(
             action: 'BootpayCancel'
-            message :'팝업창을 닫았습니다.'
+            message: '팝업창을 닫았습니다.'
           )
         , '*')
     , 3000)
@@ -756,27 +744,49 @@ window.BootPay =
       document.bootpay_confirm_form.submit()
     @
 
-  # 네이버페이 Zzim 추가 Method
-  addNaverPayZzim: (data, test = false) ->
-    return alert('shop_id를 입력해주세요.') unless data.shop_id?.length
-    return alert('item_id를 입력해주세요.') unless data.item_id?.length
+# 네이버페이 Zzim 추가 Method
+  addNaverPayZzim: (data, timeout = 60000) ->
     @removePaymentWindow(false)
-    requestUrlHash = if test then @naverpayZzimUrl.test else @naverpayZzimUrl.live
-    requestUrl = if @isMobile() then requestUrlHash.mobile else requestUrlHash.pc
-    document.body.insertAdjacentHTML 'beforeend', """
-      <div id="#{@windowId}">
-        <form id="__BOOTPAY_TOP_FORM__" name="__BOOTPAY_TOP_FORM__" action="#{[@restUrl(), 'continue'].join('/')}" method="post">
-      </div>
-    """
-    document.__BOOTPAY_TOP_FORM__.innerHTML = """
-      <input type="hidden" name="ITEM_ID" value="#{data.item_id}" />
-      <input type="hidden" name="SHOP_ID" value="#{data.shop_id}" />
-    """
-    @popupInstance = window.open("about:blank", 'bootpay_inner_popup', 'width=500,height=300,toolbar=no,location=no,status=no,scrollbar=no,menubar=no')
-    document.__BOOTPAY_TOP_FORM__.action = requestUrl
-    document.__BOOTPAY_TOP_FORM__.target = 'bootpay_inner_popup'
-    document.__BOOTPAY_TOP_FORM__.method = 'GET'
-    document.__BOOTPAY_TOP_FORM__.submit()
+    @setApplicationId data.application_id if data.application_id?
+    try
+      throw new Error('item_id를 입력해주세요.') unless data.item_id?.length
+      throw new Error('item_name을 입력해주세요.') unless data.item_name?.length
+      throw new Error('item_desc를 입력해주세요.') unless data.item_desc?.length
+      throw new Error('item_uprice를 입력해주세요.') unless data.item_uprice?
+      throw new Error('item_image를 입력해주세요.') unless data.item_image?.length
+      throw new Error('item_url을 입력해주세요.') unless data.item_url?.length
+    catch e then return alert(e.message)
+    requestUrl = @naverpayZzimUrl((if data.test_mode then 'development' else 'production'), (if @isMobile() then 'mobile' else 'pc'))
+    encryptData = AES.encrypt(JSON.stringify(data), @getData('sk'))
+    request.post([@restUrl(), "npay/zzim.json"].join('/')).set(
+      'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'
+    ).timeout(
+      response: timeout
+      deadline: timeout
+    ).send(
+      data: encryptData.ciphertext.toString(Base64)
+      session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
+    ).end(
+      (error, response) =>
+        if response.statusCode is 200
+          document.body.insertAdjacentHTML 'beforeend', """
+            <div id="#{@windowId}">
+              <form id="__BOOTPAY_TOP_FORM__" name="__BOOTPAY_TOP_FORM__" action="#{[@restUrl(), 'continue'].join('/')}" method="post">
+            </div>
+          """
+          document.__BOOTPAY_TOP_FORM__.innerHTML = """
+            <input type="hidden" name="ITEM_ID" value="#{response.body.data.item_id}" />
+            <input type="hidden" name="SHOP_ID" value="#{response.body.data.shop_id}" />
+          """
+          @popupInstance = window.open("about:blank", 'bootpay_inner_popup', if @isMobile() then '' else 'width=500,height=300,toolbar=no,location=no,status=no,scrollbar=no,menubar=no')
+          document.__BOOTPAY_TOP_FORM__.action = requestUrl
+          document.__BOOTPAY_TOP_FORM__.target = 'bootpay_inner_popup'
+          document.__BOOTPAY_TOP_FORM__.method = 'GET'
+          document.__BOOTPAY_TOP_FORM__.submit()
+        else
+          Logger.error response.body
+          alert(response.body.message)
+    )
 
 window.BootPay.initialize()
 

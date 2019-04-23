@@ -62,6 +62,20 @@
       "development": "https://dev-analytics.bootpay.co.kr",
       "test": "https://test-analytics.bootpay.co.kr",
       "production": "https://analytics.bootpay.co.kr"
+    },
+    "naverpayZzimUrl": {
+      "development": {
+        "pc": "https://test-pay.naver.com/customer/wishlistPopup.nhn",
+        "mobile": "https://test-m.pay.naver.com/mobile/customer/wishList.nhn"
+      },
+      "test": {
+        "pc": "https://test-pay.naver.com/customer/wishlistPopup.nhn",
+        "mobile": "https://test-m.pay.naver.com/mobile/customer/wishList.nhn"
+      },
+      "production": {
+        "pc": "https://pay.naver.com/customer/wishlistPopup.nhn",
+        "mobile": "https://m.pay.naver.com/mobile/customer/wishList.nhn"
+      }
     }
   }
 }
