@@ -525,7 +525,7 @@ window.BootPay =
         when 'BootpayDone'
           @progressMessageHide()
           try
-            @clearEnvironment()
+            @clearEnvironment(data.popup_close)
             @methods.done.call @, data
           catch e
             @sendPaymentStepData(
@@ -691,14 +691,15 @@ window.BootPay =
   isConfirmLock: ->
     @CONFIRM_LOCK
 
-  clearEnvironment: ->
+  clearEnvironment: (isClose = 1) ->
     clearInterval(@popupWatchInstance) if @popupWatchInstance
-    if @popupInstance?
+    isClose = if isClose? then isClose else 1
+    if @popupInstance? and isClose
       @popupInstance.close()
       @popupInstance = undefined
 
   startPopupPaymentWindow: (data) ->
-    document.getElementById(@iframeId).src = ''
+    document.getElementById(@iframeId).style.display = 'none';
     @clearEnvironment()
     @hideProgressButton()
     @progressMessageShow('팝업창을 닫으면 종료됩니다.')
