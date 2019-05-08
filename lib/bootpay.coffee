@@ -538,7 +538,8 @@ window.BootPay =
             step: 'done'
             status: 1
           )
-          @removePaymentWindow()
+          isClose = if data.is_done_close? then data.is_done_close  else true
+          @removePaymentWindow() if isClose
         when 'BootpayClose'
           @progressMessageHide()
           @removePaymentWindow()
