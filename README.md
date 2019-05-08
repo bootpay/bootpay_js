@@ -2,12 +2,15 @@
 
 ## Change Log
 
-### 3.0.1 ( Nightly )
+### 3.0.1 ( Stable )
 #### 복합기능
 - use_order_id: 1 과 같은 1, 0의 값을 직관적으로 true, false도 함께 허용
+#### 새로운 기능
+- 네이버페이 주문형 요청 추가
+- 페이앱 결제 완료 후 창 닫기 옵션 추가
+- 결제 완료 후 완료 버튼 노출 추가
 
-
-### 3.0.0 ( Stable )
+### 3.0.0 
 #### 새로운 기능
 - 앞으로 새로 제공될 결제 방식(기존 PG 결제 이외의)에 대한 업데이트 이루어졌습니다.
 - REST API로 결제 승인이 가능합니다. 좀 더 정밀한 결제 검증이 가능해졌습니다. ( Docs에서 사용법을 업데이트 중 )
@@ -44,7 +47,7 @@ https://www.npmjs.com/package/bootpay-js
 ## 연동 방법
 ### 1. CDN으로 Javascript 호출하기
 ```html
-<script src="https://cdn.bootpay.co.kr/js/bootpay-3.0.0.min.js" type="application/javascript"></script>
+<script src="https://cdn.bootpay.co.kr/js/bootpay-3.0.1.min.js" type="application/javascript"></script>
 ```
 
 ### 2. npm으로 설치하기
@@ -62,7 +65,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^3.0.0"
+    "bootpay-js": "^3.0.1"
     //...
   }
 }
@@ -76,7 +79,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-3.0.0.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-3.0.1.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });
