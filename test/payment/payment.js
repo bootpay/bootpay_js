@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 	BootPay.setLogLevel(4);
 	BootPay.setMode('development');
+	BootPay.useOnestoreApi();
 	BootPay.startTrace({
 		items: [
 			{
@@ -64,7 +65,7 @@ function doPayment() {
 				escrow: 1,
 				theme_color: document.getElementsByName('theme_color')[0].value,
 				color: document.getElementsByName('color')[0].value,
-				// is_done_close: false,
+				is_done_close: false,
 				ux: document.getElementsByName('ux')[0].value // registration, easy, once
 			}
 		}).error(function (data) {

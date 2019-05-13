@@ -34,6 +34,14 @@ window.BootPay =
   zeroPaymentMethod: ['bankalarm', 'auth', 'card_rebill']
   urls: require('../package.json').urls
   tk: undefined
+  thirdPartyData: {}
+
+  initialize: (logLevel = 1) ->
+    @setLogLevel logLevel
+    @setReadyUUID()
+    @setReadySessionKey()
+    @bindBootpayCommonEvent()
+
   naverpayZzimUrl: (mode = 'production', platform = 'pc') ->
     @urls.naverpayZzimUrl[mode][platform]
   restUrl: ->
@@ -51,11 +59,6 @@ window.BootPay =
     agent = window.navigator.userAgent
     agent.match(/iPad/i) || agent.match(/iPhone/i)
 
-  initialize: (logLevel = 1) ->
-    @setLogLevel logLevel
-    @setReadyUUID()
-    @setReadySessionKey()
-    @bindBootpayCommonEvent()
 # meta tag에서 application id를 찾는다.
   setApplicationId: (applicationId = undefined) ->
     if applicationId?
@@ -268,6 +271,7 @@ window.BootPay =
         extra: if data.extra? then data.extra else undefined
         account_expire_at: if data.account_expire_at? then data.account_expire_at else undefined
         tk: @tk
+        third_party: @thirdPartyData
       # 각 함수 호출 callback을 초기화한다.
       @methods = {}
       # 아이템 정보의 Validation
@@ -348,6 +352,16 @@ window.BootPay =
       for index of @params.extra
         @params.extra[index] = 1 if @params.extra[index] is true
         @params.extra[index] = 0 if @params.extra[index] is false
+
+    if @params.third_party?
+      for index of @params.third_party
+        if @params.third_party[index]? and (typeof @params.third_party[index] is 'object')
+          for key of @params.third_party[index]
+            @params.third_party[index][key] = 1 if @params.third_party[index][key] is true
+            @params.third_party[index][key] = 0 if @params.third_party[index][key] is false
+        else
+          @params.third_party[index] = 1 if @params.third_party[index] is true
+          @params.third_party[index] = 0 if @params.third_party[index] is false
 
 # 결제창을 조립해서 만들고 부트페이로 결제 정보를 보낸다.
 # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
@@ -789,6 +803,12 @@ window.BootPay =
           Logger.error response.body
           alert(response.body.message)
     )
+  # thirdparty API 데이터
+  setThirdPartyApi: (key, value) ->
+    @thirdPartyData[key] = value
+
+  useOnestoreApi: (enable = true) ->
+    @setThirdPartyApi 'onestore', {use: enable}
 
 window.BootPay.initialize()
 

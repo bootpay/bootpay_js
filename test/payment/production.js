@@ -54,6 +54,7 @@ function doPayment() {
 			expire_month: '36',
 			vbank_result: 1,
 			quota: '0,2,3',
+			is_done_close: false,
 			locale: 'en'
 		}
 	}).ready(function (data) {
