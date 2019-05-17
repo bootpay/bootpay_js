@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'inicis';
+	document.getElementsByName('pg')[0].value = 'lgup';
 	document.getElementsByName('method')[0].value = 'bank';
 	document.getElementsByName('boot_key')[0].value = 'aqure84'
 });
@@ -44,14 +44,14 @@ function doPayment() {
 			return_url: 'https://dev-app.bootpay.co.kr/test',
 			boot_key: document.getElementsByName('boot_key')[0].value,
 			account_expire_at: '2019-05-03 12:33:00',
-			// items: [
-			// 	{
-			// 		item_name: '테스트 아이템',
-			// 		qty: 1,
-			// 		unique: '123',
-			// 		price: 1000
-			// 	}
-			// ],
+			items: [
+				{
+					item_name: '테스트 아이템',
+					qty: 1,
+					unique: '123',
+					price: 3000
+				}
+			],
 			user_info: {
 				username: '홍길동',
 				email: 'test.bootpay.co.kr@gmail.com',
@@ -66,7 +66,8 @@ function doPayment() {
 				theme_color: document.getElementsByName('theme_color')[0].value,
 				color: document.getElementsByName('color')[0].value,
 				is_done_close: false,
-				ux: document.getElementsByName('ux')[0].value // registration, easy, once
+				ux: document.getElementsByName('ux')[0].value, // registration, easy, once,
+				offer_period: '2019052020190530'
 			}
 		}).error(function (data) {
 			var msg = "결제 에러입니다.: " + JSON.stringify(data)

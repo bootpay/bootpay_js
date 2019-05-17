@@ -807,8 +807,9 @@ window.BootPay =
   setThirdPartyApi: (key, value) ->
     @thirdPartyData[key] = value
 
-  useOnestoreApi: (enable = true) ->
-    @setThirdPartyApi 'onestore', {use: enable}
+  useOnestoreApi: (thirdPartyOption = {}, enable = true) ->
+    thirdPartyOption.use = enable
+    @setThirdPartyApi 'onestore', thirdPartyOption
 
 window.BootPay.initialize()
 
