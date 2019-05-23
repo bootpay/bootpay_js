@@ -1,6 +1,6 @@
 request = require('superagent')
 import 'es6-promise/auto'
-import './event'
+import Event from './event'
 import Logger from './logger'
 import AES from 'crypto-js/aes'
 import Base64 from 'crypto-js/enc-base64'
@@ -11,7 +11,7 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '3.0.2'
+  version: '3.0.3'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
@@ -37,6 +37,7 @@ window.BootPay =
   thirdPartyData: {}
 
   initialize: (logLevel = 1) ->
+    Event.startEventBinding()
     @setLogLevel logLevel
     @setReadyUUID()
     @setReadySessionKey()
