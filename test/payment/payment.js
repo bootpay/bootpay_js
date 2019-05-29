@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'lgup';
-	document.getElementsByName('method')[0].value = 'bank';
+	document.getElementsByName('pg')[0].value = 'payapp';
+	document.getElementsByName('method')[0].value = 'card';
 	document.getElementsByName('boot_key')[0].value = 'aqure84'
 });
 
@@ -43,7 +43,7 @@ function doPayment() {
 			escrow: true,
 			return_url: 'https://dev-app.bootpay.co.kr/test',
 			boot_key: document.getElementsByName('boot_key')[0].value,
-			account_expire_at: '2019-05-03 12:33:00',
+			account_expire_at: '2019-05-31',
 			items: [
 				{
 					item_name: '테스트 아이템',
@@ -62,7 +62,7 @@ function doPayment() {
 				vbank_result: false,
 				quota: '0,2,3,4,5,6,7,8,9,10,11',
 				phone_carrier: 'SKT',
-				escrow: 1,
+				escrow: false,
 				theme_color: document.getElementsByName('theme_color')[0].value,
 				color: document.getElementsByName('color')[0].value,
 				is_done_close: false,

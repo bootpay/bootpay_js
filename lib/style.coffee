@@ -14,6 +14,7 @@ style.innerHTML = """
 @media (min-width: 500px) {
   .bootpay-open {
     position: relative;
+    background-color: transparent;
   }
 }
 
