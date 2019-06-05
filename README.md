@@ -2,7 +2,12 @@
 
 ## Change Log
 
-### 3.0.3 ( Stable )
+### 3.0.4 ( Stable )
+#### 기능 변경
+- Angular Universal 컴파일시 localStorage 에러 수정
+- 안드로이드 (9.0 파이) 팝업 정책 변경으로 우회코드 추가
+
+### 3.0.3
 #### 기능 변경
 - 부트페이 관련 이벤트를 호출시 Binding하도록 변경 
 
@@ -56,7 +61,7 @@ https://www.npmjs.com/package/bootpay-js
 ## 연동 방법
 ### 1. CDN으로 Javascript 호출하기
 ```html
-<script src="https://cdn.bootpay.co.kr/js/bootpay-3.0.3.min.js" type="application/javascript"></script>
+<script src="https://cdn.bootpay.co.kr/js/bootpay-3.0.4.min.js" type="application/javascript"></script>
 ```
 
 ### 2. npm으로 설치하기
@@ -74,7 +79,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^3.0.3"
+    "bootpay-js": "^3.0.4"
     //...
   }
 }
@@ -88,7 +93,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-3.0.3.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-3.0.4.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });
