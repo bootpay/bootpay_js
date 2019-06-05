@@ -22,9 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		]
 	});
-	document.getElementsByName('pg')[0].value = 'payapp';
-	document.getElementsByName('method')[0].value = 'card';
+	document.getElementsByName('pg')[0].value = 'inicis';
+	document.getElementsByName('method')[0].value = 'bank';
 	document.getElementsByName('boot_key')[0].value = 'aqure84'
+	document.getElementsByName('price')[0].value = 1000;
 });
 
 function doPayment() {
@@ -67,7 +68,8 @@ function doPayment() {
 				color: document.getElementsByName('color')[0].value,
 				is_done_close: false,
 				ux: document.getElementsByName('ux')[0].value, // registration, easy, once,
-				offer_period: '2019052020190530'
+				offer_period: '2019052020190530',
+				subscribe_test_payment: true
 			}
 		}).error(function (data) {
 			var msg = "결제 에러입니다.: " + JSON.stringify(data)

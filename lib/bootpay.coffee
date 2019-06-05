@@ -720,17 +720,10 @@ window.BootPay =
     @clearEnvironment()
     @hideProgressButton()
     @progressMessageShow('팝업창을 닫으면 종료됩니다.')
-    @popupInstance = window.open("about:blank", 'bootpay_inner_popup')
+    query = []
     for k, v of data.params
-      input = document.createElement('INPUT')
-      input.setAttribute('type', 'hidden')
-      input.setAttribute('name', k)
-      input.value = v
-      document.__BOOTPAY_TOP_FORM__.appendChild(input)
-    #    document.__BOOTPAY_TOP_FORM__.action = data.submit_url
-    document.__BOOTPAY_TOP_FORM__.target = 'bootpay_inner_popup'
-    document.__BOOTPAY_TOP_FORM__.method = 'GET'
-    document.__BOOTPAY_TOP_FORM__.submit()
+      query.push("#{k}=#{v}")
+    @popupInstance = window.open("#{data.submit_url}?#{query.join('&')}", 'bootpay_inner_popup')
     @popupWatchInstance = setInterval(=>
       if @popupInstance.closed # 창을 닫은 경우
         clearInterval(@popupWatchInstance) if @popupWatchInstance?
