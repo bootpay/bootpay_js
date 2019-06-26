@@ -2,7 +2,12 @@
 
 ## Change Log
 
-### 3.0.4 ( Stable )
+### 3.0.5 ( Stable )
+#### 새로운 기능
+- Stage 서버 추가
+- JS Version 기록 버그 수정
+
+### 3.0.4
 #### 기능 변경
 - Angular Universal 컴파일시 localStorage 에러 수정
 - 안드로이드 (9.0 파이) 팝업 정책 변경으로 우회코드 추가

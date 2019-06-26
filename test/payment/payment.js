@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		]
 	});
 	document.getElementsByName('pg')[0].value = 'inicis';
-	document.getElementsByName('method')[0].value = 'bank';
-	document.getElementsByName('boot_key')[0].value = 'aqure84'
+	document.getElementsByName('method')[0].value = 'card';
+	document.getElementsByName('boot_key')[0].value = 'aqure84';
 	document.getElementsByName('price')[0].value = 1000;
 });
 
@@ -44,7 +44,7 @@ function doPayment() {
 			escrow: true,
 			return_url: 'https://dev-app.bootpay.co.kr/test',
 			boot_key: document.getElementsByName('boot_key')[0].value,
-			account_expire_at: '2019-05-31',
+			account_expire_at: '2019-06-15',
 			items: [
 				{
 					item_name: '테스트 아이템',
@@ -68,8 +68,11 @@ function doPayment() {
 				color: document.getElementsByName('color')[0].value,
 				is_done_close: false,
 				ux: document.getElementsByName('ux')[0].value, // registration, easy, once,
-				offer_period: '2019052020190530',
-				subscribe_test_payment: true
+				offer_period: '20190620-20190630',
+				subscribe_test_payment: true,
+				// locale: 'en',
+				// use_able_card: ['11', '31', '41'],
+				disable_agree: true
 			}
 		}).error(function (data) {
 			var msg = "결제 에러입니다.: " + JSON.stringify(data)

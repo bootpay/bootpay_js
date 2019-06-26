@@ -51,16 +51,19 @@
     "restUrl": {
       "development": "https://dev-api.bootpay.co.kr",
       "test": "https://test-api.bootpay.co.kr",
+      "stage": "https://stage-api.bootpay.co.kr",
       "production": "https://api.bootpay.co.kr"
     },
     "clientUrl": {
       "development": "https://dev-app.bootpay.co.kr",
       "test": "https://test-app.bootpay.co.kr",
+      "stage": "https://stage-app.bootpay.co.kr",
       "production": "https://app.bootpay.co.kr"
     },
     "analyticsUrl": {
       "development": "https://dev-analytics.bootpay.co.kr",
       "test": "https://test-analytics.bootpay.co.kr",
+      "stage": "https://stage-analytics.bootpay.co.kr",
       "production": "https://analytics.bootpay.co.kr"
     },
     "naverpayZzimUrl": {
