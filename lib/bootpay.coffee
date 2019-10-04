@@ -628,7 +628,7 @@ window.BootPay =
     catch then ''
     document.getElementById(@windowId).outerHTML = '' if document.getElementById(@windowId)?
     try
-      @methods.close @ if @methods.close? and callClose
+      @methods.close.call @ if @methods.close? and callClose
     catch e
       @sendPaymentStepData(
         step: 'close'
