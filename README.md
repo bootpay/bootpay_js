@@ -1,6 +1,9 @@
 # Bootpay JS
 
 ## Change Log
+### 3.0.6 ( Nightly )
+#### 버그 수정
+- close 함수 실행 시 익명함수가 간헐적으로 모두 실행되는 버그 수정 ( ajax 이후 실행되는 경우 )
 
 ### 3.0.5 ( Stable )
 #### 새로운 기능
