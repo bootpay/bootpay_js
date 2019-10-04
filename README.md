@@ -1,11 +1,11 @@
 # Bootpay JS
 
 ## Change Log
-### 3.0.6 ( Nightly )
+### 3.0.6 ( Stable )
 #### 버그 수정
 - close 함수 실행 시 익명함수가 간헐적으로 모두 실행되는 버그 수정 ( ajax 이후 실행되는 경우 )
 
-### 3.0.5 ( Stable )
+### 3.0.5 
 #### 새로운 기능
 - Stage 서버 추가
 - JS Version 기록 버그 수정
