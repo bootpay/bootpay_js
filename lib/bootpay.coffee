@@ -623,6 +623,7 @@ window.BootPay =
   blockIEVersion: -> @isLtBrowserVersion @ieMinVersion
 # 결제창을 삭제한다.
   removePaymentWindow: (callClose = true) ->
+    @progressMessageHide()
     document.body.style.removeProperty('bootpay-modal-open')
     try document.body.classList.remove('bootpay-open')
     catch then ''
