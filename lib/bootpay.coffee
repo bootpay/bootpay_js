@@ -666,10 +666,11 @@ window.BootPay =
     @startPopupPaymentWindow(@popupData)
 
   progressMessageHide: ->
-    pms = document.getElementById('bootpay-progress-message')
-    pms.style.setProperty('display', 'none')
-    document.getElementById('progress-message-text').innerText = ''
-    try document.getElementById(@iframeId).removeEventListener('load', @progressMessageHide)
+    try
+      pms = document.getElementById('bootpay-progress-message')
+      pms.style.setProperty('display', 'none')
+      document.getElementById('progress-message-text').innerText = ''
+      document.getElementById(@iframeId).removeEventListener('load', @progressMessageHide)
     catch then return
 
   progressMessageShow: (msg) ->
