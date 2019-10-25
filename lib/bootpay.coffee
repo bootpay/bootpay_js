@@ -751,7 +751,7 @@ window.BootPay =
             )
           , '*')
       , 1000)
-    , 500)
+    , 100)
 
   transactionConfirm: (data) ->
     if @isConfirmLock()
