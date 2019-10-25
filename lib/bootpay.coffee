@@ -737,19 +737,21 @@ window.BootPay =
     query = []
     for k, v of data.params
       query.push("#{k}=#{v}")
-    @popupInstance.close() if @popupInstance?
-    @popupInstance = window.open("#{data.submit_url}?#{query.join('&')}", "bootpay_inner_popup_#{(new Date).getTime()}")
-    @popupWatchInstance = setInterval(=>
-      if @popupInstance.closed # 창을 닫은 경우
-        clearInterval(@popupWatchInstance) if @popupWatchInstance?
-        if @isMobileSafari then window.off('pagehide.bootpayUnload') else window.off('beforeunload.bootpayUnload')
-        window.postMessage(
-          JSON.stringify(
-            action: 'BootpayCancel'
-            message: '팝업창을 닫았습니다.'
-          )
-        , '*')
-    , 1000)
+    setTimeout(=>
+      @popupInstance.close() if @popupInstance?
+      @popupInstance = window.open("#{data.submit_url}?#{query.join('&')}", "bootpay_inner_popup_#{(new Date).getTime()}")
+      @popupWatchInstance = setInterval(=>
+        if @popupInstance.closed # 창을 닫은 경우
+          clearInterval(@popupWatchInstance) if @popupWatchInstance?
+          if @isMobileSafari then window.off('pagehide.bootpayUnload') else window.off('beforeunload.bootpayUnload')
+          window.postMessage(
+            JSON.stringify(
+              action: 'BootpayCancel'
+              message: '팝업창을 닫았습니다.'
+            )
+          , '*')
+      , 1000)
+    , 500)
 
   transactionConfirm: (data) ->
     if @isConfirmLock()
