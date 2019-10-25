@@ -1,6 +1,11 @@
 # Bootpay JS
 
 ## Change Log
+### 3.0.7 ( Nightly )
+#### 기능변경
+- 팝업 결제시 팝업 Instance 체크 interval 3000ms -> 1000ms로 변경
+- extra popup option ( 강제적으로 팝업을 띄워서 결제하는 기능 ) 기능 추가 ( 일부 PG만 사용 가능 )
+
 ### 3.0.6 ( Stable )
 #### 버그 수정
 - close 함수 실행 시 익명함수가 간헐적으로 모두 실행되는 버그 수정 ( ajax 이후 실행되는 경우 )
