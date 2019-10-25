@@ -718,14 +718,12 @@ window.BootPay =
   startPopupPaymentWindow: (data) ->
     if @isMobileSafari
       window.off('pagehide.bootpayUnload')
-      window.on('pagehide.bootpayUnload', (e) =>
-        e.preventDefault()
+      window.on('pagehide.bootpayUnload', =>
         @popupInstance.close() if @popupInstance?
       )
     else
       window.off('beforeunload.bootpayUnload')
-      window.on('beforeunload.bootpayUnload', (e) =>
-        e.preventDefault()
+      window.on('beforeunload.bootpayUnload', =>
         @popupInstance.close() if @popupInstance?
       )
 
@@ -741,6 +739,7 @@ window.BootPay =
     @popupWatchInstance = setInterval(=>
       if @popupInstance.closed # 창을 닫은 경우
         clearInterval(@popupWatchInstance) if @popupWatchInstance?
+        if @isMobileSafari then window.off('pagehide.bootpayUnload') else window.off('beforeunload.bootpayUnload')
         window.postMessage(
           JSON.stringify(
             action: 'BootpayCancel'
