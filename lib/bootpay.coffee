@@ -11,7 +11,7 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '3.0.5'
+  version: '3.0.7'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
@@ -723,7 +723,8 @@ window.BootPay =
     query = []
     for k, v of data.params
       query.push("#{k}=#{v}")
-    @popupInstance = window.open("#{data.submit_url}?#{query.join('&')}", 'bootpay_inner_popup')
+    @popupInstance.close() if @popupInstance?
+    @popupInstance = window.open("#{data.submit_url}?#{query.join('&')}", "bootpay_inner_popup_#{(new Date).getTime()}")
     @popupWatchInstance = setInterval(=>
       if @popupInstance.closed # 창을 닫은 경우
         clearInterval(@popupWatchInstance) if @popupWatchInstance?
@@ -733,7 +734,7 @@ window.BootPay =
             message: '팝업창을 닫았습니다.'
           )
         , '*')
-    , 3000)
+    , 1000)
 
   transactionConfirm: (data) ->
     if @isConfirmLock()
