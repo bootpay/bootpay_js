@@ -59,7 +59,7 @@ window.BootPay =
 
   isMobileSafari: ->
     agent = window.navigator.userAgent
-    agent.match(/iPad/i) || agent.match(/iPhone/i)
+    (agent.match(/iPad/i) || agent.match(/iPhone/i))?
 
 # meta tag에서 application id를 찾는다.
   setApplicationId: (applicationId = undefined) ->
