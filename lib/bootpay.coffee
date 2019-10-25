@@ -716,6 +716,19 @@ window.BootPay =
       @popupInstance = undefined
 
   startPopupPaymentWindow: (data) ->
+    if @isMobileSafari
+      window.off('pagehide.bootpayUnload')
+      window.on('pagehide.bootpayUnload', (e) =>
+        e.preventDefault()
+        @popupInstance.close() if @popupInstance?
+      )
+    else
+      window.off('beforeunload.bootpayUnload')
+      window.on('beforeunload.bootpayUnload', (e) =>
+        e.preventDefault()
+        @popupInstance.close() if @popupInstance?
+      )
+
     document.getElementById(@iframeId).style.display = 'none';
     @clearEnvironment()
     @hideProgressButton()
