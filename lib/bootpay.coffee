@@ -471,6 +471,7 @@ window.BootPay =
         when 'BootpayBankReady'
           try
             @clearEnvironment()
+            @progressMessageHide()
             @methods.ready.call @, data if @methods.ready?
           catch e
             @sendPaymentStepData(
