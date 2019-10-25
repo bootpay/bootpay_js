@@ -470,8 +470,8 @@ window.BootPay =
           @removePaymentWindow()
         when 'BootpayBankReady'
           try
-            @clearEnvironment()
             @progressMessageHide()
+            @clearEnvironment()
             @methods.ready.call @, data if @methods.ready?
           catch e
             @sendPaymentStepData(
