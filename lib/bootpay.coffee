@@ -11,7 +11,7 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '3.0.7'
+  version: '3.0.8'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
@@ -312,6 +312,27 @@ window.BootPay =
       step: 'start'
       status: 1
     )
+    @
+
+  startPaymentByUrl: (url) ->
+    @bindBootpayPaymentEvent()
+    @removePaymentWindow(false)
+    @setConfirmLock(false)
+    @tk = "#{@generateUUID()}-#{(new Date).getTime()}"
+    html = """
+        <div id="#{@windowId}">
+          <form name="bootpay_form" action="#{url}" method="POST">
+          </form>
+          <form id="__BOOTPAY_TOP_FORM__" name="__BOOTPAY_TOP_FORM__" action="#{[@restUrl(), 'continue'].join('/')}" method="post">
+          </form>
+          <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl(), 'confirm'].join('/')}" method="POST">
+          </form>
+          <div class="bootpay-window" id="bootpay-background-window">#{@iframeHtml('')}</div>
+        </div>
+        """
+    document.body.insertAdjacentHTML 'beforeend', html
+    try document.body.classList.add('bootpay-open')
+    catch then ''
     @
 
 #  결제 요청 정보 Validation
