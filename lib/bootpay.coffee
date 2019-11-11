@@ -314,12 +314,12 @@ window.BootPay =
     )
     @
 
-  startPaymentByUrl: (url) ->
+  startPaymentByUrl: (url, tk = undefined) ->
     try
       @bindBootpayPaymentEvent()
       @removePaymentWindow(false)
       @setConfirmLock(false)
-      @tk = "#{@generateUUID()}-#{(new Date).getTime()}"
+      @tk = if tk?.length then tk else "#{@generateUUID()}-#{(new Date).getTime()}"
       html = """
           <div id="#{@windowId}">
             <form name="bootpay_form" action="#{url}" method="GET">
