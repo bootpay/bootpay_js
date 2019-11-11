@@ -321,11 +321,14 @@ window.BootPay =
     @tk = "#{@generateUUID()}-#{(new Date).getTime()}"
     html = """
         <div id="#{@windowId}">
+          <form name="bootpay_form" action="#{url}" method="GET">
+            <input type="hidden" name="tk" value="#{@tk}" />
+          </form>
           <form id="__BOOTPAY_TOP_FORM__" name="__BOOTPAY_TOP_FORM__" action="#{[@restUrl(), 'continue'].join('/')}" method="post">
           </form>
           <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl(), 'confirm'].join('/')}" method="POST">
           </form>
-          <div class="bootpay-window" id="bootpay-background-window">#{@iframeHtml(url)}</div>
+          <div class="bootpay-window" id="bootpay-background-window">#{@iframeHtml('')}</div>
         </div>
         """
     document.body.insertAdjacentHTML 'beforeend', html
