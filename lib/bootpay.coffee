@@ -321,7 +321,7 @@ window.BootPay =
     @tk = "#{@generateUUID()}-#{(new Date).getTime()}"
     html = """
         <div id="#{@windowId}">
-          <form name="bootpay_form" action="#{url}" method="POST">
+          <form name="bootpay_form" action="#{url}" method="GET">
           </form>
           <form id="__BOOTPAY_TOP_FORM__" name="__BOOTPAY_TOP_FORM__" action="#{[@restUrl(), 'continue'].join('/')}" method="post">
           </form>
