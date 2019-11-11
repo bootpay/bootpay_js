@@ -333,6 +333,7 @@ window.BootPay =
     document.body.insertAdjacentHTML 'beforeend', html
     try document.body.classList.add('bootpay-open')
     catch then ''
+    @start()
     @
 
 #  결제 요청 정보 Validation
