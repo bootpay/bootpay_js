@@ -315,26 +315,38 @@ window.BootPay =
     @
 
   startPaymentByUrl: (url) ->
-    @bindBootpayPaymentEvent()
-    @removePaymentWindow(false)
-    @setConfirmLock(false)
-    @tk = "#{@generateUUID()}-#{(new Date).getTime()}"
-    html = """
-        <div id="#{@windowId}">
-          <form name="bootpay_form" action="#{url}" method="GET">
-            <input type="hidden" name="tk" value="#{@tk}" />
-          </form>
-          <form id="__BOOTPAY_TOP_FORM__" name="__BOOTPAY_TOP_FORM__" action="#{[@restUrl(), 'continue'].join('/')}" method="post">
-          </form>
-          <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl(), 'confirm'].join('/')}" method="POST">
-          </form>
-          <div class="bootpay-window" id="bootpay-background-window">#{@iframeHtml('')}</div>
-        </div>
-        """
-    document.body.insertAdjacentHTML 'beforeend', html
-    try document.body.classList.add('bootpay-open')
-    catch then ''
-    @start()
+    try
+      @bindBootpayPaymentEvent()
+      @removePaymentWindow(false)
+      @setConfirmLock(false)
+      @tk = "#{@generateUUID()}-#{(new Date).getTime()}"
+      html = """
+          <div id="#{@windowId}">
+            <form name="bootpay_form" action="#{url}" method="GET">
+              <input type="hidden" name="tk" value="#{@tk}" />
+            </form>
+            <form id="__BOOTPAY_TOP_FORM__" name="__BOOTPAY_TOP_FORM__" action="#{[@restUrl(), 'continue'].join('/')}" method="post">
+            </form>
+            <form id="bootpay_confirm_form" name="bootpay_confirm_form" action="#{[@restUrl(), 'confirm'].join('/')}" method="POST">
+            </form>
+            <div class="bootpay-window" id="bootpay-background-window">#{@iframeHtml('')}</div>
+          </div>
+          """
+      document.body.insertAdjacentHTML 'beforeend', html
+      try document.body.classList.add('bootpay-open')
+      catch then ''
+      @start()
+    catch e
+      @sendPaymentStepData(
+        step: 'start'
+        status: -1
+        e: e
+      )
+      throw e
+    @sendPaymentStepData(
+      step: 'start'
+      status: 1
+    )
     @
 
 #  결제 요청 정보 Validation
