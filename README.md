@@ -1,7 +1,12 @@
 # Bootpay JS
 
 ## Change Log
-### 3.0.7 ( Stable )
+
+### 3.0.8 ( Stable )
+#### 새로운 기능 
+- 결제링크 생성 후 결제창을 띄우는 기능 추가 ( 결제 요청 REST API는 공개 예정 ) 
+
+### 3.0.7 
 #### 기능변경
 - 팝업 결제시 팝업 Instance 체크 interval 3000ms -> 1000ms로 변경
 - extra popup option ( 강제적으로 팝업을 띄워서 결제하는 기능 ) 기능 추가 ( 일부 PG만 사용 가능 )
@@ -74,7 +79,7 @@ https://www.npmjs.com/package/bootpay-js
 ## 연동 방법
 ### 1. CDN으로 Javascript 호출하기
 ```html
-<script src="https://cdn.bootpay.co.kr/js/bootpay-3.0.6.min.js" type="application/javascript"></script>
+<script src="https://cdn.bootpay.co.kr/js/bootpay-3.0.8.min.js" type="application/javascript"></script>
 ```
 
 ### 2. npm으로 설치하기
@@ -92,7 +97,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^3.0.7"
+    "bootpay-js": "^3.0.8"
     //...
   }
 }
@@ -106,7 +111,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-3.0.7.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-3.0.8.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });
