@@ -18,24 +18,69 @@ style.innerHTML = """
   }
 }
 
-@-webkit-keyframes sk-bouncedelay {
-    0%, 80%, 100% {
-        -webkit-transform: scale(0);
-    }
-    40% {
-        -webkit-transform: scale(1.0);
-    }
+.bootpay-loading-spinner {
+  display: inline-block;
+  width: 42px;
+  height: 42px;
+  vertical-align: middle;
 }
 
-@keyframes sk-bouncedelay {
-    0%, 80%, 100% {
-        -webkit-transform: scale(0);
-        transform: scale(0);
-    }
-    40% {
-        -webkit-transform: scale(1.0);
-        transform: scale(1.0);
-    }
+.bootpay-loading-spinner .bootpay-circle {
+    width: 42px;
+    height: 42px;
+    animation: bootpay-loading-rotate 2s linear infinite;
+    vertical-align: middle;
+}
+
+.bootpay-loading-spinner .bootpay-circle .bootpay-path {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: 0;
+    stroke-width: 2;
+    stroke: #ffffff;
+    stroke-linecap: round;
+    animation: bootpay-loading-dash 1.5s ease-in-out infinite;
+}
+
+@keyframes bootpay-loading-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bootpay-loading-dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -40px;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -120px;
+  }
+}
+
+@-webkit-keyframes bootpay-loading-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes bootpay-loading-dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -40px;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -120px;
+  }
 }
 
 .bootpay-modal-open {
@@ -155,30 +200,14 @@ style.innerHTML = """
     }
 }
 
-.bootpay-window .progress-message-window .progress-message span.text {
+.bootpay-window .progress-message-window .progress-message .bootpay-text {
+  margin-top: 1rem;
+}
+
+.bootpay-window .progress-message-window .progress-message .bootpay-text span.bootpay-inner-text {
+    font-size: 14px;
     font-weight: 400;
-    color: #fff;
-}
-
-.bootpay-window .spinner .bounce {
-    width: 10px;
-    height: 10px;
-    margin: 0 3px;
-    background-color: #fff;
-    border-radius: 100%;
-    display: inline-block;
-    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-}
-
-.bootpay-window .spinner .bounce1 {
-    -webkit-animation-delay: -0.32s;
-    animation-delay: -0.32s;
-}
-
-.bootpay-window .spinner .bounce2 {
-    -webkit-animation-delay: -0.16s;
-    animation-delay: -0.16s;
+    color: #ffffff;
 }
 
 .bootpay-window:before, .progress-message-window:before {

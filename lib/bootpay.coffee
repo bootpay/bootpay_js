@@ -11,7 +11,7 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '3.0.8'
+  version: '3.1.0'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
@@ -683,9 +683,17 @@ window.BootPay =
     """
 <iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}" allowtransparency="true" scrolling="no"></iframe>
 <div class="progress-message-window" id="bootpay-progress-message">
-  <div class="progress-message spinner">
-    <div class="bounce1 bounce"></div><div class="bounce2 bounce"></div><div class="bounce3 bounce"></div>         &nbsp;
-    <span class="text" id="progress-message-text"></span>
+  <div class="progress-message">
+    <div class="bootpay-loading">
+      <div class="bootpay-loading-spinner">
+        <svg viewBox="25 25 50 50" class="bootpay-circle" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="20" fill="none" class="bootpay-path"></circle>
+        </svg>
+      </div>
+    </div>
+    <div class="bootpay-text">
+      <span class="bootpay-inner-text" id="progress-message-text"></span>
+    </div>
   </div>
 </div>
 <div class="progress-message-window over" id="bootpay-progress-button-window">
