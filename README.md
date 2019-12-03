@@ -2,7 +2,12 @@
 
 ## Change Log
 
-### 3.0.8 ( Stable )
+### 3.1.0 ( Stable )
+#### 변경된 점
+- Progress 애니메이션 변경
+- 결제창 Size Stylesheet 변경
+
+### 3.0.8 
 #### 새로운 기능 
 - 결제링크 생성 후 결제창을 띄우는 기능 추가 ( 결제 요청 REST API는 공개 예정 ) 
 
@@ -79,7 +84,7 @@ https://www.npmjs.com/package/bootpay-js
 ## 연동 방법
 ### 1. CDN으로 Javascript 호출하기
 ```html
-<script src="https://cdn.bootpay.co.kr/js/bootpay-3.0.8.min.js" type="application/javascript"></script>
+<script src="https://cdn.bootpay.co.kr/js/bootpay-3.1.0.min.js" type="application/javascript"></script>
 ```
 
 ### 2. npm으로 설치하기
@@ -97,7 +102,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^3.0.8"
+    "bootpay-js": "^3.1.0"
     //...
   }
 }
@@ -111,7 +116,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-3.0.8.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-3.1.0.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });
