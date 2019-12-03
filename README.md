@@ -1,6 +1,6 @@
 # Bootpay JS
 
-## Change Log
+## Change Log 
 
 ### 3.1.0 ( Stable )
 #### 변경된 점
