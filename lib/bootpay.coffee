@@ -427,6 +427,7 @@ window.BootPay =
     @params.sk = window.localStorage.getItem('sk')
     @params.time = window.localStorage.getItem('time')
     @params.price = data.price
+    @params.delivery_price = data.delivery_price
     @params.format = @option.format if data.format?
     @params.params = data.params
     @params.user_id = if user? then user.id else undefined
