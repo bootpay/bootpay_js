@@ -2,7 +2,13 @@
 
 ## Change Log 
 
-### 3.1.0 ( Stable )
+### 3.1.1 ( Stable )
+#### 새로운 기능
+- delivery_price ( 배송비 ) 를 추가로 받습니다.
+#### 변경된 점
+- 다날 본인인증 관련 새로운 암호화 방식으로 사용됩니다. ( 기존 3.1.0 이하 사용자분들은 unique값이 달라질 수 있습니다. 유의해주시기 바랍니다. )
+
+### 3.1.0 
 #### 변경된 점
 - Progress 애니메이션 변경
 - 결제창 Size Stylesheet 변경
@@ -84,7 +90,7 @@ https://www.npmjs.com/package/bootpay-js
 ## 연동 방법
 ### 1. CDN으로 Javascript 호출하기
 ```html
-<script src="https://cdn.bootpay.co.kr/js/bootpay-3.1.0.min.js" type="application/javascript"></script>
+<script src="https://cdn.bootpay.co.kr/js/bootpay-3.1.1.min.js" type="application/javascript"></script>
 ```
 
 ### 2. npm으로 설치하기
@@ -102,7 +108,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^3.1.0"
+    "bootpay-js": "^3.1.1"
     //...
   }
 }
@@ -116,7 +122,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-3.1.0.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-3.1.1.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });
