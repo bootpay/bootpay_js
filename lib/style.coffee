@@ -158,29 +158,48 @@ style.innerHTML = """
     max-width: 600px;
     border-radius: 3px;
     width: 100%;
-    white-space: pre-line;
+    white-space: normal;
     vertical-align: middle;
 }
 
 .bootpay-window .progress-message-window .close-message-box .close-popup {
-    padding: 1rem;
+    padding: 14px;
     background-color: #fff;
     color: #333;
     border-radius: 3px;
 }
 
+.bootpay-window .progress-message-window .close-message-box .close-popup .close-popup-header {
+  position: relative;
+  text-align: right;
+  padding: 14px;
+}
+
+.bootpay-window .progress-message-window .close-message-box .close-popup .close-popup-header button.close-btn {
+    position: absolute;
+    top: -10px;
+    right: -4px;
+    box-shadow: none;
+    font-size: 24px;
+    outline: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+}
+
 .bootpay-window .progress-message-window .close-message-box .close-popup h4.sub-title {
     font-size: 18px;
     padding: 0;
-    margin: 0;
+    margin-top: 7px;
     font-weight: 400;
+    margin-bottom: 18px;
+    text-align: left;
 }
 
 .bootpay-window .progress-message-window .close-message-box .close-popup button.close-payment-window {
-    margin-top: 2rem;
     display: block;
     width: 100%;
-    padding: 1rem;
+    padding: 14px;
     border: 1px solid #5e72e4;
     border-radius: 2px;
     background-color: #5e72e4;
@@ -190,6 +209,12 @@ style.innerHTML = """
     outline: none;
     color: #fff;
 }
+
+.bootpay-window .progress-message-window .close-message-box .close-popup button.close-payment-window.naverpay-btn {
+    border: 1px solid #0fbc60;
+    background-color: #1ec800;
+}
+
 
 @media (min-width: 500px) {
     .bootpay-window .progress-message-window .progress-message {

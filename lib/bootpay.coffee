@@ -11,7 +11,7 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '3.1.1'
+  version: '3.1.2'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
@@ -474,6 +474,14 @@ window.BootPay =
           @progressMessageHide()
           # 아이폰은 사파리 정책상 팝업을 띄우려면 사용자의 직접적인 액션이 있어야 한다.
           if @isMobileSafari()
+            alias = try @popupData.params.payment.pm_alias catch then ''
+            buttonObject = document.getElementById("__bootpay-close-button")
+            buttonObject.classList.remove('naverpay-btn')
+            # 네이버페이인 경우 네이버페이 색상으로 편집
+            if alias is 'npay'
+              document.getElementById("__bootpay_close_button_title").innerText = '네이버페이를 팝업창으로 실행합니다.'
+              buttonObject.innerText = '네이버페이로 결제하기'
+              buttonObject.classList.add('naverpay-btn')
             @showProgressButton()
           else
             @startPopupPaymentWindow(data)
@@ -700,8 +708,11 @@ window.BootPay =
 <div class="progress-message-window over" id="bootpay-progress-button-window">
   <div class="close-message-box">
     <div class="close-popup">
-      <h4 class="sub-title">선택하신 결제는 팝업으로 결제가 시작됩니다. 결제를 시작할까요?</h4>
-      <button class="close-payment-window" onclick="window.BootPay.startPopup();" type="button" id="__bootpay-close-button">결제 시작하기</button>
+      <div class="close-popup-header">
+        <button class="close-btn" onclick="window.BootPay.removePaymentWindow()">×</button>
+      </div>
+      <h4 class="sub-title" id="__bootpay_close_button_title">선택하신 결제는 팝업으로 결제가 시작됩니다. 결제를 시작할까요?</h4>
+      <button class="close-payment-window" onclick="window.BootPay.startPopup();" type="button" id="__bootpay-close-button">결제하기</button>
     </div>
   </div>
 </div>
