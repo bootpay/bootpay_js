@@ -320,13 +320,14 @@ export default {
               data: encryptData.ciphertext.toString(Base64)
               session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
             ).then((res) =>
-              console.log res
               if res.body? and res.body.code is 0
-                window.postMessage(
-                  JSON.stringify(
-                    res.body.data
-                  )
-                , '*')
+                setTimeout(=>
+                  window.postMessage(
+                    JSON.stringify(
+                      res.body.data
+                    )
+                  , '*')
+                , 300)
               else
                 window.postMessage(
                   JSON.stringify(
