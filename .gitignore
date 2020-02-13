@@ -6,4 +6,5 @@ package-lock.json
 /node_modules
 yarn.lock
 lib/*.js
+lib/extend/*.js
 /test
