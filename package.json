@@ -4,7 +4,8 @@
   "description": "Bootpay Javasrcipt Library",
   "main": "lib/bootpay.js",
   "files": [
-    "lib/*.js"
+    "lib/*.js",
+    "lib/extend/*.js"
   ],
   "devDependencies": {
     "coffee-loader": "^0.9.0",
