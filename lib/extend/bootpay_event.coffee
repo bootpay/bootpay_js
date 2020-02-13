@@ -20,19 +20,15 @@ export default {
         # iFrame창을 삭제한다.
           @popupData = data
           @progressMessageHide()
-          # 아이폰은 사파리 정책상 팝업을 띄우려면 사용자의 직접적인 액션이 있어야 한다.
-          if @isMobileSafari() or @isSafari()
-            alias = try @popupData.params.payment.pm_alias catch then ''
-            buttonObject = document.getElementById("__bootpay-close-button")
-            buttonObject.classList.remove('naverpay-btn')
-            # 네이버페이인 경우 네이버페이 색상으로 편집
-            if alias is 'npay'
-              document.getElementById("__bootpay_close_button_title").innerText = '네이버페이를 팝업으로 진행합니다'
-              buttonObject.innerText = '네이버페이로 결제하기'
-              buttonObject.classList.add('naverpay-btn')
-            @showProgressButton()
+          if @isMobileSafari()
+            @showPopupButton()
           else
-            @startPopupPaymentWindow(data)
+            testPopup = window.open('about:blank', 'BOOTPAY_TEST', 'width=0,height=0,left=0,top=0')
+            if testPopup?
+              testPopup.close()
+              return @startPopupPaymentWindow(data)
+            else
+              @showPopupButton()
         when 'BootpayFormSubmit'
           for k, v of data.params
             input = document.createElement('INPUT')
@@ -269,7 +265,6 @@ export default {
   # 팝업 창이 시작될 때 각 이벤트를 binding하고
   # 팝업창을 띄우고나서 팝업이 닫히는지 매번확인한다
   startPopupPaymentWindow: (data) ->
-    console.log data
     if @isMobileSafari
       window.off('pagehide.bootpayUnload')
       window.on('pagehide.bootpayUnload', =>
@@ -352,4 +347,17 @@ export default {
             , '*')
       , 300)
     , 100)
+
+  showPopupButton: ->
+    alias = try @popupData.params.payment.pm_alias catch then ''
+    buttonObject = document.getElementById("__bootpay-close-button")
+    buttonObject.classList.remove('naverpay-btn')
+    # 네이버페이인 경우 네이버페이 색상으로 편집
+    if alias is 'npay'
+      document.getElementById("__bootpay_close_button_title").innerText = '네이버페이를 팝업으로 진행합니다'
+      buttonObject.innerText = '네이버페이로 결제하기'
+      buttonObject.classList.add('naverpay-btn')
+    @showProgressButton()
+
+
 }
