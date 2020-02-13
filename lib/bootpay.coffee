@@ -39,7 +39,6 @@ window.BootPay =
   zeroPaymentMethod: ['bankalarm', 'auth', 'card_rebill']
   urls: require('../package.json').urls
   tk: undefined
-  thirdPartyData: {}
 
   initialize: (logLevel = 1) ->
     if Element?
