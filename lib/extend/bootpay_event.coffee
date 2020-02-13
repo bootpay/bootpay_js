@@ -23,7 +23,7 @@ export default {
           if @isMobileSafari()
             @showPopupButton()
           else
-            testPopup = window.open('about:blank', 'BOOTPAY_TEST', 'width=0,height=0,left=0,top=0')
+            testPopup = window.open('about:blank', 'BOOTPAY_TEST', 'width=1,height=1,left=0,top=0', false)
             if testPopup?
               testPopup.close()
               return @startPopupPaymentWindow(data)
