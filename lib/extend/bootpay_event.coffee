@@ -292,7 +292,7 @@ export default {
       @popupInstance.close() if @popupInstance?
       # 플랫폼에서 설정해야할 정보를 가져온다
       platform = try data.params.pe[@platformSymbol()] catch then {}
-      spec = if platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height}" else ''
+      spec = if platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},scrollbars=yes" else ''
       @popupInstance = window.open("#{data.submit_url}?#{query.join('&')}", "bootpay_inner_popup_#{(new Date).getTime()}", spec)
       @popupWatchInstance = setInterval(=>
         if @popupInstance.closed # 창을 닫은 경우
