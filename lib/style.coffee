@@ -155,7 +155,7 @@ style.innerHTML = """
 .bootpay-window .progress-message-window .close-message-box {
     display: inline-block;
     text-align: center;
-    max-width: 600px;
+    max-width: 400px;
     border-radius: 3px;
     width: 100%;
     white-space: normal;
@@ -185,6 +185,7 @@ style.innerHTML = """
     border: 0;
     background: transparent;
     padding: 0;
+    cursor: pointer;
 }
 
 .bootpay-window .progress-message-window .close-message-box .close-popup h4.sub-title {
@@ -208,6 +209,7 @@ style.innerHTML = """
     font-size: 16px;
     outline: none;
     color: #fff;
+    cursor: pointer;
 }
 
 .bootpay-window .progress-message-window .close-message-box .close-popup button.close-payment-window.naverpay-btn {

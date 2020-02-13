@@ -21,7 +21,7 @@ export default {
           @popupData = data
           @progressMessageHide()
           # 아이폰은 사파리 정책상 팝업을 띄우려면 사용자의 직접적인 액션이 있어야 한다.
-          if @isMobileSafari()
+          if @isMobileSafari() or @isSafari()
             alias = try @popupData.params.payment.pm_alias catch then ''
             buttonObject = document.getElementById("__bootpay-close-button")
             buttonObject.classList.remove('naverpay-btn')
@@ -294,7 +294,7 @@ export default {
       platform = try data.params.pe[@platformSymbol()] catch then {}
       left = try if  window.screen.width < platform.width then 0 else (window.screen.width - platform.width) / 2 catch then '100'
       top = try if  window.screen.height < platform.height then 0 else (window.screen.height - platform.height) / 2 catch then '100'
-      spec = if platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},left=#{left},top=#{top},scrollbars=yes" else ''
+      spec = if platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},top=#{top},left=#{left},scrollbars=yes,toolbar=no, location=no, directories=no, status=no, menubar=no" else ''
       @popupInstance = window.open("#{data.submit_url}?#{query.join('&')}", "bootpay_inner_popup_#{(new Date).getTime()}", spec)
       return window.postMessage(
         JSON.stringify(
