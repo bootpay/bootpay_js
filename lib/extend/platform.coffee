@@ -8,6 +8,10 @@ export default {
   isMobileSafari: ->
     agent = window.navigator.userAgent
     (agent.match(/iPad/i) || agent.match(/iPhone/i))?
+
+  # IE인지 검사한다
+  isIE: ->
+    window.navigator.userAgent.indexOf('MSIE') > 0 || window.navigator.userAgent.match(/Trident.*rv\:11\./)?.length
   # IE 버전 이하인지 검사한다
   isLtBrowserVersion: (version) ->
     sAgent = window.navigator.userAgent

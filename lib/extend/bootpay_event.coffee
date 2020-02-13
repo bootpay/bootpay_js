@@ -12,7 +12,6 @@ export default {
         data = {}
         data = JSON.parse e.data if e.data? and typeof e.data is 'string' and /Bootpay/.test(e.data)
         data.action = data.action.replace(/Child/g, '') if data.action?
-      #        console.log data
       catch e
         Logger.error "data: #{e.data}, #{e.message} json parse error"
         return
@@ -261,7 +260,7 @@ export default {
   # 팝업 watcher를 삭제한다
   # 창이 닫힌다면 팝업창도 강제로 닫는다
   clearEnvironment: (isClose = 1) ->
-    clearInterval(@popupWatchInstance) if @popupWatchInstance
+    clearInterval(@popupWatchInstance) if @popupWatchInstance?
     isClose = if isClose? then isClose else 1
     if @popupInstance? and isClose
       @popupInstance.close()
@@ -270,6 +269,7 @@ export default {
   # 팝업 창이 시작될 때 각 이벤트를 binding하고
   # 팝업창을 띄우고나서 팝업이 닫히는지 매번확인한다
   startPopupPaymentWindow: (data) ->
+    console.log data
     if @isMobileSafari
       window.off('pagehide.bootpayUnload')
       window.on('pagehide.bootpayUnload', =>
@@ -294,16 +294,53 @@ export default {
       platform = try data.params.pe[@platformSymbol()] catch then {}
       spec = if platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},scrollbars=yes" else ''
       @popupInstance = window.open("#{data.submit_url}?#{query.join('&')}", "bootpay_inner_popup_#{(new Date).getTime()}", spec)
+      # 팝업 창이 닫혔는지 계속해서 찾는다
       @popupWatchInstance = setInterval(=>
         if @popupInstance.closed # 창을 닫은 경우
           clearInterval(@popupWatchInstance) if @popupWatchInstance?
           if @isMobileSafari then window.off('pagehide.bootpayUnload') else window.off('beforeunload.bootpayUnload')
-          window.postMessage(
-            JSON.stringify(
-              action: 'BootpayCancel'
-              message: '팝업창을 닫았습니다.'
+          # IE 인 경우에 팝업이 뜨면 결제가 완료되었는지 데이터를 확인해본다
+          if @isIE()
+            requestData = {
+              application_id: @applicationId
+              tk: @tk
+            }
+            encryptData = AES.encrypt(JSON.stringify(requestData), @getData('sk'))
+            request.put([@restUrl(), "confirm", "#{data.params.su}.json"].join('/')).set(
+              'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'
+            ).send(
+              data: encryptData.ciphertext.toString(Base64)
+              session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
+            ).then((res) =>
+              console.log res
+              if res.body? and res.body.code is 0
+                window.postMessage(
+                  JSON.stringify(
+                    res.body.data
+                  )
+                , '*')
+              else
+                window.postMessage(
+                  JSON.stringify(
+                    action: 'BootpayCancel'
+                    message: '팝업창을 닫았습니다.'
+                  )
+                , '*')
+            ).catch((err) =>
+              window.postMessage(
+                JSON.stringify(
+                  action: 'BootpayCancel'
+                  message: "팝업창을 닫았습니다."
+                )
+              , '*')
             )
-          , '*')
-      , 1000)
+          else
+            window.postMessage(
+              JSON.stringify(
+                action: 'BootpayCancel'
+                message: '팝업창을 닫았습니다.'
+              )
+            , '*')
+      , 300)
     , 100)
 }

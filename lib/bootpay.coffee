@@ -48,7 +48,6 @@ window.BootPay =
       @setReadySessionKey()
       @bindBootpayCommonEvent()
 
-
 ObjectAssign(window.BootPay, Analytics, BootpayEvent, Common, Message, Notification, Payment, Platform, Storage)
 window.BootPay.initialize()
 

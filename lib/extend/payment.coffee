@@ -41,7 +41,6 @@ export default {
         extra: if data.extra? then data.extra else undefined
         account_expire_at: if data.account_expire_at? then data.account_expire_at else undefined
         tk: @tk
-        third_party: @thirdPartyData
       # 각 함수 호출 callback을 초기화한다.
       @methods = {}
       # 아이템 정보의 Validation
