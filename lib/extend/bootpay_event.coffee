@@ -292,8 +292,16 @@ export default {
       @popupInstance.close() if @popupInstance?
       # 플랫폼에서 설정해야할 정보를 가져온다
       platform = try data.params.pe[@platformSymbol()] catch then {}
-      spec = if platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},scrollbars=yes" else ''
+      left = try if  window.screen.width < platform.width then 0 else (window.screen.width - platform.width) / 2 catch then '100'
+      top = try if  window.screen.height < platform.height then 0 else (window.screen.height - platform.height) / 2 catch then '100'
+      spec = if platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},left=#{left},top=#{top},scrollbars=yes" else ''
       @popupInstance = window.open("#{data.submit_url}?#{query.join('&')}", "bootpay_inner_popup_#{(new Date).getTime()}", spec)
+      return window.postMessage(
+        JSON.stringify(
+          action: 'BootpayError'
+          message: '브라우저의 팝업이 차단되어 결제가 중단되었습니다. 브라우저 팝업 허용을 해주세요.'
+        )
+      , '*') unless @popupInstance?
       # 팝업 창이 닫혔는지 계속해서 찾는다
       @popupWatchInstance = setInterval(=>
         if @popupInstance.closed # 창을 닫은 경우
