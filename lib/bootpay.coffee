@@ -1,5 +1,5 @@
-import 'es6-promise'
-import 'babel-polyfill'
+import 'es6-promise/auto'
+import ObjectAssign from 'object-assign'
 import Analytics from './extend/analytics'
 import BootpayEvent from './extend/bootpay_event'
 import Common from './extend/common'
@@ -49,7 +49,7 @@ window.BootPay =
       @bindBootpayCommonEvent()
 
 
-Object.assign(window.BootPay, Analytics, BootpayEvent, Common, Message, Notification, Payment, Platform, Storage)
+ObjectAssign(window.BootPay, Analytics, BootpayEvent, Common, Message, Notification, Payment, Platform, Storage)
 window.BootPay.initialize()
 
 export default window.BootPay
