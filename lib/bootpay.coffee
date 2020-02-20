@@ -3,6 +3,7 @@ import ObjectAssign from 'object-assign'
 import Analytics from './extend/analytics'
 import BootpayEvent from './extend/bootpay_event'
 import Common from './extend/common'
+import Encrypt from  './extend/encrypt'
 import Message from './extend/message'
 import Notification from './extend/notification'
 import Payment from './extend/payment'
@@ -16,7 +17,7 @@ window.BootPay =
   SK_TIMEOUT: 1800000 # 30분
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '3.2.0'
+  version: '3.2.1'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'
@@ -48,7 +49,7 @@ window.BootPay =
       @setReadySessionKey()
       @bindBootpayCommonEvent()
 
-ObjectAssign(window.BootPay, Analytics, BootpayEvent, Common, Message, Notification, Payment, Platform, Storage)
+ObjectAssign(window.BootPay, Analytics, BootpayEvent, Common, Encrypt, Message, Notification, Payment, Platform, Storage)
 window.BootPay.initialize()
 
 export default window.BootPay

@@ -1,6 +1,4 @@
 import Logger from '../logger'
-import AES from 'crypto-js/aes'
-import Base64 from 'crypto-js/enc-base64'
 import request from 'superagent'
 
 export default {
@@ -34,15 +32,13 @@ export default {
     @integrityItemData() if @params.items?.length
     @params.items = data.items
     @integrityParams() if !@params.method? or !@params.method isnt 'auth'
-    encryptData = AES.encrypt(JSON.stringify(@params), @getData('sk'))
     request.post([@restUrl(), "notify?ver=#{@version}&format=json"].join('/')).set(
       'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'
     ).timeout(
       response: timeout
       deadline: timeout
     ).send(
-      data: encryptData.ciphertext.toString(Base64)
-      session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
+      @encryptParams(@params)
     ).then((res) =>
       if res.status isnt 200 or res.body.status isnt 200
         Logger.error "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요."

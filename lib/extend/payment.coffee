@@ -1,6 +1,4 @@
 import Logger from '../logger'
-import AES from 'crypto-js/aes'
-import Base64 from 'crypto-js/enc-base64'
 export default {
 # 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
   request: (data) ->
@@ -50,12 +48,12 @@ export default {
       # True, False의 데이터를 1, 0으로 변경하는 작업을 한다
       @generateTrueFalseParams()
       # 데이터를 AES로 암호화한다.
-      encryptData = AES.encrypt(JSON.stringify(@params), @params.sk)
+      encryptData = @encryptParams(@params)
       html = """
         <div id="#{@windowId}">
           <form name="bootpay_form" action="#{[@restUrl(), 'start', 'js', '?ver=' + @version].join('/')}" method="POST">
-            <input type="hidden" name="data" value="#{encryptData.ciphertext.toString(Base64)}" />
-            <input type="hidden" name="session_key" value="#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}" />
+            <input type="hidden" name="data" value="#{encryptData.data}" />
+            <input type="hidden" name="session_key" value="#{encryptData.session_key}" />
           </form>
           <form id="__BOOTPAY_TOP_FORM__" name="__BOOTPAY_TOP_FORM__" action="#{[@restUrl(), 'continue'].join('/')}" method="post">
           </form>

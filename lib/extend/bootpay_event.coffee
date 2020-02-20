@@ -1,6 +1,4 @@
 import Logger from '../logger'
-import AES from 'crypto-js/aes'
-import Base64 from 'crypto-js/enc-base64'
 import request from 'superagent'
 
 export default {
@@ -23,12 +21,7 @@ export default {
           if @isMobileSafari()
             @showPopupButton()
           else
-            testPopup = window.open('about:blank', 'BOOTPAY_TEST', 'width=1,height=1,left=0,top=0', false)
-            if testPopup?
-              testPopup.close()
-              return @startPopupPaymentWindow(data)
-            else
-              @showPopupButton()
+            @startPopupPaymentWindow(data)
         when 'BootpayFormSubmit'
           for k, v of data.params
             input = document.createElement('INPUT')
@@ -241,12 +234,10 @@ export default {
       catch then data.e
       data.trace = try data.e.stack
       catch then undefined
-    encryptData = AES.encrypt(JSON.stringify(data), @getData('sk'))
     request.post([@analyticsUrl(), "event"].join('/')).set(
       'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'
     ).send(
-      data: encryptData.ciphertext.toString(Base64)
-      session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
+      @encryptParams(data)
     ).then((res) =>
       Logger.debug "BOOTPAY MESSAGE: 결제 이벤트 데이터 정보 전송"
     ).catch((err) =>
@@ -304,16 +295,13 @@ export default {
           if @isMobileSafari then window.off('pagehide.bootpayUnload') else window.off('beforeunload.bootpayUnload')
           # IE 인 경우에 팝업이 뜨면 결제가 완료되었는지 데이터를 확인해본다
           if @isIE()
-            requestData = {
-              application_id: @applicationId
-              tk: @tk
-            }
-            encryptData = AES.encrypt(JSON.stringify(requestData), @getData('sk'))
             request.put([@restUrl(), "confirm", "#{data.params.su}.json"].join('/')).set(
               'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'
             ).send(
-              data: encryptData.ciphertext.toString(Base64)
-              session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
+              @encryptParams(
+                application_id: @applicationId
+                tk: @tk
+              )
             ).then((res) =>
               if res.body? and res.body.code is 0
                 setTimeout(=>
@@ -358,6 +346,4 @@ export default {
       buttonObject.innerText = '네이버페이로 결제하기'
       buttonObject.classList.add('naverpay-btn')
     @showProgressButton()
-
-
 }
