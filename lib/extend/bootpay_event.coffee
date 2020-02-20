@@ -21,11 +21,11 @@ export default {
           if @isMobileSafari()
             @showPopupButton()
           else
-            testPopup = window.open('about:blank', 'BOOTPAY_TEST', 'width=1,height=1,left=0,top=0', false)
+            testPopup = window.open('https://cdn.bootpay.co.kr/close.html', 'BOOTPAY_TEST', 'width=1,height=1,left=0,top=0', false)
             if testPopup?
               setTimeout(=>
-                testPopup.close()
-              , 300)
+                try testPopup.close() catch then ''
+              , 500)
               return @startPopupPaymentWindow(data)
             else
               @showPopupButton()
