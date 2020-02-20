@@ -21,7 +21,14 @@ export default {
           if @isMobileSafari()
             @showPopupButton()
           else
-            @startPopupPaymentWindow(data)
+            testPopup = window.open('about:blank', 'BOOTPAY_TEST', 'width=1,height=1,left=0,top=0', false)
+            if testPopup?
+              setTimeout(=>
+                testPopup.close()
+              , 300)
+              return @startPopupPaymentWindow(data)
+            else
+              @showPopupButton()
         when 'BootpayFormSubmit'
           for k, v of data.params
             input = document.createElement('INPUT')
