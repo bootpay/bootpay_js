@@ -224,7 +224,7 @@ export default {
         <input type="hidden" name="application_id" value="#{@applicationId}" />
       """
       document.getElementById('bootpay_confirm_form').innerHTML = html
-      document.bootpay_confirm_form.action = [@restUrl(), 'confirm'].join('/')
+      document.bootpay_confirm_form.action = "#{[@restUrl(), 'confirm'].join('/')}?#{@generateUUID()}"
       document.bootpay_confirm_form.target = 'bootpay_inner_iframe'
       document.bootpay_confirm_form.submit()
     @
