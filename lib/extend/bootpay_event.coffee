@@ -21,14 +21,7 @@ export default {
           if @isMobileSafari()
             @showPopupButton()
           else
-            testPopup = window.open('https://cdn.bootpay.co.kr/close.html', 'BOOTPAY_TEST', 'width=1,height=1,left=0,top=0', false)
-            if testPopup?
-              setTimeout(=>
-                try testPopup.close() catch then ''
-              , 500)
-              return @startPopupPaymentWindow(data)
-            else
-              @showPopupButton()
+            @startPopupPaymentWindow(data)
         when 'BootpayFormSubmit'
           for k, v of data.params
             input = document.createElement('INPUT')
