@@ -16,7 +16,7 @@ export default {
         device_type: @deviceType
         method: data.method if data.method?
         methods: data.methods if data.methods?
-        boot_key: data.boot_key if data.boot_key?
+        user_token: data.user_token if data.user_token?
         pg: data.pg if data.pg?
         name: data.name
         items: data.items if data.items?.length
