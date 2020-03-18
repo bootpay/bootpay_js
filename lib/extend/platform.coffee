@@ -10,7 +10,7 @@ export default {
   # 모바일 사파리인지 구분
   isMobileSafari: ->
     agent = window.navigator.userAgent
-    (agent.match(/iPad/i) || agent.match(/iPhone/i))?
+    (agent.match(/iPad/i) || agent.match(/iPhone/i)) && !agent.match(/CriOS/i)?
 
   # IE인지 검사한다
   isIE: ->
