@@ -18,10 +18,10 @@ export default {
         # iFrame창을 삭제한다.
           @popupData = data
           @progressMessageHide()
-          if @isMobileSafari()
-            @showPopupButton()
-          else
-            @startPopupPaymentWindow(data)
+#          if @isMobileSafari()
+          @showPopupButton()
+#          else
+#            @startPopupPaymentWindow(data)
         when 'BootpayFormSubmit'
           for k, v of data.params
             input = document.createElement('INPUT')
@@ -342,7 +342,7 @@ export default {
     buttonObject.classList.remove('naverpay-btn')
     # 네이버페이인 경우 네이버페이 색상으로 편집
     if alias is 'npay'
-      document.getElementById("__bootpay_close_button_title").innerText = '네이버페이를 팝업으로 진행합니다'
+      document.getElementById("__bootpay_close_button_title").innerText = '네이버페이로 결제를 시작합니다'
       buttonObject.innerText = '네이버페이로 결제하기'
       buttonObject.classList.add('naverpay-btn')
     @showProgressButton()

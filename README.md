@@ -1,7 +1,11 @@
 # Bootpay JS
 
-## Change Log 
-### 3.2.2 ( Stable )
+## Change Log
+### 3.2.3 (Stable) 
+#### 기능 변경
+- 모바일 사파리에서 팝업 결제창을 띄울 경우 동의창이 나왔지만 모든 브라우저 모든 OS에 대해 동의창이 뜨도록 변경 ( window.opener 관련 버그 회피 )
+ 
+### 3.2.2 
 #### 새로운 기능
 - Easy Card 기능 추가 ( 부트페이에서 제공하는 간편결제카드 기능 추가 )
 
@@ -108,7 +112,7 @@ https://www.npmjs.com/package/bootpay-js
 ## 연동 방법
 ### 1. CDN으로 Javascript 호출하기
 ```html
-<script src="https://cdn.bootpay.co.kr/js/bootpay-3.2.2.min.js" type="application/javascript"></script>
+<script src="https://cdn.bootpay.co.kr/js/bootpay-3.2.3.min.js" type="application/javascript"></script>
 ```
 
 ### 2. npm으로 설치하기
@@ -126,7 +130,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^3.2.2"
+    "bootpay-js": "^3.2.3"
     //...
   }
 }
@@ -140,7 +144,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-3.2.2.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-3.2.3.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });
