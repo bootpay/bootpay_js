@@ -202,7 +202,7 @@ export default {
     ).then(
       (response) =>
         if response.body? and response.body.code is 0
-          if @params.extra? and @params.extra.popup and response.body.data.type is 1
+          if (@params.extra? and @params.extra.popup) or response.body.data.type is 1
             @doStartPopup(response.body.data)
           else
             @doStartIframe()
