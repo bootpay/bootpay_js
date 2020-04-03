@@ -22,7 +22,15 @@ export default {
   # 로그 레벨을 설정한다.
   setLogLevel: (logLevel = 1) -> Logger.setLogLevel logLevel
   # 사용할 환경 mode를 설정한다
-  setMode: (mode) -> @mode = mode
+  setMode: (mode) ->
+    @mode = mode
+    @loadPaymentEnv(@mode)
+
+  getPaymentEnvByPlatform: (key) ->
+    platform = @platformSymbol()
+    env = @paymentEnv[@mode]
+    return undefined unless env?
+    if env[key]? and env[key][platform]? then env[key][platform] else undefined
 
   # device Type을 설정한다. 없을 경우 false를 리턴, 있는 경우 true를 리턴
   setDevice: (deviceType) ->

@@ -26,6 +26,7 @@ window.BootPay =
   popupWatchInstance: undefined
   popupInstance: undefined
   popupData: undefined
+  paymentEnv: {}
   ieMinVersion: 9
   deviceType: 1
   ableDeviceTypes:
@@ -48,6 +49,7 @@ window.BootPay =
       @setReadyUUID()
       @setReadySessionKey()
       @bindBootpayCommonEvent()
+      @loadPaymentEnv(@mode)
 
 ObjectAssign(window.BootPay, Analytics, BootpayEvent, Common, Encrypt, Message, Notification, Payment, Platform, Storage)
 window.BootPay.initialize()

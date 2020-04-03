@@ -195,40 +195,15 @@ export default {
     document.bootpay_form.submit()
 
   beforeStartByEnvironment: ->
-    if @params.extra? and @params.extra.popup
+    env = @getPaymentEnvByPlatform("#{@params.pg}_#{@params.method}")
+    # 강제로 팝업을 띄우거나 아니면 팝업창 관련 정보가 없는 경우
+    if (@params.extra? and @params.extra.popup and env?) or (env? and env.type is 1)
       @doStartPopup(
-        width: 500
-        height: 500
+        width: if env.width? and env.width > 0 then env.width else '600'
+        height: if env.height? and env.height > 0 then env.height else '750'
       )
     else
-      request.get([@restUrl(), "environment.json"].join('/')).query(
-        application_id: @applicationId
-        pg: @params.pg
-        method: @params.method
-      ).then(
-        (response) =>
-          if response.body? and response.body.code is 0
-            if response.body.data.type is 1
-              @doStartPopup(response.body.data)
-            else
-              @doStartIframe()
-          else
-            setTimeout(=>
-              window.postMessage(
-                JSON.stringify(
-                  action: 'BootpayError'
-                  msg: if response.body.msg? then response.body.msg else '결제 요청시 에러가 발생되었습니다.'
-                )
-              , '*')
-            , 300)
-      ).catch((err) =>
-        window.postMessage(
-          JSON.stringify(
-            action: 'BootpayError'
-            msg: try err.body.message catch then '결제 요청시 에러가 발생되었습니다.'
-          )
-        , '*')
-      )
+      @doStartIframe()
 
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->
@@ -285,4 +260,15 @@ export default {
       document.bootpay_confirm_form.target = 'bootpay_inner_iframe'
       document.bootpay_confirm_form.submit()
     @
+
+  loadPaymentEnv: (mode) ->
+    request.get([@restUrl(), "environment.json"].join('/')).then(
+      (response) =>
+        if response.body? and response.body.code is 0
+          @paymentEnv[mode] = response.body.data
+        else
+          @paymentEnv[mode] = undefined
+    ).catch((err) =>
+      @paymentEnv[mode] = undefined
+    ) unless @paymentEnv[mode]?
 }
