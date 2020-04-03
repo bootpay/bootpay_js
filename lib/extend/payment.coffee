@@ -172,7 +172,7 @@ export default {
 # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
   start: ->
     @progressMessageShow ''
-    if @params.pg? and @params.method? and @params.extra? and @params.extra.popup
+    if @params.pg? and @params.method? and @params.extra? and @params.extra.popup and @params.extra.quick_popup
       @doStartPopup(
         width: '300'
         height: '300'

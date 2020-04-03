@@ -18,12 +18,10 @@ export default {
         # iFrame창을 삭제한다.
           @popupData = data
           @progressMessageHide()
-          if @isMobileSafari()
-            @showPopupButton()
-          else
-            testPopup = window.open("#{[@analyticsUrl(), 'p'].join('/')}", 'testPopup', 'width=1,height=1')
-            return @showPopupButton() unless testPopup?
-            @startPopupPaymentWindow(data)
+#          if @isMobileSafari()
+          @showPopupButton()
+#          else
+#            @startPopupPaymentWindow(data)
         when 'BootpayFormSubmit'
           for k, v of data.params
             input = document.createElement('INPUT')
@@ -284,6 +282,12 @@ export default {
       top = try if  window.screen.height < platform.height then 0 else (window.screen.height - platform.height) / 2 catch then '100'
       spec = if platform? and platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},top=#{top},left=#{left},scrollbars=yes,toolbar=no, location=no, directories=no, status=no, menubar=no" else ''
       @popupInstance = window.open("#{data.submit_url}?#{query.join('&')}", "bootpay_inner_popup_#{(new Date).getTime()}", spec)
+      return window.postMessage(
+        JSON.stringify(
+          action: 'BootpayError'
+          message: '브라우저의 팝업이 차단되어 결제가 중단되었습니다. 브라우저 팝업 허용을 해주세요.'
+        )
+      , '*') unless @popupInstance?
       # 팝업 창이 닫혔는지 계속해서 찾는다
       @popupWatchInstance = setInterval(=>
         if @popupInstance.closed # 창을 닫은 경우

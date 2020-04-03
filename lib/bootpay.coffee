@@ -26,7 +26,6 @@ window.BootPay =
   popupWatchInstance: undefined
   popupInstance: undefined
   popupData: undefined
-  paymentEnv: {}
   ieMinVersion: 9
   deviceType: 1
   ableDeviceTypes:
