@@ -172,8 +172,11 @@ export default {
 # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
   start: ->
     @progressMessageShow ''
-    if @params.pg? and @params.method?
-      @beforeStartByEnvironment()
+    if @params.pg? and @params.method? and @params.extra? and @params.extra.popup
+      @doStartPopup(
+        width: '300'
+        height: '300'
+      )
     else
       @doStartIframe()
 
@@ -186,24 +189,11 @@ export default {
   # 팝업으로 결제를 시작한다
   doStartPopup: (platform) ->
     @popupInstance.close() if @popupInstance?
-    left = try if  window.screen.width < platform.width then 0 else (window.screen.width - platform.width) / 2 catch then '100'
-    top = try if  window.screen.height < platform.height then 0 else (window.screen.height - platform.height) / 2 catch then '100'
-    spec = if platform? and platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},top=#{top},left=#{left},scrollbars=yes,toolbar=no, location=no, directories=no, status=no, menubar=no" else ''
+    spec = if platform? and platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},top=#{0},left=#{0},scrollbars=yes,toolbar=no, location=no, directories=no, status=no, menubar=no" else ''
     @popupInstance = window.open('about:blank', 'bootpayPopup', spec)
     @showPopupEventProgress()
     document.bootpay_form.target = 'bootpayPopup'
     document.bootpay_form.submit()
-
-  beforeStartByEnvironment: ->
-    env = @getPaymentEnvByPlatform("#{@params.pg}_#{@params.method}")
-    # 강제로 팝업을 띄우거나 아니면 팝업창 관련 정보가 없는 경우
-    if (@params.extra? and @params.extra.popup and env?) or (env? and env.type is 1)
-      @doStartPopup(
-        width: if env.width? and env.width > 0 then env.width else '600'
-        height: if env.height? and env.height > 0 then env.height else '750'
-      )
-    else
-      @doStartIframe()
 
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->
@@ -260,23 +250,4 @@ export default {
       document.bootpay_confirm_form.target = 'bootpay_inner_iframe'
       document.bootpay_confirm_form.submit()
     @
-
-  loadPaymentEnv: (mode) ->
-    setTimeout(=>
-      pe = try JSON.parse(@getData("pe_#{mode}")) catch then undefined
-      if (pe? and pe.time? and pe.time > (new Date()).getTime() - 86400000)
-        @paymentEnv[mode] = pe
-      else
-        request.get([@analyticsUrl(), "env.json"].join('/')).then(
-          (response) =>
-            if response.body? and response.body.status is 200
-              @paymentEnv[mode] = response.body.data
-              @paymentEnv[mode].time = (new Date()).getTime()
-              @setData("pe_#{mode}", JSON.stringify(@paymentEnv[mode]))
-            else
-              @paymentEnv[mode] = undefined
-        ).catch((err) =>
-          @paymentEnv[mode] = undefined
-        )
-    , 500)
 }

@@ -17,13 +17,4 @@ export default {
 # Date: 2018-04-28
 #----------------------------------------------------------
   getData: (key) -> window.localStorage.getItem key
-
-# 모든 캐시를 날린다
-# Comment by Gosomi
-# Date: 2020-04-03
-# @return [Boolean]
-  clearCache: ->
-    @setData('pe_development', undefined)
-    @setData('pe_stage', undefined)
-    @setData('pe_production', undefined)
 }
