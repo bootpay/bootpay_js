@@ -196,7 +196,10 @@ export default {
 
   beforeStartByEnvironment: ->
     if @params.extra? and @params.extra.popup
-      @doStartPopup()
+      @doStartPopup(
+        width: 500
+        height: 500
+      )
     else
       request.get([@restUrl(), "environment.json"].join('/')).query(
         application_id: @applicationId
