@@ -18,10 +18,10 @@ export default {
         # iFrame창을 삭제한다.
           @popupData = data
           @progressMessageHide()
-#          if @isMobileSafari()
-          @showPopupButton()
-#          else
-#            @startPopupPaymentWindow(data)
+          if @isIE()
+            @startPopupPaymentWindow(data)
+          else
+            @showPopupButton()
         when 'BootpayFormSubmit'
           for k, v of data.params
             input = document.createElement('INPUT')
