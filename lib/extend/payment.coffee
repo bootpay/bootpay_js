@@ -1,4 +1,6 @@
 import Logger from '../logger'
+import request from 'superagent'
+
 export default {
 # 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
   request: (data) ->
@@ -39,6 +41,7 @@ export default {
         extra: if data.extra? then data.extra else undefined
         account_expire_at: if data.account_expire_at? then data.account_expire_at else undefined
         tk: @tk
+        puk: "BP_#{}"
       # 각 함수 호출 callback을 초기화한다.
       @methods = {}
       # 아이템 정보의 Validation
@@ -169,9 +172,57 @@ export default {
 # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
   start: ->
     @progressMessageShow ''
+    if @params.pg? and @params.method?
+      @beforeStartByEnvironment()
+    else
+      @doStartIframe()
+
+  # 기존 iFrame으로 결제를 시작한다
+  doStartIframe: ->
     document.getElementById(@iframeId).addEventListener('load', @progressMessageHide)
     document.bootpay_form.target = 'bootpay_inner_iframe'
     document.bootpay_form.submit()
+
+  # 팝업으로 결제를 시작한다
+  doStartPopup: (platform) ->
+    @popupInstance.close() if @popupInstance?
+    left = try if  window.screen.width < platform.width then 0 else (window.screen.width - platform.width) / 2 catch then '100'
+    top = try if  window.screen.height < platform.height then 0 else (window.screen.height - platform.height) / 2 catch then '100'
+    spec = if platform? and platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},top=#{top},left=#{left},scrollbars=yes,toolbar=no, location=no, directories=no, status=no, menubar=no" else ''
+    @popupInstance = window.open('about:blank', 'bootpayPopup', spec)
+    @showPopupEventProgress()
+    document.bootpay_form.target = 'bootpayPopup'
+    document.bootpay_form.submit()
+
+  beforeStartByEnvironment: ->
+    request.get([@restUrl(), "environment.json"].join('/')).query(
+      application_id: @applicationId
+      pg: @params.pg
+      method: @params.method
+    ).then(
+      (response) =>
+        if response.body? and response.body.code is 0
+          if @params.extra? and @params.extra.popup and response.body.data.type is 1
+            @doStartPopup(response.body.data)
+          else
+            @doStartIframe()
+        else
+          setTimeout(=>
+            window.postMessage(
+              JSON.stringify(
+                action: 'BootpayError'
+                msg: if response.body.msg? then response.body.msg else '결제 요청시 에러가 발생되었습니다.'
+              )
+            , '*')
+          , 300)
+    ).catch((err) =>
+      window.postMessage(
+        JSON.stringify(
+          action: 'BootpayError'
+          msg: try err.body.message catch then '결제 요청시 에러가 발생되었습니다.'
+        )
+      , '*')
+    )
 
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->

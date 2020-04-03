@@ -336,6 +336,66 @@ export default {
       , 300)
     , 100)
 
+  showPopupEventProgress: ->
+    if @isMobileSafari
+      window.off('pagehide.bootpayUnload')
+      window.on('pagehide.bootpayUnload', =>
+        @popupInstance.close() if @popupInstance?
+      )
+    else
+      window.off('beforeunload.bootpayUnload')
+      window.on('beforeunload.bootpayUnload', =>
+        @popupInstance.close() if @popupInstance?
+      )
+    @progressMessageShow('팝업창을 닫으면 종료됩니다.')
+    @popupWatchInstance = setInterval(=>
+      if @popupInstance.closed # 창을 닫은 경우
+        clearInterval(@popupWatchInstance) if @popupWatchInstance?
+        if @isMobileSafari then window.off('pagehide.bootpayUnload') else window.off('beforeunload.bootpayUnload')
+        # IE 인 경우에 팝업이 뜨면 결제가 완료되었는지 데이터를 확인해본다
+        if @isIE() and @params.tk?
+          request.put([@restUrl(), "confirm", "#{@tk}.json"].join('/')).set(
+            'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'
+          ).send(
+            @encryptParams(
+              application_id: @applicationId
+              method: 'transaction_key'
+              tk: @tk
+            )
+          ).then((res) =>
+            if res.body? and res.body.code is 0
+              setTimeout(=>
+                window.postMessage(
+                  JSON.stringify(
+                    res.body.data
+                  )
+                , '*')
+              , 300)
+            else
+              window.postMessage(
+                JSON.stringify(
+                  action: 'BootpayCancel'
+                  message: '팝업창을 닫았습니다.'
+                )
+              , '*')
+          ).catch((err) =>
+            window.postMessage(
+              JSON.stringify(
+                action: 'BootpayCancel'
+                message: "팝업창을 닫았습니다."
+              )
+            , '*')
+          )
+        else
+          window.postMessage(
+            JSON.stringify(
+              action: 'BootpayCancel'
+              message: '팝업창을 닫았습니다.'
+            )
+          , '*')
+    , 300)
+
+
   showPopupButton: ->
     alias = try @popupData.params.payment.pm_alias catch then ''
     buttonObject = document.getElementById("__bootpay-close-button")
