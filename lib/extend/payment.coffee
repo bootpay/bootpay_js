@@ -262,13 +262,21 @@ export default {
     @
 
   loadPaymentEnv: (mode) ->
-    request.get([@restUrl(), "environment.json"].join('/')).then(
-      (response) =>
-        if response.body? and response.body.code is 0
-          @paymentEnv[mode] = response.body.data
-        else
+    setTimeout(=>
+      pe = try JSON.parse(@getData("pe_#{mode}")) catch then undefined
+      if (pe? and pe.time? and pe.time > (new Date()).getTime() - 86400000)
+        @paymentEnv[mode] = pe
+      else
+        request.get([@analyticsUrl(), "env.json"].join('/')).then(
+          (response) =>
+            if response.body? and response.body.status is 200
+              @paymentEnv[mode] = response.body.data
+              @paymentEnv[mode].time = (new Date()).getTime()
+              @setData("pe_#{mode}", JSON.stringify(@paymentEnv[mode]))
+            else
+              @paymentEnv[mode] = undefined
+        ).catch((err) =>
           @paymentEnv[mode] = undefined
-    ).catch((err) =>
-      @paymentEnv[mode] = undefined
-    ) unless @paymentEnv[mode]?
+        )
+    , 500)
 }
