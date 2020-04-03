@@ -195,34 +195,37 @@ export default {
     document.bootpay_form.submit()
 
   beforeStartByEnvironment: ->
-    request.get([@restUrl(), "environment.json"].join('/')).query(
-      application_id: @applicationId
-      pg: @params.pg
-      method: @params.method
-    ).then(
-      (response) =>
-        if response.body? and response.body.code is 0
-          if (@params.extra? and @params.extra.popup) or response.body.data.type is 1
-            @doStartPopup(response.body.data)
+    if @params.extra? and @params.extra.popup
+      @doStartPopup()
+    else
+      request.get([@restUrl(), "environment.json"].join('/')).query(
+        application_id: @applicationId
+        pg: @params.pg
+        method: @params.method
+      ).then(
+        (response) =>
+          if response.body? and response.body.code is 0
+            if response.body.data.type is 1
+              @doStartPopup(response.body.data)
+            else
+              @doStartIframe()
           else
-            @doStartIframe()
-        else
-          setTimeout(=>
-            window.postMessage(
-              JSON.stringify(
-                action: 'BootpayError'
-                msg: if response.body.msg? then response.body.msg else '결제 요청시 에러가 발생되었습니다.'
-              )
-            , '*')
-          , 300)
-    ).catch((err) =>
-      window.postMessage(
-        JSON.stringify(
-          action: 'BootpayError'
-          msg: try err.body.message catch then '결제 요청시 에러가 발생되었습니다.'
-        )
-      , '*')
-    )
+            setTimeout(=>
+              window.postMessage(
+                JSON.stringify(
+                  action: 'BootpayError'
+                  msg: if response.body.msg? then response.body.msg else '결제 요청시 에러가 발생되었습니다.'
+                )
+              , '*')
+            , 300)
+      ).catch((err) =>
+        window.postMessage(
+          JSON.stringify(
+            action: 'BootpayError'
+            msg: try err.body.message catch then '결제 요청시 에러가 발생되었습니다.'
+          )
+        , '*')
+      )
 
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->
