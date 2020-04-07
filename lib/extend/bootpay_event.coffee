@@ -199,7 +199,7 @@ export default {
     @tk = undefined
 
   closePopupWithPaymentWindow: ->
-    if confirm "결제창을 닫을까요?"
+    if confirm "결제창을 닫게 되면 현재 진행중인 결제가 취소됩니다. 정말로 닫을까요?"
       @clearEnvironment(true)
       @removePaymentWindow()
 

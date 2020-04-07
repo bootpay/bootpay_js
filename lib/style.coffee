@@ -232,18 +232,21 @@ style.innerHTML = """
 }
 
 .bootpay-window .progress-message-window .progress-message .bootpay-popup-close {
-  margin-top: 1rem;
+  position: absolute;
+  right: 1rem;
+  top: 0;
 }
 
 .bootpay-window .progress-message-window .progress-message .bootpay-popup-close button {
   background: transparent;
   border: 0;
   outline: 0;
-  text-decoration: underline;
   -webkit-appearance: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 28px;
   color: #fff;
+  padding: 0;
+  margin: 0;
 }
 
 .bootpay-window .progress-message-window .progress-message .bootpay-text span.bootpay-inner-text {
