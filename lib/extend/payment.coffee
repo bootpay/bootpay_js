@@ -210,6 +210,9 @@ export default {
     <div class="bootpay-text">
       <span class="bootpay-inner-text" id="progress-message-text"></span>
     </div>
+    <div class="bootpay-popup-close" id="__bootpay-popup-close-button__" style="display: none;">
+      <button onclick="window.BootPay.closePopupWithPaymentWindow()">결제창 바로 닫기</button>
+    </div>
   </div>
 </div>
 <div class="progress-message-window over" id="bootpay-progress-button-window">

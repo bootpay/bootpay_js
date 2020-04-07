@@ -7,10 +7,13 @@ export default {
       document.getElementById(@iframeId).removeEventListener('load', @progressMessageHide)
     catch then return
 
-  progressMessageShow: (msg) ->
+  progressMessageShow: (msg, closeButton = false) ->
     pms = document.getElementById('bootpay-progress-message')
     pms.style.setProperty('display', 'block')
     document.getElementById('progress-message-text').innerText = msg
+    btn = document.getElementById('__bootpay-popup-close-button__')
+    btnStyle = if closeButton then 'block' else 'none'
+    btn.style.setProperty('display', btnStyle)
 
   showProgressButton: ->
     clb = document.getElementById(@closeId)

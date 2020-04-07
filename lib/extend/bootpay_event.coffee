@@ -198,6 +198,11 @@ export default {
     )
     @tk = undefined
 
+  closePopupWithPaymentWindow: ->
+    if confirm "결제창을 닫을까요?"
+      @clearEnvironment(true)
+      @removePaymentWindow()
+
   cancel: (method) ->
     @methods.cancel = method
     @
@@ -270,7 +275,7 @@ export default {
     document.getElementById(@iframeId).style.display = 'none';
     @clearEnvironment()
     @hideProgressButton()
-    @progressMessageShow('팝업창을 닫으면 종료됩니다.')
+    @progressMessageShow('팝업창을 닫으면 종료됩니다.', true)
     query = []
     for k, v of data.params
       query.push("#{k}=#{v}") if ['su', 'pa_id'].indexOf(k) > -1
@@ -347,7 +352,7 @@ export default {
       window.on('beforeunload.bootpayUnload', =>
         @popupInstance.close() if @popupInstance?
       )
-    @progressMessageShow('팝업창을 닫으면 종료됩니다.')
+    @progressMessageShow('팝업창을 닫으면 종료됩니다.', true)
     @popupWatchInstance = setInterval(=>
       if @popupInstance.closed # 창을 닫은 경우
         clearInterval(@popupWatchInstance) if @popupWatchInstance?

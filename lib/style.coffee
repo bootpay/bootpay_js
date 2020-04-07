@@ -231,6 +231,21 @@ style.innerHTML = """
   margin-top: 1rem;
 }
 
+.bootpay-window .progress-message-window .progress-message .bootpay-popup-close {
+  margin-top: 1rem;
+}
+
+.bootpay-window .progress-message-window .progress-message .bootpay-popup-close button {
+  background: transparent;
+  border: 0;
+  outline: 0;
+  text-decoration: underline;
+  -webkit-appearance: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #fff;
+}
+
 .bootpay-window .progress-message-window .progress-message .bootpay-text span.bootpay-inner-text {
     font-size: 14px;
     font-weight: 400;
