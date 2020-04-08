@@ -4,10 +4,11 @@ import request from 'superagent'
 export default {
 # 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
   request: (data) ->
+    console.log @isPaymentLock()
     return if @isPaymentLock()
+    @removePaymentWindow(false)
     @setPaymentLock(true)
     @bindBootpayPaymentEvent()
-    @removePaymentWindow(false)
     @setConfirmLock(false)
     try
       user = @getUserData()
