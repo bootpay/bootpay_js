@@ -15,6 +15,7 @@ import './style'
 window.BootPay =
   VISIT_TIMEOUT: 86400000 # 재 방문 시간에 대한 interval
   SK_TIMEOUT: 1800000 # 30분
+  PAYMENT_LOCK: false
   CONFIRM_LOCK: false
   applicationId: undefined
   version: '3.2.4'

@@ -178,6 +178,8 @@ export default {
 
   # 결제창을 삭제한다.
   removePaymentWindow: (callClose = true) ->
+    # Payment Lock을 해제한다
+    @setPaymentLock(false)
     @progressMessageHide()
     document.body.style.removeProperty('bootpay-modal-open')
     try document.body.classList.remove('bootpay-open')
@@ -224,6 +226,12 @@ export default {
 
   setConfirmLock: (lock) ->
     @CONFIRM_LOCK = lock
+
+  setPaymentLock: (lock) ->
+    @PAYMENT_LOCK = lock
+
+  isPaymentLock: ->
+    @PAYMENT_LOCK
 
   isConfirmLock: ->
     @CONFIRM_LOCK
