@@ -1,13 +1,13 @@
 # Bootpay JS
 
 ## Change Log
-### 3.2.4 (Nightly)
+### 3.2.4 (Stable)
 #### 기능 추가
 - 팝업으로 결제창 진행시 부모창에서 결제창 닫기 버튼 활성화기능 추가
 - 팝업 관련 이벤트 버그 수정
 - 단일 결제 Lock 추가
 
-### 3.2.3 (Stable) 
+### 3.2.3 
 #### 기능 변경
 - 모바일 사파리에서 팝업 결제창을 띄울 경우 동의창이 나왔지만 모든 브라우저 모든 OS에 대해 동의창이 뜨도록 변경 ( window.opener 관련 버그 회피 )
 - quick_popup 기능 추가 ( 결제하기 버튼을 누른 후 팝업이 뜨기 까지 ajax(파폭&크롬)나 300ms이상 지연(사파리) 없이 팝업 차단 없이 바로 결제창을 팝업으로 띄우기 원할때 쓰는 기능 )
@@ -137,7 +137,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^3.2.3"
+    "bootpay-js": "^3.2.4"
     //...
   }
 }
@@ -151,7 +151,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-3.2.3.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-3.2.4.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });
