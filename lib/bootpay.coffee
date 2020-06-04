@@ -18,7 +18,7 @@ window.BootPay =
   PAYMENT_LOCK: false
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '3.2.4'
+  version: '3.2.5'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'

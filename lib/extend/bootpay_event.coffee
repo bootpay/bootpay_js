@@ -51,6 +51,16 @@ export default {
           @removePaymentWindow()
         when 'BootpayBankReady'
           try
+            # 팝업이 뜬 경우
+            # iframe으로 창 이동 명령을 보낸다
+            # 그리고 다시 BankReady를 받기 위해 popupInstance 데이터를 모두 초기화 한다
+            if @popupInstance?
+              @clearEnvironment()
+              data.action = 'BootpayChildBankReady'
+              document.getElementById(@iframeId).contentWindow.postMessage(JSON.stringify(data), '*')
+              return
+          catch then ''
+          try
             @progressMessageHide()
             @clearEnvironment()
             @methods.ready.call @, data if @methods.ready?
