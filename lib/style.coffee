@@ -149,7 +149,6 @@ style.innerHTML = """
     width: 100%;
     background-color: transparent;
     vertical-align: middle;
-    margin-top: -35%;
 }
 
 .bootpay-window .progress-message-window .close-message-box {
