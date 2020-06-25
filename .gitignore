@@ -8,3 +8,4 @@ yarn.lock
 lib/*.js
 lib/extend/*.js
 /test
+/html/test.json

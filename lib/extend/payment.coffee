@@ -76,6 +76,7 @@ export default {
         status: -1
         e: e
       )
+      @setPaymentLock(false)
       throw e
     @sendPaymentStepData(
       step: 'start'
