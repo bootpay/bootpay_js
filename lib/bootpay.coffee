@@ -3,7 +3,7 @@ import ObjectAssign from 'object-assign'
 import Analytics from './extend/analytics'
 import BootpayEvent from './extend/bootpay_event'
 import Common from './extend/common'
-import Encrypt from  './extend/encrypt'
+import Encrypt from './extend/encrypt'
 import Message from './extend/message'
 import Notification from './extend/notification'
 import Payment from './extend/payment'
@@ -18,7 +18,7 @@ window.BootPay =
   PAYMENT_LOCK: false
   CONFIRM_LOCK: false
   applicationId: undefined
-  version: '3.2.6'
+  version: '3.3.0'
   mode: 'production'
   backgroundId: 'bootpay-background-window'
   windowId: 'bootpay-payment-window'

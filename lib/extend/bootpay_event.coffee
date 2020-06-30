@@ -151,6 +151,9 @@ export default {
         when 'BootpayClose'
           @progressMessageHide()
           @removePaymentWindow()
+        when 'BootpayShowPaymentWindow'
+          console.log 'show!'
+          document.getElementById(@iframeId).style.setProperty('height', '100%')
     )
   bindBootpayCommonEvent: ->
     window.off 'message.BootpayCommonEvent'

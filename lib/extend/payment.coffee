@@ -200,7 +200,7 @@ export default {
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->
     """
-<iframe id="#{@iframeId}" name="bootpay_inner_iframe" src="#{url}" allowtransparency="true" scrolling="no"></iframe>
+<iframe id="#{@iframeId}" style="height: 0;" name="bootpay_inner_iframe" src="#{url}" allowtransparency="true" scrolling="no"></iframe>
 <div class="progress-message-window" id="bootpay-progress-message">
   <div class="progress-message">
     <div class="bootpay-loading">
