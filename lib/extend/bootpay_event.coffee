@@ -14,6 +14,10 @@ export default {
         Logger.error "data: #{e.data}, #{e.message} json parse error"
         return
       switch data.action
+      # 팝업창으로 결제창 호출 이벤트
+      # Comment by Gosomi
+      # Date: 2020-06-30
+      # @return [undefined]
         when 'BootpayPopup'
         # iFrame창을 삭제한다.
           @popupData = data
@@ -22,6 +26,10 @@ export default {
             @startPopupPaymentWindow(data)
           else
             @showPopupButton()
+      # 결제창 form submit 방식으로 동작할 때 action
+      # Comment by Gosomi
+      # Date: 2020-06-30
+      # @return [undefined]
         when 'BootpayFormSubmit'
           for k, v of data.params
             input = document.createElement('INPUT')
@@ -32,6 +40,10 @@ export default {
           document.__BOOTPAY_TOP_FORM__.action = data.url
           document.__BOOTPAY_TOP_FORM__.acceptCharset = data.charset
           document.__BOOTPAY_TOP_FORM__.submit()
+      # 사용자가 결제창을 취소했을 때 이벤트
+      # Comment by Gosomi
+      # Date: 2020-06-30
+      # @return [undefined]
         when 'BootpayCancel'
           @progressMessageShow '취소중입니다.'
           try
@@ -49,6 +61,10 @@ export default {
             status: 1
           )
           @removePaymentWindow()
+      # 가상계좌 입금 대기 상태 ( 계좌 발급이 되었을 때 호출 )
+      # Comment by Gosomi
+      # Date: 2020-06-30
+      # @return [undefined]
         when 'BootpayBankReady'
           try
             # 팝업이 뜬 경우
@@ -75,6 +91,10 @@ export default {
             step: 'ready'
             status: 1
           )
+      # 결제 승인 전 action
+      # Comment by Gosomi
+      # Date: 2020-06-30
+      # @return [undefined]
         when 'BootpayConfirm'
           @progressMessageShow '승인중입니다.'
           try
@@ -94,6 +114,10 @@ export default {
             step: 'confirm'
             status: 1
           )
+      # 결제창 resize 이벤트
+      # Comment by Gosomi
+      # Date: 2020-06-30
+      # @return [undefined]
         when 'BootpayResize'
           iframeSelector = document.getElementById(@iframeId)
           backgroundSelector = document.getElementById(@backgroundId)
@@ -114,6 +138,10 @@ export default {
             # ie 9이하에서는 overflow 속성을 인식하지 못한다.
             iframeSelector.style.overflow = data.overflow
             iframeSelector.setAttribute 'scrolling', data.scrolling if data.scrolling?
+      # 결제 진행시 오류가 났을 때 호출 되는 action
+      # Comment by Gosomi
+      # Date: 2020-06-30
+      # @return [undefined]
         when 'BootpayError'
           try
             @clearEnvironment()
@@ -130,6 +158,10 @@ export default {
             status: 1
           )
           @removePaymentWindow()
+      # 결제 완료시 호출되는 action
+      # Comment by Gosomi
+      # Date: 2020-06-30
+      # @return [undefined]
         when 'BootpayDone'
           @progressMessageHide()
           try
@@ -148,11 +180,19 @@ export default {
           )
           isClose = if data.is_done_close? then data.is_done_close  else true
           @removePaymentWindow() if isClose
+      # 사용자 혹은 PG에서 창이 닫히는 action
+      # Comment by Gosomi
+      # Date: 2020-06-30
+      # @return [undefined]
         when 'BootpayClose'
           @progressMessageHide()
           @removePaymentWindow()
+      # iFrame 결제창을 app에서 notify 받아 보여준다
+      # Comment by Gosomi
+      # Date: 2020-06-30
+      # @return [undefined]
         when 'BootpayShowPaymentWindow'
-          console.log 'show!'
+          # iframe 창의 결제창을 보여준다
           document.getElementById(@iframeId).style.setProperty('height', '100%')
     )
   bindBootpayCommonEvent: ->
