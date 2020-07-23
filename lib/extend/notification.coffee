@@ -16,11 +16,11 @@ export default {
     @params.redirect_url = if data.redirect_url? then data.redirect_url else ''
     @params.return_url = if data.return_url? then data.return_url else ''
     @params.phone = if data.phone?.length then data.phone.replace(/-/g, '') else ''
-    @params.uuid = if data.uuid?.length then data.uuid else window.localStorage['uuid']
+    @params.uuid = if data.uuid?.length then data.uuid else @getData('uuid')
     @params.order_id = if data.order_id? then String(data.order_id) else undefined
     @params.order_info = if data.order_info? then data.order_info else {} # 네이버페이 order 정보
-    @params.sk = window.localStorage.getItem('sk')
-    @params.time = window.localStorage.getItem('time')
+    @params.sk = @getData('sk')
+    @params.time = @getData('time')
     @params.price = data.price
     @params.delivery_price = data.delivery_price
     @params.format = @option.format if data.format?

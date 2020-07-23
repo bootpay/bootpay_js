@@ -10,11 +10,19 @@ export default {
 # Comment by Gosomi
 # Date: 2018-04-28
 #----------------------------------------------------------
-  setData: (key, value) -> window.localStorage.setItem key, value
+  setData: (key, value) ->
+    try
+      window.localStorage.setItem key, value
+    catch
+      @localStorage[key] = value
 #----------------------------------------------------------
 # Local Storage에서 데이터를 가져온다.
 # Comment by Gosomi
 # Date: 2018-04-28
 #----------------------------------------------------------
-  getData: (key) -> window.localStorage.getItem key
+  getData: (key) ->
+    try
+      window.localStorage.getItem key
+    catch
+      @localStorage[key]
 }
