@@ -45,6 +45,7 @@ export default {
         tk: @tk
       # 각 함수 호출 callback을 초기화한다.
       @methods = {}
+      @extraValueAppend()
       # 아이템 정보의 Validation
       @integrityItemData() if @params.items?.length
       # 결제 정보 데이터의 Validation
@@ -170,6 +171,14 @@ export default {
           @params.third_party[index] = 1 if @params.third_party[index] is true
           @params.third_party[index] = 0 if @params.third_party[index] is false
 
+# Extra value를 조건에 맞게 추가
+  extraValueAppend: ->
+    if @isSetQuickPopup
+      @params.extra ?= {}
+      @params.extra.quick_popup = true
+      @params.extra.popup = true
+      @isSetQuickPopup = false
+
 # 결제창을 조립해서 만들고 부트페이로 결제 정보를 보낸다.
 # 보낸 이후에 app.bootpay.co.kr로 데이터를 전송한다.
   start: ->
@@ -182,20 +191,34 @@ export default {
     else
       @doStartIframe()
 
-  # 기존 iFrame으로 결제를 시작한다
+# 기존 iFrame으로 결제를 시작한다
   doStartIframe: ->
+    # 팝업이 떠있으면 일단 닫는다
+    @popupInstance.close() if @popupInstance?
     document.getElementById(@iframeId).addEventListener('load', @progressMessageHide)
     document.bootpay_form.target = 'bootpay_inner_iframe'
     document.bootpay_form.submit()
 
-  # 팝업으로 결제를 시작한다
+# 팝업으로 결제를 시작한다
   doStartPopup: (platform) ->
-    @popupInstance.close() if @popupInstance?
-    spec = if platform? and platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},top=#{0},left=#{0},scrollbars=yes,toolbar=no, location=no, directories=no, status=no, menubar=no" else ''
-    @popupInstance = window.open('about:blank', 'bootpayPopup', spec)
+    unless @popupInstance?
+      spec = if platform? and platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},top=#{0},left=#{0},scrollbars=yes,toolbar=no, location=no, directories=no, status=no, menubar=no" else ''
+      @popupInstance = window.open('about:blank', 'bootpayPopup', spec)
     @showPopupEventProgress()
     document.bootpay_form.target = 'bootpayPopup'
     document.bootpay_form.submit()
+
+  startQuickPopup: ->
+    @isSetQuickPopup = true
+    @expressPopupReady()
+
+# 미리 팝업을 준비한다
+  expressPopupReady: ->
+    if platform? and platform.width? and platform.width > 0
+      spec = "width=#{platform.width},height=#{platform.height},top=#{0},left=#{0},scrollbars=yes,toolbar=no, location=no, directories=no, status=no, menubar=no"
+    else
+      spec = if @isMobile() then '' else "width=750,height=500,top=#{0},left=#{0},scrollbars=yes,toolbar=no, location=no, directories=no, status=no, menubar=no"
+    @popupInstance = window.open('https://inapp.bootpay.co.kr/waiting', 'bootpayPopup', spec)
 
 # 결제할 iFrame 창을 만든다.
   iframeHtml: (url) ->
@@ -231,11 +254,11 @@ export default {
 </div>
     """
 
-  # 팝업결제를 실행한다
+# 팝업결제를 실행한다
   startPopup: ->
     @startPopupPaymentWindow(@popupData)
 
-  # 결제를 승인한다
+# 결제를 승인한다
   transactionConfirm: (data) ->
     if @isConfirmLock()
       console.log 'Transaction Lock'

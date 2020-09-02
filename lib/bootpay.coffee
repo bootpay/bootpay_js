@@ -29,6 +29,7 @@ window.BootPay =
   popupData: undefined
   ieMinVersion: 9
   deviceType: 1
+  isSetQuickPopup: false
   ableDeviceTypes:
     JS: 1
     ANDROID: 2
