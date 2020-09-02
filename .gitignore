@@ -1,7 +1,9 @@
 Gemfile.lock
 *.iml
 *.idea
-/public
+/public/*
+!/public/waiting
+
 package-lock.json
 /node_modules
 yarn.lock

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>부트페이 결제 진행중</title>
+    <link rel="icon" href="data:;base64,=">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/waiting/stylesheets/style.css"/>
+</head>
+<body>
+<div class="bootpay-window">
+    <div class="progress-message-window" id="bootpay-progress-message">
+        <div class="progress-message">
+            <div class="bootpay-loading">
+                <div class="bootpay-loading-spinner">
+                    <svg viewBox="25 25 50 50" class="bootpay-circle" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="20" fill="none" class="bootpay-path"></circle>
+                    </svg>
+                </div>
+            </div>
+            <div class="bootpay-text">
+                <span class="bootpay-inner-text" id="progress-message-text">결제창을 불러오는 중입니다.</span>
+            </div>
+            <div class="bootpay-popup-close" id="__bootpay-popup-close-button__">
+                <button onclick="window.close()">×</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
