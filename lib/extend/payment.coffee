@@ -3,7 +3,7 @@ import request from 'superagent'
 
 export default {
 # 결제 정보를 보내 부트페이에서 결제 정보를 띄울 수 있게 한다.
-  request: (data) ->
+  request: (data, lazy = false) ->
     return if @isPaymentLock()
     @removePaymentWindow(false)
     @setPaymentLock(true)
@@ -44,7 +44,8 @@ export default {
         account_expire_at: if data.account_expire_at? then data.account_expire_at else undefined
         tk: @tk
       # 각 함수 호출 callback을 초기화한다.
-      @methods = {}
+      # async의 경우엔 초기화하지 않는다
+      @methods = {} unless lazy
       @extraValueAppend()
       # 아이템 정보의 Validation
       @integrityItemData() if @params.items?.length
@@ -213,9 +214,11 @@ export default {
     return alert('비동기로 실행될 함수가 있어야 합니다.') unless method?
     # 먼저 팝업을 띄운다
     @startQuickPopup() if conditions
+    # 함수 초기화
+    @methods = {}
     method.call().then(
       (data) =>
-        @request(data)
+        @request(data, true)
       (e) =>
         @clearEnvironment(true)
         @forceClose(e.message)
