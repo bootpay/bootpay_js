@@ -48,7 +48,7 @@ export default {
           @progressMessageShow '취소중입니다.'
           try
             @clearEnvironment()
-            @methods.cancel.call @, data if @methods.cancel?
+            @cancelMethodCall(data) if @methods.cancel?
           catch e
             @sendPaymentStepData(
               step: 'cancel'
@@ -65,21 +65,22 @@ export default {
       # Comment by Gosomi
       # Date: 2020-06-30
       # @return [undefined]
-        when 'BootpayBankReady'
+        when 'BootpayBankReady', 'BootpayChildBankReady'
           try
-            # 팝업이 뜬 경우
-            # iframe으로 창 이동 명령을 보낸다
-            # 그리고 다시 BankReady를 받기 위해 popupInstance 데이터를 모두 초기화 한다
-            if @popupInstance?
-              @clearEnvironment()
-              data.action = 'BootpayChildBankReady'
-              document.getElementById(@iframeId).contentWindow.postMessage(JSON.stringify(data), '*')
-              return
+          # 팝업이 뜬 경우
+          # iframe으로 창 이동 명령을 보낸다
+          # 그리고 다시 BankReady를 받기 위해 popupInstance 데이터를 모두 초기화 한다
+          #            if @popupInstance?
+          #              @progressMessageHide()
+          #              @clearEnvironment()
+          #              data.action = 'BootpayChildBankReady'
+          #              document.getElementById(@iframeId).contentWindow.postMessage(JSON.stringify(data), '*')
+          #              return
           catch then ''
           try
             @progressMessageHide()
-            @clearEnvironment()
-            @methods.ready.call @, data if @methods.ready?
+            @clearEnvironment(if @popupInstance? then 0 else 1)
+            @readyMethodCall(data)
           catch e
             @sendPaymentStepData(
               step: 'ready'
@@ -102,7 +103,7 @@ export default {
             if !@methods.confirm?
               @transactionConfirm data
             else
-              @methods.confirm.call(@, data)
+              @confirmMethodCall(data)
           catch e
             @sendPaymentStepData(
               step: 'confirm'
@@ -145,7 +146,7 @@ export default {
         when 'BootpayError'
           try
             @clearEnvironment()
-            @methods.error.call @, data if @methods.error?
+            @errorMethodCall(data)
           catch e
             @sendPaymentStepData(
               step: 'error'
@@ -166,7 +167,7 @@ export default {
           @progressMessageHide()
           try
             @clearEnvironment(data.popup_close)
-            @methods.done.call @, data
+            @doneMethodCall(data)
           catch e
             @sendPaymentStepData(
               step: 'done'
@@ -178,13 +179,14 @@ export default {
             step: 'done'
             status: 1
           )
-          isClose = if data.is_done_close? then data.is_done_close  else true
+          isClose = if data.is_done_close? then data.is_done_close else true
           @removePaymentWindow() if isClose
       # 사용자 혹은 PG에서 창이 닫히는 action
       # Comment by Gosomi
       # Date: 2020-06-30
       # @return [undefined]
         when 'BootpayClose'
+          @clearEnvironment()
           @progressMessageHide()
           @removePaymentWindow()
       # iFrame 결제창을 app에서 notify 받아 보여준다
@@ -192,7 +194,7 @@ export default {
       # Date: 2020-06-30
       # @return [undefined]
         when 'BootpayShowPaymentWindow'
-          # iframe 창의 결제창을 보여준다
+        # iframe 창의 결제창을 보여준다
           document.getElementById(@iframeId).style.setProperty('height', '100%')
     )
   bindBootpayCommonEvent: ->
@@ -223,13 +225,16 @@ export default {
 # Date: 2020-02-13
 # @return [undefined]
   forceClose: (message = undefined) ->
-    @methods.cancel.call @, {
+    @cancelMethodCall(
       action: 'BootpayCancel',
       message: if message? then message else '사용자에 의한 취소'
-    } if @methods.cancel?
+    )
     @removePaymentWindow()
 
-  # 결제창을 삭제한다.
+  timeIntervalByPlatform: ->
+    if @isMobile() then 200 else 0
+
+# 결제창을 삭제한다.
   removePaymentWindow: (callClose = true) ->
     # Payment Lock을 해제한다
     @setPaymentLock(false)
@@ -239,7 +244,7 @@ export default {
     catch then ''
     document.getElementById(@windowId).outerHTML = '' if document.getElementById(@windowId)?
     try
-      @methods.close.call @ if @methods.close? and callClose
+      @closeMethodCall() if callClose
     catch e
       @sendPaymentStepData(
         step: 'close'
@@ -310,8 +315,8 @@ export default {
       Logger.error "BOOTPAY MESSAGE: 결제 이벤트 데이터 정보 전송실패 #{JSON.stringify(err)}"
     )
 
-  # 팝업 watcher를 삭제한다
-  # 창이 닫힌다면 팝업창도 강제로 닫는다
+# 팝업 watcher를 삭제한다
+# 창이 닫힌다면 팝업창도 강제로 닫는다
   clearEnvironment: (isClose = 1) ->
     clearInterval(@popupWatchInstance) if @popupWatchInstance?
     isClose = if isClose? then isClose else 1
@@ -319,8 +324,8 @@ export default {
       @popupInstance.close()
       @popupInstance = undefined
 
-  # 팝업 창이 시작될 때 각 이벤트를 binding하고
-  # 팝업창을 띄우고나서 팝업이 닫히는지 매번확인한다
+# 팝업 창이 시작될 때 각 이벤트를 binding하고
+# 팝업창을 띄우고나서 팝업이 닫히는지 매번확인한다
   startPopupPaymentWindow: (data) ->
     if @isMobileSafari
       window.off('pagehide.bootpayUnload')
@@ -343,9 +348,12 @@ export default {
     setTimeout(=>
       @popupInstance.close() if @popupInstance?
       # 플랫폼에서 설정해야할 정보를 가져온다
-      platform = try data.params.pe[@platformSymbol()] catch then {}
-      left = try if  window.screen.width < platform.width then 0 else (window.screen.width - platform.width) / 2 catch then '100'
-      top = try if  window.screen.height < platform.height then 0 else (window.screen.height - platform.height) / 2 catch then '100'
+      platform = try data.params.pe[@platformSymbol()]
+      catch then {}
+      left = try if  window.screen.width < platform.width then 0 else (window.screen.width - platform.width) / 2
+      catch then '100'
+      top = try if  window.screen.height < platform.height then 0 else (window.screen.height - platform.height) / 2
+      catch then '100'
       spec = if platform? and platform.width? and platform.width > 0 then "width=#{platform.width},height=#{platform.height},top=#{top},left=#{left},scrollbars=yes,toolbar=no, location=no, directories=no, status=no, menubar=no" else ''
       @popupInstance = window.open("#{data.submit_url}?#{query.join('&')}", "bootpay_inner_popup_#{(new Date).getTime()}", spec)
       return window.postMessage(
@@ -463,7 +471,8 @@ export default {
 
 
   showPopupButton: ->
-    alias = try @popupData.params.payment.pm_alias catch then ''
+    alias = try @popupData.params.payment.pm_alias
+    catch then ''
     buttonObject = document.getElementById("__bootpay-close-button")
     buttonObject.classList.remove('naverpay-btn')
     # 네이버페이인 경우 네이버페이 색상으로 편집

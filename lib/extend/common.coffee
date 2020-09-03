@@ -29,4 +29,36 @@ export default {
   setDevice: (deviceType) ->
     @deviceType = @ableDeviceTypes[deviceType] if @ableDeviceTypes[deviceType]?
     @ableDeviceTypes[deviceType]?
+
+  cancelMethodCall: (data = {}) ->
+    setTimeout(=>
+      @methods.cancel.call @, data if @methods.cancel?
+    , @timeIntervalByPlatform())
+
+  errorMethodCall: (data = {}) ->
+    setTimeout(=>
+      @methods.error.call @, data if @methods.error?
+    , @timeIntervalByPlatform())
+
+  confirmMethodCall: (data = {}) ->
+    setTimeout(=>
+      @methods.confirm.call @, data if @methods.confirm?
+    , @timeIntervalByPlatform())
+
+  readyMethodCall: (data = {}) ->
+    setTimeout(=>
+      @methods.ready.call @, data if @methods.ready?
+    , @timeIntervalByPlatform())
+
+  closeMethodCall: (data = {}) ->
+    setTimeout(=>
+      @methods.close.call @, data if @methods.close?
+    , @timeIntervalByPlatform())
+
+  doneMethodCall: (data = {}) ->
+    setTimeout(=>
+      @methods.done.call @, data if @methods.done?
+    , @timeIntervalByPlatform())
+
+
 }
