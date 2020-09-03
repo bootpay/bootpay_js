@@ -67,17 +67,6 @@ export default {
       # @return [undefined]
         when 'BootpayBankReady', 'BootpayChildBankReady'
           try
-          # 팝업이 뜬 경우
-          # iframe으로 창 이동 명령을 보낸다
-          # 그리고 다시 BankReady를 받기 위해 popupInstance 데이터를 모두 초기화 한다
-          #            if @popupInstance?
-          #              @progressMessageHide()
-          #              @clearEnvironment()
-          #              data.action = 'BootpayChildBankReady'
-          #              document.getElementById(@iframeId).contentWindow.postMessage(JSON.stringify(data), '*')
-          #              return
-          catch then ''
-          try
             @progressMessageHide()
             @clearEnvironment(if @popupInstance? then 0 else 1)
             @readyMethodCall(data)
@@ -232,7 +221,7 @@ export default {
     @removePaymentWindow()
 
   timeIntervalByPlatform: ->
-    if @isMobile() then 200 else 0
+    if @isMobile() then 300 else 0
 
 # 결제창을 삭제한다.
   removePaymentWindow: (callClose = true) ->
