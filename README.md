@@ -2,6 +2,18 @@
 
 ## Change Log
 
+### 3.3.0 (Nightly)
+#### popupAsyncRequest 추가
+- promise 기반으로 동작하는 함수를 전달할 경우 resolve함수에 request시 필요한 데이터를 전달하면 팝업이 뜨면서 결제창이 생성
+- ios safari의 경우 scroll로 인해 iFrame의 터치영역에 버그가 생기는 변수로 인해 해당 문제를 팝업으로 대체
+- popupAsyncRequest를 할 경우 조건을 줘서 팝업창을 띄울지 아니면 일반적인 iFrame을 띄울지 선택이 가능
+
+#### 모바일 custom method 실행 최적화
+- 모바일에서 custom 함수 실행시 같은 thread 에서 동시 실행될 경우 무시되는 현상 제거
+
+#### 팝업으로 통합결제창 진행
+- 팝업으로 통합창이 가능하도록 수정 
+
 ### 3.2.6 (Stable)
 #### 버그 수정
 - 결제 시작 중 금액으로 인한 오류가 발생되었을 때 다시 결제창이 뜨지 않는 버그 수정
