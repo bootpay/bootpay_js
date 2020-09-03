@@ -222,10 +222,10 @@ export default {
 # Comment by Gosomi
 # Date: 2020-02-13
 # @return [undefined]
-  forceClose: ->
+  forceClose: (message = undefined) ->
     @methods.cancel.call @, {
       action: 'BootpayCancel',
-      message: '사용자에 의한 취소'
+      message: if message? then message else '사용자에 의한 취소'
     } if @methods.cancel?
     @removePaymentWindow()
 

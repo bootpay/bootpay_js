@@ -208,6 +208,21 @@ export default {
     document.bootpay_form.target = 'bootpayPopup'
     document.bootpay_form.submit()
 
+# 팝업으로 시작하는 조건 부 async request 추가
+  popupAsyncRequest: (conditions, method) ->
+    return alert('비동기로 실행될 함수가 있어야 합니다.') unless method?
+    # 먼저 팝업을 띄운다
+    @startQuickPopup() if conditions
+    method.call().then(
+      (data) =>
+        @request(data)
+      (e) =>
+        @clearEnvironment(true)
+        @forceClose(e.message)
+    )
+    @
+
+# 사용자 promise 가 발생되기 전 선 팝업을 띄운다
   startQuickPopup: ->
     @isSetQuickPopup = true
     @expressPopupReady()
