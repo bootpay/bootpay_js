@@ -65,7 +65,7 @@ export default {
       # Comment by Gosomi
       # Date: 2020-06-30
       # @return [undefined]
-        when 'BootpayBankReady', 'BootpayChildBankReady'
+        when 'BootpayBankReady'
           try
             @progressMessageHide()
             @clearEnvironment(if @popupInstance? then 0 else 1)
