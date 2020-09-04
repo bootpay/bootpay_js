@@ -2,7 +2,7 @@
 
 ## Change Log
 
-### 3.3.0 (Nightly)
+### 3.3.0 (Stable)
 #### popupAsyncRequest 추가
 - promise 기반으로 동작하는 함수를 전달할 경우 resolve함수에 request시 필요한 데이터를 전달하면 팝업이 뜨면서 결제창이 생성
 - ios safari의 경우 scroll로 인해 iFrame의 터치영역에 버그가 생기는 변수로 인해 해당 문제를 팝업으로 대체
@@ -14,7 +14,7 @@
 #### 팝업으로 통합결제창 진행
 - 팝업으로 통합창이 가능하도록 수정 
 
-### 3.2.6 (Stable)
+### 3.2.6
 #### 버그 수정
 - 결제 시작 중 금액으로 인한 오류가 발생되었을 때 다시 결제창이 뜨지 않는 버그 수정
 
@@ -158,7 +158,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^3.2.4"
+    "bootpay-js": "^3.3.0"
     //...
   }
 }
@@ -172,7 +172,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-3.2.4.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-3.3.0.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });
