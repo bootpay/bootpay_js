@@ -1,0 +1,16 @@
+version: '3'
+volumes:
+  postgres_data: {}
+
+services:
+  bootpay_js_dev:
+    image: docker.bootpay.co.kr/bootpay/bootpay-js:dev
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/var/www/
+    ports:
+      - "10011:3001"
+    extra_hosts:
+      "test-database": 10.0.100.2
