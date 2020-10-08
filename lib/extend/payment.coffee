@@ -125,8 +125,8 @@ export default {
   integrityParams: ->
     price = parseFloat @params.price
     try
-      throw '결제할 금액을 설정해주세요. ( 1,000원 이상, 본인인증/정기 결제요청의 경우엔 0원을 입력해주세요. ) [ params: price ]' if (isNaN(price) or price < 1000) and ( @zeroPaymentMethod.indexOf(@params.method) > -1 or (not @params.method?.length or not @params.pg?.length))
-      throw '판매할 상품명을 입력해주세요. [ parmas: name ]' unless @params.name?.length
+      throw '결제할 금액을 설정해주세요. ( 100원 이상, 본인인증/정기 결제요청의 경우엔 0원을 입력해주세요. ) [ params: price ]' if (isNaN(price) or price < 100) and ( @zeroPaymentMethod.indexOf(@params.method) > -1 or (not @params.method?.length or not @params.pg?.length))
+      throw '판매할 상품명을 입력해주세요. [ params: name ]' unless @params.name?.length
       throw '익스플로러 8이하 버전에서는 결제가 불가능합니다.' if @blockIEVersion()
       throw '휴대폰 번호의 자리수와 형식이 맞지 않습니다. [ params : phone ]' if @params.phone?.length and !@phoneRegex.test(@params.phone)
       throw '판매하려는 제품 order_id를 지정해주셔야합니다. 다른 결제 정보와 겹치지 않은 유니크한 값으로 정해서 보내주시기 바랍니다. [ params: order_id ]' unless @params.order_id?.length
