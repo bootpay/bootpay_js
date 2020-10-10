@@ -125,7 +125,7 @@ export default {
   integrityParams: ->
     price = parseFloat @params.price
     try
-      throw '결제할 금액을 설정해주세요. ( 100원 이상, 본인인증/정기 결제요청의 경우엔 0원을 입력해주세요. ) [ params: price ]' if (isNaN(price) or price < 100) and ( @zeroPaymentMethod.indexOf(@params.method) > -1 or (not @params.method?.length or not @params.pg?.length))
+      throw '결제할 금액을 설정해주세요. ( 100원 이상, 본인인증/정기 결제요청의 경우엔 0원을 입력해주세요. ) [ params: price ]' if (isNaN(price) or price < 100) and (@zeroPaymentMethod.indexOf(@params.method) > -1 or (not @params.method?.length or not @params.pg?.length))
       throw '판매할 상품명을 입력해주세요. [ params: name ]' unless @params.name?.length
       throw '익스플로러 8이하 버전에서는 결제가 불가능합니다.' if @blockIEVersion()
       throw '휴대폰 번호의 자리수와 형식이 맞지 않습니다. [ params : phone ]' if @params.phone?.length and !@phoneRegex.test(@params.phone)
@@ -275,6 +275,35 @@ export default {
 # 팝업결제를 실행한다
   startPopup: ->
     @startPopupPaymentWindow(@popupData)
+
+# 간편결제 비밀번호 direct로 뜨게끔
+  verifyPassword: (data = {}) ->
+    verifyUrl = [@clientUrl(), 'verify', 'password'].join('/')
+    encryptData = @encryptParams(
+      user_token: data.userToken
+      device_id: data.deviceId
+      message: data.message
+    )
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      """
+        <div id="#{@windowId}">
+          <form name="bootpayVerifyForm" action="#{verifyUrl}" method="GET">
+            <input type="hidden" name="data" value="#{encryptData.data}" />
+            <input type="hidden" name="session_key" value="#{encryptData.session_key}" />
+          </form>
+          <div class="bootpay-window" id="bootpay-background-window">#{@iframeHtml('')}</div>
+        </div>
+      """
+    )
+    @bindVerifyPasswordEvent()
+    try document.body.classList.add('bootpay-open')
+    catch then ''
+    document.getElementById(@iframeId).style.setProperty('height', '100%')
+    document.bootpayVerifyForm.target = 'bootpay_inner_iframe'
+    document.bootpayVerifyForm.submit()
+    @
+
 
 # 결제를 승인한다
   transactionConfirm: (data) ->

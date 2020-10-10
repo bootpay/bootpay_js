@@ -209,6 +209,31 @@ export default {
           Logger.debug "receive analytics data: #{JSON.stringify(data)}"
           @setAnalyticsData(data)
     )
+# 비밀번호 인증 관련 event를 받는다
+# Comment by Gosomi
+# Date: 2020-10-10
+# @return [Hash]
+  bindVerifyPasswordEvent: ->
+    window.off 'message.BootpayVerifyPasswordEvent'
+    window.on('message.BootpayVerifyPasswordEvent', (e) =>
+      try
+        data = {}
+        data = JSON.parse e.data if e.data? and typeof e.data is 'string' and /Bootpay/.test(e.data)
+        data.action = data.action.replace(/Child/g, '') if data.action?
+      catch e
+        Logger.error "data: #{e.data}, #{e.message} json parse error"
+        return
+      switch data.action
+        when 'BootpayVerifyError'
+          @methods.verifyError(data) if @methods.verifyError?
+          @removeVerifyWindow()
+        when 'BootpayVerifySuccess'
+          @methods.verifySuccess(data) if @methods.verifySuccess?
+          @removeVerifyWindow()
+        when 'BootpayVerifyCancel'
+          @methods.verifyCancel(data) if @methods.verifyCancel?
+          @removeVerifyWindow()
+    )
 # 강제로 창을 닫는다
 # Comment by Gosomi
 # Date: 2020-02-13
@@ -247,6 +272,14 @@ export default {
     )
     @tk = undefined
 
+# 비밀번호 창을 닫는다
+  removeVerifyWindow: ->
+    @progressMessageHide()
+    document.body.style.removeProperty('bootpay-modal-open')
+    try document.body.classList.remove('bootpay-open')
+    catch then ''
+    document.getElementById(@windowId).outerHTML = '' if document.getElementById(@windowId)?
+
   closePopupWithPaymentWindow: ->
     if confirm "결제창을 닫게 되면 현재 진행중인 결제가 취소됩니다. 정말로 닫을까요?"
       @clearEnvironment(true)
@@ -269,6 +302,18 @@ export default {
     @
   close: (method) ->
     @methods.close = method
+    @
+
+  verifyCancel: (method) ->
+    @methods.verifyCancel = method
+    @
+
+  verifySuccess: (method) ->
+    @methods.verifySuccess = method
+    @
+
+  verifyError: (method) ->
+    @methods.verifyError = method
     @
 
   setConfirmLock: (lock) ->
