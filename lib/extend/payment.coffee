@@ -300,6 +300,18 @@ export default {
     )
     @
 
+  changePassword: (data = {}) ->
+    @initializeEasySubmit(
+      [@clientUrl(), 'easy', 'password', 'change'].join('/')
+      {
+        user_token: data.userToken
+        device_id: data.deviceId
+        message: data.message
+      }
+    )
+    @
+
+
 # 간편결제 관련 Form Submit
   initializeEasySubmit: (url, data = {}) ->
     encryptData = @encryptParams(data)
