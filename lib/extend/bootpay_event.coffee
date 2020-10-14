@@ -213,9 +213,9 @@ export default {
 # Comment by Gosomi
 # Date: 2020-10-10
 # @return [Hash]
-  bindVerifyPasswordEvent: ->
-    window.off 'message.BootpayVerifyPasswordEvent'
-    window.on('message.BootpayVerifyPasswordEvent', (e) =>
+  bindEasyEvent: ->
+    window.off 'message.BootpayEasyEvent'
+    window.on('message.BootpayEasyEvent', (e) =>
       try
         data = {}
         data = JSON.parse e.data if e.data? and typeof e.data is 'string' and /Bootpay/.test(e.data)
@@ -224,14 +224,14 @@ export default {
         Logger.error "data: #{e.data}, #{e.message} json parse error"
         return
       switch data.action
-        when 'BootpayVerifyError'
-          @methods.verifyError(data) if @methods.verifyError?
+        when 'BootpayEasyError'
+          @methods.easyError(data) if @methods.easyError?
           @removeVerifyWindow()
-        when 'BootpayVerifySuccess'
-          @methods.verifySuccess(data) if @methods.verifySuccess?
+        when 'BootpayEasySuccess'
+          @methods.easySuccess(data) if @methods.easySuccess?
           @removeVerifyWindow()
-        when 'BootpayVerifyCancel'
-          @methods.verifyCancel(data) if @methods.verifyCancel?
+        when 'BootpayEasyCancel'
+          @methods.easyCancel(data) if @methods.easyCancel?
           @removeVerifyWindow()
     )
 # 강제로 창을 닫는다
@@ -304,16 +304,16 @@ export default {
     @methods.close = method
     @
 
-  verifyCancel: (method) ->
-    @methods.verifyCancel = method
+  easyCancel: (method) ->
+    @methods.easyCancel = method
     @
 
-  verifySuccess: (method) ->
-    @methods.verifySuccess = method
+  easySuccess: (method) ->
+    @methods.easySuccess = method
     @
 
-  verifyError: (method) ->
-    @methods.verifyError = method
+  easyError: (method) ->
+    @methods.easyError = method
     @
 
   setConfirmLock: (lock) ->

@@ -278,17 +278,36 @@ export default {
 
 # 간편결제 비밀번호 direct로 뜨게끔
   verifyPassword: (data = {}) ->
-    verifyUrl = [@clientUrl(), 'verify', 'password'].join('/')
-    encryptData = @encryptParams(
-      user_token: data.userToken
-      device_id: data.deviceId
-      message: data.message
+    @initializeEasySubmit(
+      [@clientUrl(), 'easy', 'password', 'verify'].join('/')
+      {
+        user_token: data.userToken
+        device_id: data.deviceId
+        message: data.message
+      }
     )
+    @
+
+# 비밀번호 등록
+  registerCard: (data = {}) ->
+    @initializeEasySubmit(
+      [@clientUrl(), 'easy', 'card', 'register'].join('/')
+      {
+        user_token: data.userToken
+        device_id: data.deviceId
+        message: data.message
+      }
+    )
+    @
+
+# 간편결제 관련 Form Submit
+  initializeEasySubmit: (url, data = {}) ->
+    encryptData = @encryptParams(data)
     document.body.insertAdjacentHTML(
       'beforeend',
       """
         <div id="#{@windowId}">
-          <form name="bootpayVerifyForm" action="#{verifyUrl}" method="GET">
+          <form name="bootpayEasyForm" action="#{url}" method="GET">
             <input type="hidden" name="data" value="#{encryptData.data}" />
             <input type="hidden" name="session_key" value="#{encryptData.session_key}" />
           </form>
@@ -296,13 +315,12 @@ export default {
         </div>
       """
     )
-    @bindVerifyPasswordEvent()
+    @bindEasyEvent()
     try document.body.classList.add('bootpay-open')
     catch then ''
     document.getElementById(@iframeId).style.setProperty('height', '100%')
-    document.bootpayVerifyForm.target = 'bootpay_inner_iframe'
-    document.bootpayVerifyForm.submit()
-    @
+    document.bootpayEasyForm.target = 'bootpay_inner_iframe'
+    document.bootpayEasyForm.submit()
 
 
 # 결제를 승인한다
