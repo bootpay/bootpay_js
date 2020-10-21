@@ -2,11 +2,11 @@
 
 ## Change Log
 
-### 3.3.1 (Nightly)
+### 3.3.1 (Stable)
 #### 통합결제 1000원 미만 결제 팝업 버그 수정
 - method blank 처리 추가, methods 다결제 요청시 validation 추가
 
-### 3.3.0 (Stable)
+### 3.3.0 
 #### popupAsyncRequest 추가
 - promise 기반으로 동작하는 함수를 전달할 경우 resolve함수에 request시 필요한 데이터를 전달하면 팝업이 뜨면서 결제창이 생성
 - ios safari의 경우 scroll로 인해 iFrame의 터치영역에 버그가 생기는 변수로 인해 해당 문제를 팝업으로 대체
