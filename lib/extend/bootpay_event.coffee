@@ -184,6 +184,7 @@ export default {
       # @return [undefined]
         when 'BootpayShowPaymentWindow'
         # iframe 창의 결제창을 보여준다
+          document.getElementById(@iframeId).style.removeProperty('display')
           document.getElementById(@iframeId).style.setProperty('height', '100%')
     )
   bindBootpayCommonEvent: ->
