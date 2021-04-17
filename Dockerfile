@@ -1,4 +1,4 @@
-FROM ruby:2.7.1
+FROM ruby:2.7.3
 
 RUN echo "$(sed -e 's/deb.debian.org/ftp.kr.debian.org/g' /etc/apt/sources.list)" > /etc/apt/sources.list
 # Install dependencies
