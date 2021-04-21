@@ -2,7 +2,11 @@
 
 ## Change Log
 
-### 3.3.1 (Stable)
+### 3.3.2 (Stable)
+#### 월컴페이먼츠 카드정기결제(디지털) 버그 수정
+- 결제방법 digital_card_rebill 추가 
+
+### 3.3.1
 #### 통합결제 1000원 미만 결제 팝업 버그 수정
 - method blank 처리 추가, methods 다결제 요청시 validation 추가
 
@@ -162,7 +166,7 @@ var BootPay = require('bootpay-js');
 {
   "dependencies": {
     //...
-    "bootpay-js": "^3.3.0"
+    "bootpay-js": "^3.3.2"
     //...
   }
 }
@@ -176,7 +180,7 @@ import BootPay from 'bootpay-js'
 ```html
 <script type="text/javascript">
     //jQuery 수정 버전을 로드한다.
-    require(["https://cdn.bootpay.co.kr/js/bootpay-3.3.0.min.js"], function(BootPay) {
+    require(["https://cdn.bootpay.co.kr/js/bootpay-3.3.2.min.js"], function(BootPay) {
         BootPay.request({
             // anyThing Data
         });

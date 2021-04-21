@@ -39,7 +39,7 @@ window.BootPay =
   option: {}
   phoneRegex: /^\d{2,3}\d{3,4}\d{4}$/
   dateFormat: /(\d{4})-(\d{2})-(\d{2})/
-  zeroPaymentMethod: ['bankalarm', 'auth', 'card_rebill']
+  zeroPaymentMethod: ['bankalarm', 'auth', 'card_rebill', 'digital_card_rebill']
   urls: require('../package.json').urls
   tk: undefined
   localStorage: {}
