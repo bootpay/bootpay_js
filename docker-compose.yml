@@ -12,5 +12,7 @@ services:
       - ./:/var/www/
     ports:
       - "10011:3001"
+    hostname: bootpay-js-v1
+    container_name: bootpay-js-v1
     extra_hosts:
       "test-database": 10.0.100.2

@@ -10,9 +10,11 @@ module.exports = {
     },
     devServer: {
         port: 3001,
-        public: 'g-cdn.bootpay.co.kr',
+        public: 'd-cdn.bootapi.com',
         inline: false,
-        hot: false
+        hot: false,
+        disableHostCheck: false,
+        host: '0.0.0.0'
     },
     optimization: {
         minimizer: [
