@@ -94,9 +94,9 @@ export default {
       data: encryptData.ciphertext.toString(Base64)
       session_key: "#{encryptData.key.toString(Base64)}###{encryptData.iv.toString(Base64)}"
     ).then((res) =>
-      Logger.warn "BOOTPAY MESSAGE: #{res.body.message} - Application ID가 제대로 되었는지 확인해주세요." if res.status isnt 200 or res.body.status isnt 200
+      Logger.warn "BOOTPAY MESSAGE: #{if res.body? then res.body.message else ''} - Application ID가 제대로 되었는지 확인해주세요." if res.status isnt 200 or res.body.status isnt 200
     ).catch((err) =>
-      Logger.warn "BOOTPAY MESSAGE: #{err.body.message} - Application ID가 제대로 되었는지 확인해주세요."
+      Logger.warn "BOOTPAY MESSAGE: #{if err.body? then err.body.message else ''} - Application ID가 제대로 되었는지 확인해주세요."
     )
 # 로그인 정보를 부트페이 서버로 전송한다.
   startLoginSession: (data) ->
