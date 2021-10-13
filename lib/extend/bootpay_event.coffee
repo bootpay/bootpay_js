@@ -337,7 +337,7 @@ export default {
     data.application_id = @applicationId
     if data.e?
       data.msg = try data.e.message
-      catch then data.e
+      catch then ''
       data.trace = try data.e.stack
       catch then undefined
     request.post([@analyticsUrl(), "event"].join('/')).set(
