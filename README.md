@@ -1,8 +1,8 @@
 # Bootpay JS
 
-## 현재 버전 v1 저장소입니다
-* v2 버전은 private 저장소로 변경되었고, https://www.npmjs.com/package/@bootpay/client-js 로 배포될 예정입니다.
-* v2 버전은 2022년 4월중에 BETA로 오픈 예정입니다.
+## 현재 버전 API-v1 저장소입니다
+* API-v2 (SDK 4.0.0) 버전은 private 저장소로 변경되었고, https://www.npmjs.com/package/@bootpay/client-js 로 배포될 예정입니다.
+* API-v2 (SDK 4.0.0)  버전은 2022년 4월중에 BETA로 오픈 예정입니다.
 
 ## Change Log
 
