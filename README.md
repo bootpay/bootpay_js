@@ -1,12 +1,16 @@
 # Bootpay JS
 
+## 현재 버전 v1 저장소입니다
+* v2 버전은 private 저장소로 변경되었고, https://www.npmjs.com/package/@bootpay/client-js 로 배포될 예정입니다.
+* v2 버전은 2022년 4월중에 BETA로 오픈 예정입니다.
+
 ## Change Log
 
-### 3.3.4 (Nightly)
+### 3.3.4 (Stable)
 #### 오류 발생시 event 전송 버그 수정 ( error event에 Message가 null인 경우 처리 안됨 )
 #### SuperAgent에서 이벤트 전송시 암호화될 때 오류 예외처리 추가
 
-### 3.3.3 (Stable)
+### 3.3.3
 #### 결제 창 상태 정보 전송시 오류가 나면 관련 에러처리 버그 수정
 #### 카카오 정기결제 0원 결제로 설정하면 빌링키만 가져올 수 있도록 개선
 
