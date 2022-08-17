@@ -1,8 +1,9 @@
 # Bootpay JS
 
 ## 현재 버전 API-v1 저장소입니다
-* API-v2 (SDK 4.0.0) 버전은 private 저장소로 변경되었고, https://www.npmjs.com/package/@bootpay/client-js 로 배포될 예정입니다.
-* API-v2 (SDK 4.0.0)  버전은 2022년 4월중에 BETA로 오픈 예정입니다.
+* API-v2 (SDK 4.0.0) 버전은 private 저장소로 변경되었고, https://www.npmjs.com/package/@bootpay/client-js 로 변경되었습니다.
+* API-v2 (SDK 4.0.0) 버전은 typescript로 작성되었으며, SSR 기반 프레임워크, CDN등 모두 지원합니다.
+* 기본 v1 버전은 계속해서 유지보수할 예정이고, 신규 기능은 v2로 지원됩니다.
 
 ## Change Log
 
