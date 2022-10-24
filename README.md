@@ -7,7 +7,10 @@
 
 ## Change Log
 
-### 3.3.5 (Stable)
+### 3.3.6 (Stable)
+#### 오래된 development-package-dependency 정리
+
+### 3.3.5 
 #### babel-cli > glob-parent 버전으로 인한 보안 취약점 제거
 
 ### 3.3.4
