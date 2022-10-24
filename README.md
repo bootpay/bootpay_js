@@ -7,7 +7,10 @@
 
 ## Change Log
 
-### 3.3.4 (Stable)
+### 3.3.5 (Stable)
+#### babel-cli > glob-parent 버전으로 인한 보안 취약점 제거
+
+### 3.3.4
 #### 오류 발생시 event 전송 버그 수정 ( error event에 Message가 null인 경우 처리 안됨 )
 #### SuperAgent에서 이벤트 전송시 암호화될 때 오류 예외처리 추가
 
